@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace PC
+{
+    /// <summary>
+    /// This class acts as the template for the chosen Message Generators
+    /// </summary>
+    public abstract class CNCProtokoll
+    {
+        /// <summary>
+        /// Provides the template for the GetCurrentFeedMessage
+        /// </summary>
+        /// <returns>CNCMessage</returns>
+        public abstract CNCMessage GetCurrentFeedMessage();
+
+        /// <summary>
+        /// Provides the template for the GetCurrentXMessage - Function
+        /// </summary>
+        /// <returns>CNCMessage</returns>
+        public abstract CNCMessage GetCurrentXMessage();
+
+        /// <summary>
+        /// Provides the template for the GetCurrentYMessage - Function
+        /// </summary>
+        /// <returns>CNCMessage</returns>
+        public abstract CNCMessage GetCurrentYMessage();
+
+        /// <summary>
+        /// Provides the template for the GetCurrentYMessage - Function
+        /// </summary>
+        /// <returns></returns>
+        public abstract CNCMessage GetCurrentZMessage();
+
+        /// <summary>
+        /// Provides the template for the GetCurrentZMessage
+        /// </summary>
+        /// <returns></returns>
+        public abstract CNCMessage GetCurrentXYZMessage();
+
+        /// <summary>
+        /// Provides the template for the GetMoveByXMessage
+        /// </summary>
+        /// <returns></returns>
+        public abstract CNCMessage GetMoveByXMessage();
+
+        /// <summary>
+        /// Provides the template for the GetMoveByYMessage
+        /// </summary>
+        /// <returns></returns>
+        public abstract CNCMessage GetMoveByYMessage();
+
+        /// <summary>
+        /// Provides the template for the GetMoveByZMessage
+        /// </summary>
+        /// <returns></returns>
+        public abstract CNCMessage GetMoveByZMessage();
+
+        /// <summary>
+        /// Provides the template for the GetSetFeedMessage
+        /// </summary>
+        /// <returns></returns>
+        public abstract CNCMessage GetSetFeedMessage();
+    }
+}
