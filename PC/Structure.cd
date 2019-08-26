@@ -56,11 +56,25 @@
       <FileName>StatusReportEventsArgs.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="PC.GRBLCommandDictionary">
+    <Position X="11.25" Y="8.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>GRBLCommandDictionary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Enum Name="PC.MachineStates">
     <Position X="11.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>MachineStates.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PC.GRBLCommand">
+    <Position X="13.75" Y="8.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>qOAAAAgwgBQAEQACgBAAAAoAAAAAIABQggMAQAABkAA=</HashCode>
+      <FileName>GRBLCommand.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Delegate Name="PC.CNCMessageEventHandler">

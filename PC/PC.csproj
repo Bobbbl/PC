@@ -70,6 +70,8 @@
     <Compile Include="CNCEventsArgs.cs" />
     <Compile Include="CNCMessageEventHandler.cs" />
     <Compile Include="CNCProtokoll.cs" />
+    <Compile Include="GRBLCommand.cs" />
+    <Compile Include="GRBLCommandDictionary.cs" />
     <Compile Include="GRBLProtokoll.cs" />
     <Compile Include="MachineStates.cs" />
     <Compile Include="SerialGRBLInterface.cs" />
