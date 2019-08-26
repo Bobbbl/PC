@@ -17,12 +17,12 @@
   <Class Name="PC.CNCInterface">
     <Position X="7" Y="1.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAACAAAAAAAAAAIAAAAAA=</HashCode>
       <FileName>CNCInterface.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PC.SerialGRBLInterface">
-    <Position X="6.75" Y="3.25" Width="2.75" />
+    <Position X="6.5" Y="3.75" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAABAAAECAAAQAAACEAAACAAAQAAgAAAAA=</HashCode>
       <FileName>SerialGRBLInterface.cs</FileName>
@@ -70,10 +70,10 @@
       <FileName>MachineStates.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="PC.GRBLCommand">
+  <Enum Name="PC.GRBLCommand" Collapsed="true">
     <Position X="13.75" Y="8.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>qOAAAAgwgBQAEQACgBAAAAoAAAAAIABQggMAQAABkAA=</HashCode>
+      <HashCode>qOAAAAgwgBQAEQACsBAAAAoAAAAAJABQhgMAQAABkAA=</HashCode>
       <FileName>GRBLCommand.cs</FileName>
     </TypeIdentifier>
   </Enum>

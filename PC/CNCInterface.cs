@@ -2,13 +2,58 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 
 namespace PC
 {
     public abstract class CNCInterface
     {
+
+        private Timer PollTimer = new Timer(1000) { AutoReset = true };
+
+        private int _PollTimeout = 1000;
+        public int PollTimeout
+        {
+            get
+            {
+                return _PollTimeout;
+            }
+            set
+            {
+                if (value < 0)
+                    return;
+
+                _PollTimeout = value;
+                PollTimer.Interval = value;
+                PollTimer.Stop();
+                System.Threading.Thread.Sleep(0);
+                PollTimer.Start();
+            }
+        }
+
+        private bool _AutoPoll = false;
+        public bool AutoPoll
+        {
+            get
+            {
+                return _AutoPoll;
+            }
+            set
+            {
+                PollTimer.Interval = PollTimeout;
+                PollTimer.AutoReset = value;
+                PollTimer.Enabled = value;
+            }
+        }
+
         public abstract void SendMessage(CNCMessage message);
 
         public abstract CNCMessage ReceiveMessage(int TimeOut);
+
+
+        public CNCInterface()
+        {
+
+        }
     }
 }
