@@ -17,12 +17,12 @@
   <Class Name="PC.CNCInterface">
     <Position X="7" Y="1.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAACAAAAAAAAAAIAAAAAA=</HashCode>
+      <HashCode>AAAAABAAAAAAAAAAACAAAAAQACAAAAAAAAAAIAAIAAg=</HashCode>
       <FileName>CNCInterface.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PC.SerialGRBLInterface">
-    <Position X="6.5" Y="3.75" Width="2.75" />
+    <Position X="8.5" Y="5.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAABAAAECAAAQAAACEAAACAAAQAAgAAAAA=</HashCode>
       <FileName>SerialGRBLInterface.cs</FileName>
@@ -36,7 +36,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="PC.GRBLProtokoll">
-    <Position X="6.75" Y="8.5" Width="2.25" />
+    <Position X="6" Y="9.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>EEAAAAAABAAIAAABAAAQAAAAAAAAABAAAIAAAIAAIAA=</HashCode>
       <FileName>GRBLProtokoll.cs</FileName>
@@ -57,9 +57,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="PC.GRBLCommandDictionary">
-    <Position X="11.25" Y="8.5" Width="1.75" />
+    <Position X="12" Y="9.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAACAAAAAAAAAAAAAAAABAAAA=</HashCode>
       <FileName>GRBLCommandDictionary.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -80,7 +80,7 @@
   <Delegate Name="PC.CNCMessageEventHandler">
     <Position X="9.5" Y="1.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>CNCMessageEventHandler.cs</FileName>
     </TypeIdentifier>
   </Delegate>
