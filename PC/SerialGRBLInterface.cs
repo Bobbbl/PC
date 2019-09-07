@@ -29,9 +29,22 @@ namespace PC
 
         public SerialPort SerialInterface { get; set; }
 
-        public SerialGRBLInterface(SerialPort port)
+        public SerialGRBLInterface(string PortName, int BaudRate)
         {
-            SerialInterface = port;
+            // Default Settings
+            System.IO.Ports.SerialPort sport = new System.IO.Ports.SerialPort();
+            sport.PortName = PortName;
+            sport.BaudRate = BaudRate;
+            sport.Parity = System.IO.Ports.Parity.None;
+            sport.DataBits = 8;
+            sport.StopBits = System.IO.Ports.StopBits.One;
+            sport.Handshake = System.IO.Ports.Handshake.None;
+            // Serial Port Time Outs
+            sport.WriteTimeout = 500;
+            sport.ReadTimeout = 500;
+            sport.Open();
+
+            SerialInterface = sport;
         }
     }
 }

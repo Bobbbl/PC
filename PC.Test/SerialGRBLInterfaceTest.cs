@@ -8,5 +8,15 @@ namespace PC.Test
 {
     public class SerialGRBLInterfaceTest
     {
+        public SerialGRBLInterface GRBLInterface { get; set; }
+
+        public string PortName { get; set; }
+
+        public int BaudRate { get; set; }
+
+        public SerialGRBLInterfaceTest()
+        {
+            GRBLInterface = new SerialGRBLInterface(PortName, BaudRate);
+        }
     }
 }

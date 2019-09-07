@@ -7,6 +7,9 @@ namespace PC
 {
     public class GRBLProtokoll : CNCProtokoll
     {
+
+        public GRBLCommandDictionary CommandDict { get; set; } = new GRBLCommandDictionary();
+
         /// <summary>
         /// Gets a GRBL Message for Feed
         /// </summary>
@@ -31,7 +34,10 @@ namespace PC
         /// <returns>CNCMessage</returns>
         public override CNCMessage GetCurrentXYZMessage()
         {
-            throw new NotImplementedException();
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.RTC_StatusReportQuery));
+
+            return rmessage;
         }
 
         /// <summary>

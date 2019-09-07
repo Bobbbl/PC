@@ -13,9 +13,9 @@ namespace PC
 
         public bool GRBLCommand { get; set; }
 
-        public void AppendCommand()
+        public void AppendCommand(string c)
         {
-            throw new System.NotImplementedException();
+            Message += c;
         }
 
 
