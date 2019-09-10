@@ -45,7 +45,9 @@ namespace PC
             {GRBLCommand.RTCSetRapid25Percent, Convert.ToString(0x97)},
             {GRBLCommand.RTC_ToggleSpindleStop, Convert.ToString(0x9E)},
             {GRBLCommand.RTC_ToggleFloodCoolant, Convert.ToString(0xA0)},
-            {GRBLCommand.RTC_ToggleMistCoolant, Convert.ToString(0xA1)}
+            {GRBLCommand.RTC_ToggleMistCoolant, Convert.ToString(0xA1)},
+            {GRBLCommand.G_SetUnitToMillimeter_G21, "G21" },
+            {GRBLCommand.G_RelativeMotion_G91, "G91" }
 
         };
 

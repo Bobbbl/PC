@@ -44,24 +44,24 @@ namespace PC
         /// Provides the template for the GetMoveByXMessage
         /// </summary>
         /// <returns></returns>
-        public abstract CNCMessage GetMoveByXMessage();
+        public abstract CNCMessage GetMoveByXMessage(double XMillimieter, double Feed);
 
         /// <summary>
         /// Provides the template for the GetMoveByYMessage
         /// </summary>
         /// <returns></returns>
-        public abstract CNCMessage GetMoveByYMessage();
+        public abstract CNCMessage GetMoveByYMessage(double YMillimieter, double Feed);
 
         /// <summary>
         /// Provides the template for the GetMoveByZMessage
         /// </summary>
         /// <returns></returns>
-        public abstract CNCMessage GetMoveByZMessage();
+        public abstract CNCMessage GetMoveByZMessage(double ZMillimieter, double Feed);
 
         /// <summary>
         /// Provides the template for the GetSetFeedMessage
         /// </summary>
         /// <returns></returns>
-        public abstract CNCMessage GetSetFeedMessage();
+        public abstract CNCMessage GetSetFeedMessage(double Feed);
     }
 }

@@ -66,16 +66,16 @@
     <Compile Include="SerialGRBLInterfaceTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PC\PC.csproj">
-      <Project>{716842cf-8ea3-47fb-a7a4-5f90f4d91cf7}</Project>
-      <Name>PC</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PC\PC.csproj">
+      <Project>{716842cf-8ea3-47fb-a7a4-5f90f4d91cf7}</Project>
+      <Name>PC</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

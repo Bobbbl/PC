@@ -45,6 +45,9 @@ namespace PC
         RTCSetRapid25Percent,
         RTC_ToggleSpindleStop,
         RTC_ToggleFloodCoolant,
-        RTC_ToggleMistCoolant
+        RTC_ToggleMistCoolant,
+
+        G_SetUnitToMillimeter_G21,
+        G_RelativeMotion_G91
     }
 }
