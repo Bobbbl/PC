@@ -59,6 +59,12 @@ namespace PC
         public abstract CNCMessage GetMoveByZMessage(double ZMillimieter, double Feed);
 
         /// <summary>
+        /// Provides the template for the GetMoveByXYZMessage
+        /// </summary>
+        /// <returns></returns>
+        public abstract CNCMessage GetMoveByXYZMessage(double XMillimieter, double YMillimeter, double ZMillimeter, double Feed);
+
+        /// <summary>
         /// Provides the template for the GetSetFeedMessage
         /// </summary>
         /// <returns></returns>

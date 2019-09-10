@@ -13,7 +13,8 @@ namespace PC
         /// <summary>
         /// Gets a GRBL Message for Feed. 
         /// This is the message who will returned
-        /// [GC:G0 G54 G17 G21 G90 G94 M5 M9 T0 F0 S0]        /// </summary>
+        /// [GC:G0 G54 G17 G21 G90 G94 M5 M9 T0 F0 S0]
+        /// </summary>
         /// <returns>CNCMessage</returns>
         public override CNCMessage GetCurrentFeedMessage()
         {
@@ -78,8 +79,19 @@ namespace PC
         public override CNCMessage GetMoveByXMessage(double XMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "X", XMillimieter.ToString()));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "F", Feed.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "X", XMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
+
+            return rmessage;
+        }
+
+        public override CNCMessage GetMoveByXYZMessage(double XMillimieter, double YMillimeter, double ZMillimeter, double Feed)
+        {
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "X", XMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Y", XMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Z", XMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
 
             return rmessage;
         }
@@ -91,8 +103,8 @@ namespace PC
         public override CNCMessage GetMoveByYMessage(double YMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "Y", YMillimieter.ToString()));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "F", Feed.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Y", YMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
 
             return rmessage;
         }
@@ -104,8 +116,8 @@ namespace PC
         public override CNCMessage GetMoveByZMessage(double ZMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "Z", ZMillimieter.ToString()));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "F", Feed.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Z", ZMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
 
             return rmessage;
         }
@@ -122,14 +134,62 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetJogByXMessage(double XMillimieter, double Feed)
+        public CNCMessage GetRelativeJogByXMessage(double XMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_SetUnitToMillimeter_G21));
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_RelativeMotion_G91));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "X", XMillimieter.ToString()));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "F", Feed.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "X", XMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
+
+            return rmessage;
+        }
+
+        public CNCMessage GetRelativeJogByYMessage(double YMillimieter, double Feed)
+        {
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_SetUnitToMillimeter_G21));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_RelativeMotion_G91));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Y", YMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
+
+            return rmessage;
+        }
+
+        public CNCMessage GetRelativeJogByZMessage(double ZMillimeter, double Feed)
+        {
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_SetUnitToMillimeter_G21));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_RelativeMotion_G91));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Z", ZMillimeter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
+
+            return rmessage;
+        }
+
+        public CNCMessage GetRelativeJogByXYZMessage(double XMillimieter, double YMillimeter, double ZMillimeter, double Feed)
+        {
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_SetUnitToMillimeter_G21));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_RelativeMotion_G91));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "X", XMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Y", YMillimeter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Z", ZMillimeter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
+
+            return rmessage;
+        }
+
+        public CNCMessage GetJogByXMessage(double XMillimieter, double Feed)
+        {
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "X", XMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
 
             return rmessage;
         }
@@ -138,10 +198,8 @@ namespace PC
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_SetUnitToMillimeter_G21));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_RelativeMotion_G91));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "Y", YMillimieter.ToString()));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "F", Feed.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Y", YMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
 
             return rmessage;
         }
@@ -150,10 +208,20 @@ namespace PC
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_SetUnitToMillimeter_G21));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_RelativeMotion_G91));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "Z", ZMillimieter.ToString()));
-            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteSetting, "F", Feed.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Z", ZMillimieter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
+
+            return rmessage;
+        }
+
+        public CNCMessage GetJogByXYZMessage(double XMillimeter, double YMillimeter, double ZMillimeter, double Feed)
+        {
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "X", XMillimeter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Y", YMillimeter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "Z", ZMillimeter.ToString()));
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "F", Feed.ToString()));
 
             return rmessage;
         }

@@ -84,10 +84,10 @@ namespace PC.Test
             GRBLProtokoll protokoll = new GRBLProtokoll();
 
             // Act
-            CNCMessage output = protokoll.GetMoveByXMessage();
+            CNCMessage output = protokoll.GetMoveByXMessage(12, 100);
 
             // Assert
-
+            Assert.Equal("X12 F100", output.Message.Trim());
         }
 
         [Fact]
@@ -97,7 +97,10 @@ namespace PC.Test
             GRBLProtokoll protokoll = new GRBLProtokoll();
 
             // Act
-            CNCMessage output = protokoll.GetMoveByYMessage();
+            CNCMessage output = protokoll.GetMoveByYMessage(12, 100);
+
+            // Assert
+            Assert.Equal("Y12 F100", output.Message.Trim());
         }
 
         [Fact]
@@ -107,25 +110,132 @@ namespace PC.Test
             GRBLProtokoll protokoll = new GRBLProtokoll();
 
             // Act
-            CNCMessage output = protokoll.GetMoveByZMessage();
+            CNCMessage output = protokoll.GetMoveByZMessage(12, 100);
+
+            // Assert
+            Assert.Equal("Z12 F100", output.Message.Trim());
+        }
+
+        [Fact]
+        public void GetMoveByXYZMessage_IsEqual()
+        {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            // Act
+            CNCMessage output = protokoll.GetMoveByXYZMessage(12, 12, 12, 100);
+
+            // Assert
+            Assert.Equal("X12 Y12 Z12 F100", output.Message.Trim());
         }
 
         [Fact]
         public void GetJogByXMessage_IsEqual()
         {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
 
+            // Act
+            CNCMessage output = protokoll.GetJogByXMessage(12, 100);
+
+            // Assert
+            Assert.Equal("$J=X12 F100", output.Message.Trim());
         }
 
         [Fact]
         public void GetJogByYMessage_IsEqual()
         {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
 
+            // Act
+            CNCMessage output = protokoll.GetJogByYMessage(12, 100);
+
+            // Assert
+            Assert.Equal("$J=Y12 F100", output.Message.Trim());
         }
 
         [Fact]
         public void GetJogByZMessage_IsEqual()
         {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            // Act
+            CNCMessage output = protokoll.GetJogByZMessage(12, 100);
+
+            // Assert
+            Assert.Equal("$J=Z12 F100", output.Message.Trim());
+        }
+
+        [Fact]
+        public void GetJogByXYZMessage_IsEqual()
+        {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            // Act
+            CNCMessage output = protokoll.GetJogByXYZMessage(12, 12, 12, 100);
+
+            // Assert
+            Assert.Equal("$J=X12 Y12 Z12 F100", output.Message.Trim());
+        }
+
+        [Fact]
+        public void GetRelativeJogByXMessage_IsEqual()
+        {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            // Act
+            CNCMessage output = protokoll.GetRelativeJogByXMessage(12, 100);
+
+            // Assert
+            Assert.Equal("$J=G21 G91 X12 F100", output.Message.Trim());
+        }
+
+        [Fact]
+        public void GetRelativeJogByYMessage_IsEqual()
+        {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            // Act
+            CNCMessage output = protokoll.GetRelativeJogByYMessage(12, 100);
+
+            // Assert
+            Assert.Equal("$J=G21 G91 Y12 F100", output.Message.Trim());
 
         }
+
+        [Fact]
+        public void GetRelativeJogByZMessage_IsEqual()
+        {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            // Act
+            CNCMessage output = protokoll.GetRelativeJogByZMessage(12, 100);
+
+            // Assert
+            Assert.Equal("$J=G21 G91 Z12 F100", output.Message.Trim());
+
+        }
+
+        [Fact]
+        public void GetRelativeJogByXYZMessage_IsEqual()
+        {
+            // Arrange
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            // Act
+            CNCMessage output = protokoll.GetRelativeJogByXYZMessage(12, 12, 12, 100);
+
+            // Assert
+            Assert.Equal("$J=G21 G91 X12 Y12 Z12 F100", output.Message.Trim());
+
+        }
+
+
     }
 }

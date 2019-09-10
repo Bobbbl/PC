@@ -10,12 +10,13 @@ namespace PC
         private Dictionary<GRBLCommand, string> _CommandString = new Dictionary<GRBLCommand, string>()
         {
             { GRBLCommand.GRBL_ViewSettings, "$$"},
-            {GRBLCommand.GRBL_WriteSetting, "&@@=@@@"},
+            {GRBLCommand.GRBL_WriteSetting, "$@@=%%% "},
+            {GRBLCommand.GRBL_WriteValue, "@@%%% "},
             {GRBLCommand.GRBL_ViewGCODEParameters, "$#"},
             {GRBLCommand.GRBL_ViewGCODEParserState, "$G"},
             {GRBLCommand.GRBL_ViewBuildInfo, "$I"},
             {GRBLCommand.GRBL_ViewStartUpBlocks, "$N"},
-            {GRBLCommand.GRBL_SaveStartUpBlock, "$N@@=@@@"},
+            {GRBLCommand.GRBL_SaveStartUpBlock, "$N@@=%%% "},
             {GRBLCommand.GRBL_CheckGCODEMode, "$C"},
             {GRBLCommand.GRBL_KillAlarmLock, "$X"},
             {GRBLCommand.GRBL_RunHomincCycle, "$H"},
@@ -46,8 +47,8 @@ namespace PC
             {GRBLCommand.RTC_ToggleSpindleStop, Convert.ToString(0x9E)},
             {GRBLCommand.RTC_ToggleFloodCoolant, Convert.ToString(0xA0)},
             {GRBLCommand.RTC_ToggleMistCoolant, Convert.ToString(0xA1)},
-            {GRBLCommand.G_SetUnitToMillimeter_G21, "G21" },
-            {GRBLCommand.G_RelativeMotion_G91, "G91" }
+            {GRBLCommand.G_SetUnitToMillimeter_G21, "G21 " },
+            {GRBLCommand.G_RelativeMotion_G91, "G91 " }
 
         };
 
@@ -66,12 +67,12 @@ namespace PC
 
             if(r.Contains("@@"))
             {
-                r.Replace("@@", bezeichner);
+                r = r.Replace("@@", bezeichner);
             }
 
-            if(r.Contains("@@@"))
+            if(r.Contains("%%%"))
             {
-                r.Replace("@@@", wert);
+                r = r.Replace("%%%", wert);
             }
 
             return r;

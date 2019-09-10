@@ -11,6 +11,7 @@ namespace PC
     {
         GRBL_ViewSettings,
         GRBL_WriteSetting,
+        GRBL_WriteValue,
         GRBL_ViewGCODEParameters,
         GRBL_ViewGCODEParserState,
         GRBL_ViewBuildInfo,
