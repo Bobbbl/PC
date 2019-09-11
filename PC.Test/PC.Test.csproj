@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CNCMessageTest.cs" />
+    <Compile Include="GeneralInformations.cs" />
     <Compile Include="GeneralTestInformations.cs" />
     <Compile Include="GRBLCommandDictionaryTest.cs" />
     <Compile Include="GRBLProtokollTest.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace PC.Test
 {
@@ -10,13 +11,41 @@ namespace PC.Test
     {
         public SerialGRBLInterface GRBLInterface { get; set; }
 
-        public string PortName { get; set; }
 
-        public int BaudRate { get; set; }
+        [Fact]
+        public void SendMessage_GotAnythingBack()
+        {
+            // Assamble
+            GRBLProtokoll pr = new GRBLProtokoll();
+            CNCMessage m = pr.GetCurrentFeedMessage();
+
+            // Act
+            GRBLInterface.SendMessage(m);
+
+
+            // Assert
+            // No Exception is proof enough
+
+        }
+
+        [Fact]
+        public void SendMessage_ReceiveMessage()
+        {
+            // Assamble
+            GRBLProtokoll pr = new GRBLProtokoll();
+            CNCMessage m = pr.GetCurrentFeedMessage();
+
+            // Act
+            GRBLInterface.SendMessage(m);
+            CNCMessage answer = GRBLInterface.ReceiveMessage(100);
+
+            // Assert
+            Assert.Contains("F", answer.Message);
+        }
 
         public SerialGRBLInterfaceTest()
         {
-            GRBLInterface = new SerialGRBLInterface(PortName, BaudRate);
+            GRBLInterface = new SerialGRBLInterface(GeneralInformations.PortName, GeneralInformations.BaudRate);
         }
     }
 }

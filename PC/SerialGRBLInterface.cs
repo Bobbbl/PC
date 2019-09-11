@@ -19,12 +19,22 @@ namespace PC
 
         public override CNCMessage ReceiveMessage(int TimeOut)
         {
-            throw new NotImplementedException();
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.Message = SerialInterface.ReadLine();
+
+            return rmessage;
         }
 
         public override void SendMessage(CNCMessage message)
         {
-            throw new NotImplementedException();
+            if(AutoPoll)
+            {
+                MessageBuffer.Add(message);
+            }
+            else
+            {
+                SerialInterface.WriteLine(message.Message);
+            }
         }
 
         public SerialPort SerialInterface { get; set; }
@@ -40,8 +50,8 @@ namespace PC
             sport.StopBits = System.IO.Ports.StopBits.One;
             sport.Handshake = System.IO.Ports.Handshake.None;
             // Serial Port Time Outs
-            sport.WriteTimeout = 500;
-            sport.ReadTimeout = 500;
+            sport.WriteTimeout = 200;
+            sport.ReadTimeout = 200;
             sport.Open();
 
             SerialInterface = sport;

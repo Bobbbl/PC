@@ -46,6 +46,7 @@ namespace PC
             }
         }
 
+        public List<CNCMessage> MessageBuffer { get; set; } = new List<CNCMessage>();
         public abstract void SendMessage(CNCMessage message);
 
         public abstract CNCMessage ReceiveMessage(int TimeOut);
