@@ -134,7 +134,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetRelativeJogByXMessage(double XMillimieter, double Feed)
+        public override CNCMessage GetRelativeJogByXMessage(double XMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
@@ -146,7 +146,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetRelativeJogByYMessage(double YMillimieter, double Feed)
+        public override CNCMessage GetRelativeJogByYMessage(double YMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
@@ -158,7 +158,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetRelativeJogByZMessage(double ZMillimeter, double Feed)
+        public override CNCMessage GetRelativeJogByZMessage(double ZMillimeter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
@@ -170,7 +170,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetRelativeJogByXYZMessage(double XMillimieter, double YMillimeter, double ZMillimeter, double Feed)
+        public override CNCMessage GetRelativeJogByXYZMessage(double XMillimieter, double YMillimeter, double ZMillimeter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
@@ -184,7 +184,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetJogByXMessage(double XMillimieter, double Feed)
+        public override CNCMessage GetJogByXMessage(double XMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
@@ -194,7 +194,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetJogByYMessage(double YMillimieter, double Feed)
+        public override CNCMessage GetJogByYMessage(double YMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
@@ -204,7 +204,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetJogByZMessage(double ZMillimieter, double Feed)
+        public override CNCMessage GetJogByZMessage(double ZMillimieter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
@@ -214,7 +214,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetJogByXYZMessage(double XMillimeter, double YMillimeter, double ZMillimeter, double Feed)
+        public override CNCMessage GetJogByXYZMessage(double XMillimeter, double YMillimeter, double ZMillimeter, double Feed)
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunJoggingMogion));
@@ -226,7 +226,7 @@ namespace PC
             return rmessage;
         }
 
-        public CNCMessage GetStatusReportMessage()
+        public override CNCMessage GetStatusReportMessage()
         {
             CNCMessage rmessage = new CNCMessage();
             rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.RTC_StatusReportQuery));
@@ -234,5 +234,20 @@ namespace PC
             return rmessage;
         }
 
+        public override CNCMessage GetSoftResetMessage()
+        {
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.RTC_SoftReset));
+
+            return rmessage;
+        }
+
+        public override CNCMessage GetKillAlarmMessage()
+        {
+            CNCMessage rmessage = new CNCMessage();
+            rmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_KillAlarmLock));
+
+            return rmessage;
+        }
     }
 }

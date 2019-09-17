@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
 namespace PC
@@ -18,7 +20,7 @@ namespace PC
 
         public void OnNotifyPropertyChanged(string PropName)
         {
-            if(PropertyChanged != null)
+            if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(PropName));
             }
@@ -100,9 +102,44 @@ namespace PC
         /// Private Function which is deriving the current Z in the cnc-controller
         /// </summary>
         /// <returns></returns>
-        private float GetCurrentZ()
+        public async Task<float> GetCurrentZ()
         {
-            throw new NotImplementedException();
+            float r = 0;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetCurrentZMessage();
+                Interface.SendMessage(message);
+                CNCMessage output = Interface.ReceiveMessage(100);
+                var tmp = Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[4].Value;
+                r = float.Parse(tmp);
+            });
+
+            return r;
+        }
+
+        public async Task<CNCMessage> SendKillAlarm()
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetKillAlarmMessage();
+                Interface.SendMessage(message);
+                tmp = Interface.ReceiveMessage(100);
+            });
+            return tmp;
+        }
+
+        public async Task<CNCMessage> SendSoftReset()
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetSoftResetMessage();
+                Interface.SendMessage(message);
+                tmp = Interface.ReceiveMessage(100);
+            });
+
+            return tmp;
         }
 
         /// <summary>
@@ -122,6 +159,18 @@ namespace PC
             set
             {
             }
+        }
+
+
+
+        public CNC_Device(CNCInterface IFace, CNCProtokoll protokoll)
+        {
+            Interface = IFace;
+            Protokoll = protokoll;
+        }
+
+        ~CNC_Device()
+        {
         }
     }
 }

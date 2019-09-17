@@ -20,7 +20,17 @@ namespace PC
         public override CNCMessage ReceiveMessage(int TimeOut)
         {
             CNCMessage rmessage = new CNCMessage();
-            rmessage.Message = SerialInterface.ReadLine();
+            try
+            {
+                rmessage.Message = SerialInterface.ReadLine();
+            }
+            catch (TimeoutException ex)
+            {
+                rmessage.Message = "TIMEOUT";
+            }
+
+
+
 
             return rmessage;
         }
@@ -35,6 +45,11 @@ namespace PC
             {
                 SerialInterface.WriteLine(message.Message);
             }
+        }
+
+        public override void CloseConnection()
+        {
+            SerialInterface.Close();
         }
 
         public SerialPort SerialInterface { get; set; }

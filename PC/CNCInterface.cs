@@ -51,6 +51,9 @@ namespace PC
 
         public abstract CNCMessage ReceiveMessage(int TimeOut);
 
+        public abstract void CloseConnection();
+        
+
 
         public CNCInterface()
         {

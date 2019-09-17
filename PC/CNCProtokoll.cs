@@ -69,5 +69,18 @@ namespace PC
         /// </summary>
         /// <returns></returns>
         public abstract CNCMessage GetSetFeedMessage(double Feed);
+
+        public abstract CNCMessage GetRelativeJogByXMessage(double XMillimieter, double Feed);
+        public abstract CNCMessage GetRelativeJogByYMessage(double YMillimieter, double Feed);
+        public abstract CNCMessage GetRelativeJogByZMessage(double ZMillimeter, double Feed);
+        public abstract CNCMessage GetRelativeJogByXYZMessage(double XMillimieter, double YMillimeter, double ZMillimeter, double Feed);
+        public abstract CNCMessage GetJogByXMessage(double XMillimieter, double Feed);
+        public abstract CNCMessage GetJogByYMessage(double YMillimieter, double Feed);
+        public abstract CNCMessage GetJogByZMessage(double ZMillimieter, double Feed);
+        public abstract CNCMessage GetJogByXYZMessage(double XMillimeter, double YMillimeter, double ZMillimeter, double Feed);
+        public abstract CNCMessage GetStatusReportMessage();
+        public abstract CNCMessage GetSoftResetMessage();
+        public abstract CNCMessage GetKillAlarmMessage();
+
     }
 }
