@@ -3,7 +3,7 @@
   <Class Name="PC.CNC_Device">
     <Position X="3" Y="1.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAABCAAAAYAAAAABBAAABAgAAIAQCAAAAABAAAIAI=</HashCode>
+      <HashCode>AAAAABCAAACYAwAAABBAAABAgAgIAwCAAABAtAAAIAI=</HashCode>
       <FileName>CNC_Device.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -17,28 +17,28 @@
   <Class Name="PC.CNCInterface">
     <Position X="7" Y="1.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAABAAAAAAAAAAACAAAAAQACAAAAAAAAAAIAAIAAg=</HashCode>
+      <HashCode>AAAAABAAACAAAAAAACAAABAQAKAAAAAAAAAAIAAIAAg=</HashCode>
       <FileName>CNCInterface.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PC.SerialGRBLInterface">
     <Position X="8.5" Y="5.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAABAAAECAAAQAAACEAAACAAAQAAgAAAAA=</HashCode>
+      <HashCode>AAAIAACAAAAABAAAECAAARAAAKEAAACAAAQAAgAAAAA=</HashCode>
       <FileName>SerialGRBLInterface.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PC.CNCProtokoll">
-    <Position X="2.5" Y="7.25" Width="2.25" />
+    <Position X="2.25" Y="8.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>EEAAAAAABAAAAAABAAAQAAAAAAAAABAAAIAAAIAAIAA=</HashCode>
+      <HashCode>EEAgAAAIJAAIAAABAAAQAEAAAACAABAAgIABAICAIAA=</HashCode>
       <FileName>CNCProtokoll.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PC.GRBLProtokoll">
     <Position X="6" Y="9.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>EEAAAAAABAAIAAABAAAQAAAAAAAAABAAAIAAAIAAIAA=</HashCode>
+      <HashCode>EGAgAAAIJAAIAAABAAAQAEAAAACAABAAgIABAICAIAA=</HashCode>
       <FileName>GRBLProtokoll.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -73,7 +73,7 @@
   <Enum Name="PC.GRBLCommand" Collapsed="true">
     <Position X="13.75" Y="8.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>qOAAAAgwgBQAEQACsBAAAAoAAAAAJABQhgMAQAABkAA=</HashCode>
+      <HashCode>qOAAQAgwgBQAEQACsBAAAAoAAAAAJADQhgMAQAABkAA=</HashCode>
       <FileName>GRBLCommand.cs</FileName>
     </TypeIdentifier>
   </Enum>

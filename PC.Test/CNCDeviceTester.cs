@@ -10,6 +10,44 @@ namespace PC.Test
     public class CNCDeviceTester
     {
 
+        [Fact]
+        public async Task JogRelativeTest()
+        {
+            var tmp1 = await device.RelativeJogX(10, 100);
+            var tmp2 = await device.RelativeJogY(10, 100);
+            var tmp3 = await device.RelativeJogZ(10, 100);
+            var tmp4 = await device.RelativeJogXYZ(10, 10, 10, 100);
+
+            Assert.DoesNotContain("error", tmp1.Message);
+            Assert.DoesNotContain("error", tmp2.Message);
+            Assert.DoesNotContain("error", tmp3.Message);
+            Assert.DoesNotContain("error", tmp4.Message);
+
+            Assert.Contains("ok", tmp1.Message);
+            Assert.Contains("ok", tmp2.Message);
+            Assert.Contains("ok", tmp3.Message);
+            Assert.Contains("ok", tmp4.Message);
+        }
+
+        [Fact]
+        public async Task MoveByTest()
+        {
+            var tmp1 = await device.MoveByX(10, 100);
+            var tmp2 = await device.MoveByY(10, 100);
+            var tmp3 = await device.MoveByZ(10, 100);
+            var tmp4 = await device.MoveByXYZ(10, 10, 10, 100);
+
+            Assert.DoesNotContain("error", tmp1.Message);
+            Assert.DoesNotContain("error", tmp2.Message);
+            Assert.DoesNotContain("error", tmp3.Message);
+            Assert.DoesNotContain("error", tmp4.Message);
+
+            Assert.Contains("ok", tmp1.Message);
+            Assert.Contains("ok", tmp2.Message);
+            Assert.Contains("ok", tmp3.Message);
+            Assert.Contains("ok", tmp4.Message);
+
+        }
 
         [Fact]
         public async Task JogXTest()
@@ -23,6 +61,7 @@ namespace PC.Test
         [Fact]
         public async Task JogYTest()
         {
+
             var tmp = await device.JogY(10, 100);
 
             Assert.DoesNotContain("error", tmp.Message);

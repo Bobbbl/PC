@@ -51,6 +51,8 @@ namespace PC
 
         public abstract CNCMessage ReceiveMessage(int TimeOut);
 
+        public abstract CNCMessage WaitReceiveMessage(int TimeOut, CNCMessage WaitForMessage, int WaitTimout);
+
         public abstract void CloseConnection();
         
 

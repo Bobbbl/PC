@@ -197,8 +197,9 @@ namespace PC
             await Task.Run(() =>
             {
                 CNCMessage message = Protokoll.GetJogByXMessage(X, Feed);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
                 Interface.SendMessage(message);
-                tmp = Interface.ReceiveMessage(100);
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
             });
 
             return tmp;
@@ -209,6 +210,12 @@ namespace PC
             CNCMessage tmp = null;
             await Task.Run(() =>
             {
+
+                GRBLProtokoll pr = new GRBLProtokoll();
+                CNCMessage m = pr.GetCurrentFeedMessage();
+                CNCMessage start = new CNCMessage() { Message = "Grbl 1.1g ['$' for help]" };
+                var an = Interface.WaitReceiveMessage(100, start, 2000);
+
                 CNCMessage message = Protokoll.GetJogByYMessage(Y, Feed);
                 Interface.SendMessage(message);
                 tmp = Interface.ReceiveMessage(100);
@@ -225,6 +232,126 @@ namespace PC
                 CNCMessage message = Protokoll.GetJogByYMessage(Z, Feed);
                 Interface.SendMessage(message);
                 tmp = Interface.ReceiveMessage(100);
+            });
+
+            return tmp;
+        }
+
+        public async Task<CNCMessage> MoveByX(double X, double F)
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetMoveByXMessage(X, F);
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = (Interface as SerialGRBLInterface).WaitReceiveMessage(100, t, 1000);
+            });
+            return tmp;
+        }
+
+        public async Task<CNCMessage> MoveByY(double Y, double F)
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetMoveByXMessage(Y, F);
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+            });
+            return tmp;
+        }
+
+        public async Task<CNCMessage> MoveByZ(double Z, double F)
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetMoveByXMessage(Z, F);
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+            });
+            return tmp;
+        }
+
+        public async Task<CNCMessage> MoveByXYZ(double X, double Y, double Z, double F)
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetMoveByXYZMessage(X, Y, Z, F);
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+            });
+            return tmp;
+        }
+
+        public async Task<CNCMessage> RelativeJogX(double X, double F)
+        {
+            CNCMessage tmp = null;
+
+            await Task.Run(() =>
+            {
+
+                CNCMessage message = Protokoll.GetRelativeJogByXMessage(X, F);
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+
+            });
+
+            return tmp;
+        }
+
+        public async Task<CNCMessage> RelativeJogY(double Y, double F)
+        {
+            CNCMessage tmp = null;
+
+            await Task.Run(() =>
+            {
+
+                CNCMessage message = Protokoll.GetRelativeJogByYMessage(Y, F);
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+
+            });
+
+            return tmp;
+        }
+
+        public async Task<CNCMessage> RelativeJogZ(double Z, double F)
+        {
+            CNCMessage tmp = null;
+
+            await Task.Run(() =>
+            {
+
+                CNCMessage message = Protokoll.GetRelativeJogByZMessage(Z, F);
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+
+            });
+
+            return tmp;
+        }
+
+        public async Task<CNCMessage> RelativeJogXYZ(double X, double Y, double Z, double F)
+        {
+            CNCMessage tmp = null;
+
+            await Task.Run(() =>
+            {
+
+                CNCMessage message = Protokoll.GetRelativeJogByXYZMessage(X, Y, Z, F);
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+
             });
 
             return tmp;

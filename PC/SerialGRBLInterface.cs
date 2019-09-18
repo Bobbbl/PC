@@ -37,13 +37,10 @@ namespace PC
                 rmessage.Message = "TIMEOUT";
             }
 
-
-
-
             return rmessage;
         }
 
-        public CNCMessage ReceiveMessage(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0)
+        public override CNCMessage WaitReceiveMessage(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0)
         {
             CNCMessage rmessage = new CNCMessage() { Message = ""};
 

@@ -35,13 +35,13 @@ namespace PC.Test
             GRBLProtokoll pr = new GRBLProtokoll();
             CNCMessage m = pr.GetCurrentFeedMessage();
             CNCMessage start = new CNCMessage() { Message = "Grbl 1.1g ['$' for help]" };
-            var an = GRBLInterface.ReceiveMessage(100, start, 2000);
+            var an = GRBLInterface.WaitReceiveMessage(100, start, 2000);
 
             // Act
             GRBLInterface.SendMessage(m);
             //CNCMessage answer = GRBLInterface.ReceiveMessage(10);
             CNCMessage tmp = new CNCMessage() { Message = "F" };
-            CNCMessage answer = GRBLInterface.ReceiveMessage(100, tmp, 3000);
+            CNCMessage answer = GRBLInterface.WaitReceiveMessage(100, tmp, 3000);
 
 
             // Assert
