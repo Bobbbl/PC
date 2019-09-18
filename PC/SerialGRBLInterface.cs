@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -17,12 +18,19 @@ namespace PC
         public event EventHandler UnlockNeededMessageReceived;
         public event EventHandler StatusReportMessageReceived;
 
-        public override CNCMessage ReceiveMessage(int TimeOut)
+        public CNCMessage LastMessageReceived { get; set; }
+
+        public override CNCMessage ReceiveMessage(int TimeOut = 100)
         {
             CNCMessage rmessage = new CNCMessage();
+
+            LastMessageReceived = null;
+
             try
             {
+                SerialInterface.ReadTimeout = TimeOut;
                 rmessage.Message = SerialInterface.ReadLine();
+                LastMessageReceived = rmessage;
             }
             catch (TimeoutException ex)
             {
@@ -35,9 +43,57 @@ namespace PC
             return rmessage;
         }
 
+        public CNCMessage ReceiveMessage(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0)
+        {
+            CNCMessage rmessage = new CNCMessage() { Message = ""};
+
+            LastMessageReceived = null;
+
+            if (WaitTimeout == 0)
+            {
+                try
+                {
+                    SerialInterface.ReadTimeout = TimeOut;
+                    rmessage.Message = SerialInterface.ReadLine();
+                    LastMessageReceived = rmessage;
+                }
+                catch (TimeoutException ex)
+                {
+                    rmessage.Message = "TIMEOUT";
+                }
+
+            }
+            else
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (!rmessage.Message.Contains(WaitForMessage.Message))
+                {
+                    try
+                    {
+                        SerialInterface.ReadTimeout = TimeOut;
+                        rmessage.Message = SerialInterface.ReadLine();
+                        LastMessageReceived = rmessage;
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        rmessage.Message = "TIMEOUT";
+                    }
+
+                    if (sw.ElapsedMilliseconds >= WaitTimeout)
+                        return rmessage;
+                }
+            }
+
+
+
+
+            return rmessage;
+        }
+
         public override void SendMessage(CNCMessage message)
         {
-            if(AutoPoll)
+            if (AutoPoll)
             {
                 MessageBuffer.Add(message);
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -75,27 +76,57 @@ namespace PC
         /// Private Function which is deriving the current modified feed in the cnc-controller
         /// </summary>
         /// <returns></returns>
-        private float GetCurrentFeed()
+        public async Task<float> GetCurrentFeed()
         {
-            throw new NotImplementedException();
+            float r = 0;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetCurrentFeedMessage();
+                Interface.SendMessage(message);
+                CNCMessage output = Interface.ReceiveMessage(100);
+                var tmp = Regex.Match(output.Message, @"F([0-9]{1,10})").Groups[1].Value;
+                r = Convert.ToSingle(tmp, CultureInfo.InvariantCulture);
+            });
+
+            return r;
         }
 
         /// <summary>
         /// Private Function which is deriving the current X in the cnc-controller
         /// </summary>
         /// <returns></returns>
-        private float GetCurrentX()
+        public async Task<float> GetCurrentX()
         {
-            throw new NotImplementedException();
+            float r = 0;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetCurrentXMessage();
+                Interface.SendMessage(message);
+                CNCMessage output = Interface.ReceiveMessage(100);
+                var tmp = Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[2].Value;
+                r = Convert.ToSingle(tmp, CultureInfo.InvariantCulture);
+            });
+
+            return r;
         }
 
         /// <summary>
         /// Private Function which is deriving the Y in the cnc-controller
         /// </summary>
         /// <returns></returns>
-        private float GetCurrentY()
+        public async Task<float> GetCurrentY()
         {
-            throw new NotImplementedException();
+            float r = 0;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetCurrentZMessage();
+                Interface.SendMessage(message);
+                CNCMessage output = Interface.ReceiveMessage(100);
+                var tmp = Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[3].Value;
+                r = Convert.ToSingle(tmp, CultureInfo.InvariantCulture);
+            });
+
+            return r;
         }
 
         /// <summary>
@@ -111,11 +142,29 @@ namespace PC
                 Interface.SendMessage(message);
                 CNCMessage output = Interface.ReceiveMessage(100);
                 var tmp = Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[4].Value;
-                r = float.Parse(tmp);
+                r = Convert.ToSingle(tmp, CultureInfo.InvariantCulture);
             });
 
             return r;
         }
+
+        public async Task<float[]> GetCurrentXYZ()
+        {
+            float[] r = new float[3];
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetCurrentXYZMessage();
+                Interface.SendMessage(message);
+                CNCMessage output = Interface.ReceiveMessage(100);
+                r[0] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[2].Value, CultureInfo.InvariantCulture);
+                r[1] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[3].Value, CultureInfo.InvariantCulture);
+                r[2] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[4].Value, CultureInfo.InvariantCulture);
+
+            });
+
+            return r;
+        }
+
 
         public async Task<CNCMessage> SendKillAlarm()
         {
@@ -142,6 +191,46 @@ namespace PC
             return tmp;
         }
 
+        public async Task<CNCMessage> JogX(double X, double Feed)
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetJogByXMessage(X, Feed);
+                Interface.SendMessage(message);
+                tmp = Interface.ReceiveMessage(100);
+            });
+
+            return tmp;
+        }
+
+        public async Task<CNCMessage> JogY(double Y, double Feed)
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetJogByYMessage(Y, Feed);
+                Interface.SendMessage(message);
+                tmp = Interface.ReceiveMessage(100);
+            });
+
+            return tmp;
+        }
+
+        public async Task<CNCMessage> JogZ(double Z, double Feed)
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetJogByYMessage(Z, Feed);
+                Interface.SendMessage(message);
+                tmp = Interface.ReceiveMessage(100);
+            });
+
+            return tmp;
+        }
+
+
         /// <summary>
         /// Thish holds the current Interface. The Interface can be of different
         /// and this way it can connected via SerialPort, USB etc.
@@ -162,7 +251,7 @@ namespace PC
         }
 
 
-
+        #region Constructor
         public CNC_Device(CNCInterface IFace, CNCProtokoll protokoll)
         {
             Interface = IFace;
@@ -172,5 +261,6 @@ namespace PC
         ~CNC_Device()
         {
         }
+        #endregion
     }
 }
