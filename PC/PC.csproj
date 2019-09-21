@@ -92,6 +92,7 @@
     <Compile Include="GRBLCommandDictionary.cs" />
     <Compile Include="GRBLProtokoll.cs" />
     <Compile Include="MachineStates.cs" />
+    <Compile Include="PresentViewModel.cs" />
     <Compile Include="SerialGRBLInterface.cs" />
     <Compile Include="StatusReportEventsArgs.cs" />
     <Page Include="MainWindow.xaml">

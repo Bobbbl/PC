@@ -7,7 +7,7 @@ namespace PC
 {
     public class CNCEventsArgs
     {
-        public int Message
+        public CNCMessage Message
         {
             get => default;
             set

@@ -9,6 +9,19 @@ namespace PC
     public abstract class CNCInterface
     {
 
+        public event CNCMessageEventHandler MessageReceived;
+        public event CNCMessageEventHandler MessageSent;
+
+        public void OnMessageReceived(object sender, CNCMessage message)
+        {
+            MessageReceived(sender, new CNCEventsArgs() { Message = message });
+        }
+
+        public void OnMessageSent(object sender, CNCMessage message)
+        {
+            MessageSent(sender, new CNCEventsArgs() { Message = message });
+        }
+
         private Timer PollTimer = new Timer(1000) { AutoReset = true };
 
         private int _PollTimeout = 1000;

@@ -11,11 +11,11 @@ namespace PC
     {
         public List<string> ConsoleText { get; set; }
 
-        public double CurrentX { get; set; }
+        public static double CurrentX { get; set; }
 
-        public double CurrentY { get; set; }
+        public static double CurrentY { get; set; }
 
-        public double CurrentZ { get; set; }
+        public static double CurrentZ { get; set; }
 
         public DispatcherTimer UpdateTimer { get; set; } = new DispatcherTimer();
 

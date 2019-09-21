@@ -31,6 +31,7 @@ namespace PC
                 SerialInterface.ReadTimeout = TimeOut;
                 rmessage.Message = SerialInterface.ReadLine();
                 LastMessageReceived = rmessage;
+                OnMessageReceived(this, rmessage);
             }
             catch (TimeoutException ex)
             {
@@ -53,6 +54,7 @@ namespace PC
                     SerialInterface.ReadTimeout = TimeOut;
                     rmessage.Message = SerialInterface.ReadLine();
                     LastMessageReceived = rmessage;
+                    OnMessageReceived(this, rmessage);
                 }
                 catch (TimeoutException ex)
                 {
@@ -71,6 +73,7 @@ namespace PC
                         SerialInterface.ReadTimeout = TimeOut;
                         rmessage.Message = SerialInterface.ReadLine();
                         LastMessageReceived = rmessage;
+                        OnMessageReceived(this, rmessage);
                     }
                     catch (TimeoutException ex)
                     {
@@ -93,6 +96,7 @@ namespace PC
             if (AutoPoll)
             {
                 MessageBuffer.Add(message);
+                OnMessageSent(this, message);
             }
             else
             {
