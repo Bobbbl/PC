@@ -81,7 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="XAMLFiles\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
@@ -95,21 +95,56 @@
     <Compile Include="PresentViewModel.cs" />
     <Compile Include="SerialGRBLInterface.cs" />
     <Compile Include="StatusReportEventsArgs.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="XAMLFiles\ConsolePresenter.xaml.cs">
+      <DependentUpon>ConsolePresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAMLFiles\PlotPresenter.xaml.cs">
+      <DependentUpon>PlotPresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAMLFiles\Portis.xaml.cs">
+      <DependentUpon>Portis.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAMLFiles\PortPresenter.xaml.cs">
+      <DependentUpon>PortPresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAMLFiles\ToolbarPresenter.xaml.cs">
+      <DependentUpon>ToolbarPresenter.xaml</DependentUpon>
+    </Compile>
+    <Page Include="XAMLFiles\ConsolePresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAMLFiles\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="XAMLFiles\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CNCMessage.cs" />
     <Compile Include="CNC_Device.cs" />
     <Compile Include="CNCInterface.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="XAMLFiles\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="XAMLFiles\PlotPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAMLFiles\Portis.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAMLFiles\PortPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAMLFiles\ToolbarPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -137,7 +172,7 @@
     <None Include="Structure.cd" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="XAMLFiles\App.config" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
