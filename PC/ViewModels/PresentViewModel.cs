@@ -7,7 +7,7 @@ using System.Windows.Threading;
 
 namespace PC
 {
-    public class PresentViewModel
+    public class PresentViewModel : BaseViewModel
     {
         public List<string> ConsoleText { get; set; }
 

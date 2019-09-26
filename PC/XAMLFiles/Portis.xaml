@@ -10,6 +10,7 @@
     <Grid>
         <Border BorderBrush="Black" BorderThickness="1" Background="WhiteSmoke">
             <TextBlock x:Name="PortNamePresenter" HorizontalAlignment="Center" VerticalAlignment="Center">COM</TextBlock>
+            
         </Border>
     </Grid>
 </UserControl>
