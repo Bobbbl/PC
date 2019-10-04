@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +19,37 @@ namespace PC.XAMLFiles
     /// <summary>
     /// Interaktionslogik für Portis.xaml
     /// </summary>
-    public partial class Portis : UserControl
+    public partial class Portis : UserControl, INotifyPropertyChanged
     {
+        public event PortisEventClickedEventHandler PortisClickedEvent;
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+
+        }
+        #endregion
+
+        public string PortName { get; set; } = "Default";
+        public int BaudRate { get; set; }
+
         public Portis()
         {
             InitializeComponent();
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //PortisClickedEvent(this, new PortisEventsArgs() { PortName = PortName, BaudRate = BaudRate });
+            PresentViewModel.CurrentSelectedPortName = "Click";
+
         }
     }
 }
