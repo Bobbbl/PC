@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:PC.XAMLFiles"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50"
-             Height="50" Width="50">
+             Height="50" Width="50"  HorizontalAlignment="Left" Padding="2">
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" Background="WhiteSmoke">
+        <Border BorderBrush="Black" BorderThickness="1" Background="WhiteSmoke" MouseLeftButtonDown="Border_MouseLeftButtonDown">
             <TextBlock x:Name="PortNamePresenter" HorizontalAlignment="Center" VerticalAlignment="Center">COM</TextBlock>
             
         </Border>
