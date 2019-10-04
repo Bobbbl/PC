@@ -13,7 +13,6 @@ namespace PC
 
         public PortViewModel()
         {
-            PortList.Add("asdf");
 
         }
 
