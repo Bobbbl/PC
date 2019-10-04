@@ -11,6 +11,11 @@ namespace PC
 
         public List<string> PortList { get; set; } = new List<string>();
 
+        public PortViewModel()
+        {
+            PortList.Add("asdf");
+
+        }
 
     }
 }

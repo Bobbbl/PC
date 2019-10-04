@@ -86,6 +86,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\PortToPortisConverter.cs" />
     <Compile Include="PortisEventHandler.cs" />
     <Compile Include="PortisEventsArgs.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
