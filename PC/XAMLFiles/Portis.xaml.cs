@@ -48,7 +48,7 @@ namespace PC.XAMLFiles
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             //PortisClickedEvent(this, new PortisEventsArgs() { PortName = PortName, BaudRate = BaudRate });
-            PresentViewModel.CurrentSelectedPortName = "Click";
+            PresentViewModel.CurrentSelectedPortName = PortName;
 
         }
     }

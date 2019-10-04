@@ -4,15 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PC.XAMLFiles"
+             xmlns:ViewModels="clr-namespace:PC"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="800">
     <UserControl.DataContext>
-        <local:PortPresenter></local:PortPresenter>
+        <ViewModels:PortViewModel></ViewModels:PortViewModel>
     </UserControl.DataContext>
+    <UserControl.Resources></UserControl.Resources>
     <Grid Name="Container" MinHeight="80">
         <Border BorderBrush="Black" BorderThickness="3" Background="WhiteSmoke">
             <ItemsControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                          Margin="10">
+                          Margin="10" ItemsSource="{Binding PortList, Converter={ViewModels:PortToPortisConverter}}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel></WrapPanel>
