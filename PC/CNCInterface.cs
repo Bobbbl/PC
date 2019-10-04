@@ -14,7 +14,10 @@ namespace PC
 
         public void OnMessageReceived(object sender, CNCMessage message)
         {
-            MessageReceived(sender, new CNCEventsArgs() { Message = message });
+            if (MessageReceived != null)
+            {
+                MessageReceived(sender, new CNCEventsArgs() { Message = message });
+            }
         }
 
         public void OnMessageSent(object sender, CNCMessage message)
@@ -67,7 +70,7 @@ namespace PC
         public abstract CNCMessage WaitReceiveMessage(int TimeOut, CNCMessage WaitForMessage, int WaitTimout);
 
         public abstract void CloseConnection();
-        
+
 
 
         public CNCInterface()
