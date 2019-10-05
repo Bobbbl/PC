@@ -13,9 +13,7 @@
     <Grid>
         <DockPanel>
             <portpresenter:PortPresenter DockPanel.Dock="Top"></portpresenter:PortPresenter>
-            <portpresenter:ToolbarPresenter DockPanel.Dock="Left">
-                <TextBox Text="{Binding CurrentSelectedPortName}"></TextBox>
-            </portpresenter:ToolbarPresenter>
+            <portpresenter:ToolbarPresenter DockPanel.Dock="Left"></portpresenter:ToolbarPresenter>
             <portpresenter:ConsolePresenter DockPanel.Dock="Bottom"></portpresenter:ConsolePresenter>
             <portpresenter:PlotPresenter></portpresenter:PlotPresenter>
         </DockPanel>

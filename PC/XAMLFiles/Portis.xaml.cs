@@ -38,7 +38,9 @@ namespace PC.XAMLFiles
         #endregion
 
         public string PortName { get; set; } = "Default";
-        public int BaudRate { get; set; }
+        public int BaudRate { get; set; } = 115200;
+
+
 
         public Portis()
         {
@@ -47,6 +49,7 @@ namespace PC.XAMLFiles
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            PresentViewModel.CurrentSelectedBaudRate = BaudRate;
             PresentViewModel.CurrentSelectedPortName = PortName;
 
         }
