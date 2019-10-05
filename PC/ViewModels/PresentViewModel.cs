@@ -24,6 +24,10 @@ namespace PC
 
         public DispatcherTimer PollTimer { get; set; }
 
+        public bool Connected { get; set; }
+
+        public bool ErrorReceived { get; set; }
+
 
         private static string _CurrentSelectedPortName;
         public static string CurrentSelectedPortName
@@ -92,6 +96,7 @@ namespace PC
                     CNCInterface iface = new SerialGRBLInterface(CurrentSelectedPortName, CurrentSelectedBaudRate);
                     CNCProtokoll protokoll = new GRBLProtokoll();
                     Device = new CNC_Device(iface, protokoll);
+
 
                     break;
                 default:

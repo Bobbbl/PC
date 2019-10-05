@@ -40,6 +40,8 @@ namespace PC.XAMLFiles
         public string PortName { get; set; } = "Default";
         public int BaudRate { get; set; } = 115200;
 
+        public Brush BackgroundColor { get; set; } = Brushes.White;
+
 
 
         public Portis()
