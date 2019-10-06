@@ -13,7 +13,6 @@ namespace PC
 
         public List<string> PortList { get; set; } = new List<string>();
 
-
         private DispatcherTimer PortSearchTimer = new DispatcherTimer();
 
 
@@ -31,7 +30,6 @@ namespace PC
 
             PortList = portlist;
             OnPropertyChanged(nameof(PortList));
-
 
         }
 

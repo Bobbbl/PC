@@ -8,7 +8,40 @@
              d:DesignHeight="450" d:DesignWidth="800" MinWidth="200">
     <Grid MaxWidth="500" MinWidth="250">
         <Border BorderBrush="Black" BorderThickness="3" Background="WhiteSmoke">
-            
+            <Grid VerticalAlignment="Top" Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="ErrorControlButton" Grid.Column="0" Grid.Row="0"></Button>
+                <Button x:Name="UpControlButton" Grid.Column="2" Grid.Row="0"></Button>
+                <Button x:Name="LeftControlButton" Grid.Column="1" Grid.Row="1"></Button>
+                <Button x:Name="RightControlButton" Grid.Column="3" Grid.Row="1"></Button>
+                <Button x:Name="DownControlButton" Grid.Column="2" Grid.Row="2"></Button>
+                <Button x:Name="SpindleControlButton" Grid.Column="5" Grid.Row="1"></Button>
+            </Grid>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top">
+                    <TextBox>asdf</TextBox>
+                    <Button>asdf</Button>
+                </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>
