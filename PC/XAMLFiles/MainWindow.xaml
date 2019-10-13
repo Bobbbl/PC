@@ -13,7 +13,7 @@
     <Grid>
         <DockPanel>
             <portpresenter:PortPresenter DockPanel.Dock="Top"></portpresenter:PortPresenter>
-            <portpresenter:ToolbarPresenter DockPanel.Dock="Left"></portpresenter:ToolbarPresenter>
+            <portpresenter:ToolbarPresenterLegacy DockPanel.Dock="Left"></portpresenter:ToolbarPresenterLegacy>
             <portpresenter:ConsolePresenter DockPanel.Dock="Bottom"></portpresenter:ConsolePresenter>
             <portpresenter:PlotPresenter></portpresenter:PlotPresenter>
         </DockPanel>
