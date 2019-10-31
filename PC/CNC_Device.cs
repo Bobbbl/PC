@@ -10,7 +10,7 @@ using System.Windows.Media.Media3D;
 
 namespace PC
 {
-    public class CNC_Device
+    public class CNC_Device : INotifyPropertyChanged
     {
         /// <summary>
         /// Implements INotifyPropertyChanged - Interface
