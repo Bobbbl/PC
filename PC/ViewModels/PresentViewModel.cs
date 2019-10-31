@@ -82,6 +82,12 @@ namespace PC
             StaticPropertyChanged += PresentViewModel_StaticPropertyChanged;
         }
 
+        /// <summary>
+        /// This Method gets called every time a static method is changed. Be !careful!, this method only gets called if the
+        /// value actually change. If the new value is the same as before, than it not get changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PresentViewModel_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -97,9 +103,36 @@ namespace PC
                     CNCInterface iface = new SerialGRBLInterface(CurrentSelectedPortName, CurrentSelectedBaudRate);
                     CNCProtokoll protokoll = new GRBLProtokoll();
                     Device = new CNC_Device(iface, protokoll);
-
+                    Device.PropertyChanged += Device_PropertyChanged;
+                    Device.CurrentX = 5;
 
                     break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// This gets fired if a Device Variable is changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Device_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Device.CurrentX):
+                    PresentViewModel.CurrentX = Device.CurrentX;
+                    break;
+
+                case nameof(Device.CurrentY):
+                    PresentViewModel.CurrentY = Device.CurrentY;
+                    break;
+
+                case nameof(Device.CurrentZ):
+                    PresentViewModel.CurrentZ = Device.CurrentZ;
+                    break;
+
                 default:
                     break;
             }
