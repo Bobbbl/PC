@@ -59,7 +59,8 @@ namespace PC
         }
 
 
-        public static CNC_Device Device { get; set; }
+
+        public CNC_Device Device { get; set; }
 
         #region Static INotifyPropertyChanged
 
