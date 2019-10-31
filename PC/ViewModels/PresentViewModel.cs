@@ -14,11 +14,47 @@ namespace PC
     {
         public List<string> ConsoleText { get; set; }
 
-        public static double CurrentX { get; set; }
+        private static double _CurrentX;
+        public static double CurrentX
+        {
+            get
+            {
+                return _CurrentX;
+            }
+            set
+            {
+                _CurrentX = value;
+                RaiseStaticPropertyChanged("CurrentX");
+            }
+        }
 
-        public static double CurrentY { get; set; }
+        private static double _CurrentY;
+        public static double CurrentY
+        {
+            get
+            {
+                return _CurrentY;
+            }
+            set
+            {
+                _CurrentY = value;
+                RaiseStaticPropertyChanged("CurrentY");
+            }
+        }
 
-        public static double CurrentZ { get; set; }
+        private static double _CurrentZ;
+        public static double CurrentZ
+        {
+            get
+            {
+                return _CurrentZ;
+            }
+            set
+            {
+                _CurrentZ = value;
+                RaiseStaticPropertyChanged("CurrentZ");
+            }
+        }
 
         public DispatcherTimer UpdateTimer { get; set; }
 

@@ -6,6 +6,7 @@
       <HashCode>AAAAABCAAACYAwAAABBAAABAgAgIQwCAAABAtAgAIAI=</HashCode>
       <FileName>CNC_Device.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="PC.CNCMessage">
     <Position X="0.75" Y="1.5" Width="1.5" />
