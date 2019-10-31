@@ -24,7 +24,7 @@
   <Class Name="PC.SerialGRBLInterface">
     <Position X="10.25" Y="5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAIAACAAAAABAAAECAAARAAAKEAAACAAAQAAgAAAAA=</HashCode>
+      <HashCode>AAAIAACAAAAABABAECAAARAAAKEAAACAAAQAAgAAAAA=</HashCode>
       <FileName>SerialGRBLInterface.cs</FileName>
     </TypeIdentifier>
   </Class>

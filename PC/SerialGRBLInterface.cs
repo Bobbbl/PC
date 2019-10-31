@@ -17,6 +17,7 @@ namespace PC
         public event EventHandler ProbeFailMessageReceived;
         public event EventHandler UnlockNeededMessageReceived;
         public event EventHandler StatusReportMessageReceived;
+        public event EventHandler OpenPortFailed; 
 
         public CNCMessage LastMessageReceived { get; set; }
 
@@ -124,7 +125,14 @@ namespace PC
             // Serial Port Time Outs
             sport.WriteTimeout = 200;
             sport.ReadTimeout = 200;
-            sport.Open();
+            try
+            {
+                sport.Open();
+            }
+            catch (Exception ex)
+            {
+                OpenPortFailed(this, new EventArgs());
+            }
 
             SerialInterface = sport;
         }
