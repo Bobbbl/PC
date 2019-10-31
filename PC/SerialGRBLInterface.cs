@@ -128,10 +128,13 @@ namespace PC
             try
             {
                 sport.Open();
+                ToolbarViewModel.IsConnected = true;
             }
             catch (Exception ex)
             {
-                OpenPortFailed(this, new EventArgs());
+                if (OpenPortFailed != null)
+                    OpenPortFailed(this, new EventArgs());
+                ToolbarViewModel.IsConnected = false;
             }
 
             SerialInterface = sport;
