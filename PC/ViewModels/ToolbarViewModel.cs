@@ -46,7 +46,7 @@ namespace PC
         }
 
 
-
+        #region Commands
         public ICommand SetZeroCommand { get; set; }
         public ICommand HomingCommand { get; set; }
         public ICommand UnlockCommand { get; set; }
@@ -62,6 +62,93 @@ namespace PC
         public ICommand LoadCommand { get; set; }
         public ICommand SendCommand { get; set; }
 
+        public async Task SetZero()
+        {
+            await PresentViewModel.Device.SendSoftReset();
+        }
 
-    }
+        public async Task Homing()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task Unlock()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task XMinus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task XPlus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task YPlus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task YMinus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ZPlus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ZMinus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task Spindel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SendLine()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task Load()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task Send()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        public ToolbarViewModel()
+        {
+            SetZeroCommand = new RelayCommand(async () => await SetZero());
+            HomingCommand = new RelayCommand(async () => await Homing());
+            UnlockCommand = new RelayCommand(async () => await Unlock());
+            XMinusCommand = new RelayCommand(async () => await XMinus());
+            XPlusCommand = new RelayCommand(async () => await XPlus());
+            YPlusCommand = new RelayCommand(async () => await YPlus());
+            YMinusCommand = new RelayCommand(async () => await YMinus());
+            ZPlusCommand = new RelayCommand(async () => await ZPlus());
+            ZMinusCommand = new RelayCommand(async () => await ZMinus());
+            SpindelCommand = new RelayCommand(async () => await Spindel());
+            ResetCommand = new RelayCommand(async () => await Reset());
+            SendLineButtonCommand = new RelayCommand(async () => await SendLine());
+            LoadCommand = new RelayCommand(async () => await Load());
+            SendCommand = new RelayCommand(async () => await SetZero());
+        }
 }
