@@ -96,7 +96,19 @@ namespace PC
 
 
 
-        public CNC_Device Device { get; set; }
+        public static CNC_Device _Device;
+        public static CNC_Device Device
+        {
+            get
+            {
+                return _Device;
+            }
+            set
+            {
+                _Device = value;
+                RaiseStaticPropertyChanged(nameof(Device));
+            }
+        }
 
         #region Static INotifyPropertyChanged
 
@@ -178,9 +190,6 @@ namespace PC
         {
             switch (e.PropertyName)
             {
-                case nameof(Device):
-
-                    break;
                 default:
                     break;
             }
