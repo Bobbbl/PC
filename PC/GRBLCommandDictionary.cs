@@ -48,7 +48,21 @@ namespace PC
             {GRBLCommand.RTC_ToggleFloodCoolant, Convert.ToString((char)0xA0)},
             {GRBLCommand.RTC_ToggleMistCoolant, Convert.ToString((char)0xA1)},
             {GRBLCommand.G_SetUnitToMillimeter_G21, "G21 " },
-            {GRBLCommand.G_RelativeMotion_G91, "G91 " }
+            {GRBLCommand.G_RelativeMotion_G91, "G91 " },
+            {GRBLCommand.G_SetOffset_G10, "G10 " },
+            {GRBLCommand.L1, "L1 " },
+            {GRBLCommand.L2, "L2 " },
+            {GRBLCommand.L20, "L20 " },
+            {GRBLCommand.P_Tool1, "P1 " },
+            {GRBLCommand.P_Tool2, "P2 " },
+            {GRBLCommand.P_Tool3, "P3 " },
+            {GRBLCommand.P_Tool4, "P4 " },
+            {GRBLCommand.P_Tool5, "P5 " },
+            {GRBLCommand.P_Tool6, "P6 " },
+            {GRBLCommand.P_Tool7, "P7 " },
+            {GRBLCommand.P_Tool8, "P8 " },
+            {GRBLCommand.P_Tool9, "P9 " },
+            {GRBLCommand.P_Tool10, "P10 " }
 
         };
 

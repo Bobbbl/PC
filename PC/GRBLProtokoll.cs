@@ -249,5 +249,21 @@ namespace PC
 
             return rmessage;
         }
+
+        public override CNCMessage GetSetZeroMessage()
+        {
+            CNCMessage zeromessage = new CNCMessage();
+
+            zeromessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.G_SetOffset_G10));
+            zeromessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.P_Tool1));
+            zeromessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.L20));
+            zeromessage.AppendCommand("X0 ");
+            zeromessage.AppendCommand("Y0 ");
+            zeromessage.AppendCommand("Z0");
+
+
+            return zeromessage;
+
+        }
     }
 }

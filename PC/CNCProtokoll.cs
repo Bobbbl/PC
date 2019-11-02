@@ -81,6 +81,7 @@ namespace PC
         public abstract CNCMessage GetStatusReportMessage();
         public abstract CNCMessage GetSoftResetMessage();
         public abstract CNCMessage GetKillAlarmMessage();
+        public abstract CNCMessage GetSetZeroMessage();
 
     }
 }

@@ -48,7 +48,26 @@ namespace PC
         RTC_ToggleFloodCoolant,
         RTC_ToggleMistCoolant,
 
+
         G_SetUnitToMillimeter_G21,
-        G_RelativeMotion_G91
+        G_RelativeMotion_G91,
+        G_SetOffset_G10,
+
+        L1,
+        L2,
+        L20,
+        
+        P_Tool1,
+        P_Tool2,
+        P_Tool3,
+        P_Tool4,
+        P_Tool5,
+        P_Tool6,
+        P_Tool7,
+        P_Tool8,
+        P_Tool9,
+        P_Tool10
+
+
     }
 }
