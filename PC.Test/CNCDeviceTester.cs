@@ -90,7 +90,13 @@ namespace PC.Test
 
         }
 
+        [Fact]
+        public async Task GetSetZeroMessageTest()
+        {
+            var tmp = await device.SendSetZero();
 
+            Assert.DoesNotContain("error", tmp.Message);
+        }
 
         [Fact]
         public async Task GetCurrentFeedTest()

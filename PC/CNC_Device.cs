@@ -191,6 +191,19 @@ namespace PC
             return tmp;
         }
 
+        public async Task<CNCMessage> SendSetZero()
+        {
+            CNCMessage tmp = null;
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetSetZeroMessage();
+                Interface.SendMessage(message);
+                tmp = Interface.ReceiveMessage(100);
+            });
+
+            return tmp;
+        }
+
         public async Task<CNCMessage> JogX(double X, double Feed)
         {
             CNCMessage tmp = null;

@@ -31,7 +31,6 @@ namespace PC
         public bool SpindelIsOn { get; set; }
 
         private static bool _IsConnected;
-
         public static bool IsConnected
         {
             get
@@ -64,7 +63,7 @@ namespace PC
 
         public async Task SetZero()
         {
-            await PresentViewModel.Device.SendSoftReset();
+            await PresentViewModel.Device.SendSetZero();
         }
 
         public async Task Homing()
@@ -149,6 +148,8 @@ namespace PC
             ResetCommand = new RelayCommand(async () => await Reset());
             SendLineButtonCommand = new RelayCommand(async () => await SendLine());
             LoadCommand = new RelayCommand(async () => await Load());
-            SendCommand = new RelayCommand(async () => await SetZero());
+            SendCommand = new RelayCommand(async () => await Send());
         }
+
+    }
 }

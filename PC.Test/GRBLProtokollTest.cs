@@ -223,6 +223,16 @@ namespace PC.Test
         }
 
         [Fact]
+        public void GetSetZeroMessage_IsEqual()
+        {
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            CNCMessage output = protokoll.GetSetZeroMessage();
+
+            Assert.Equal("G10 P1 L20 X0 Y0 Z0", output.Message);
+        }
+
+        [Fact]
         public void GetRelativeJogByXYZMessage_IsEqual()
         {
             // Arrange
