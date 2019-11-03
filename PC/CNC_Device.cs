@@ -370,6 +370,22 @@ namespace PC
             return tmp;
         }
 
+        public async Task<CNCMessage> DoHoming()
+        {
+            CNCMessage tmp = null;
+
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetHomingCommand();
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+
+            });
+
+            return tmp;
+        }
+
 
         /// <summary>
         /// Thish holds the current Interface. The Interface can be of different
@@ -389,6 +405,7 @@ namespace PC
             {
             }
         }
+
 
 
         #region Constructor
