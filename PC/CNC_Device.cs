@@ -376,7 +376,7 @@ namespace PC
 
             await Task.Run(() =>
             {
-                CNCMessage message = Protokoll.GetHomingCommand();
+                CNCMessage message = Protokoll.GetHomingMessage();
                 Interface.SendMessage(message);
                 CNCMessage t = new CNCMessage() { Message = "ok" };
                 tmp = Interface.WaitReceiveMessage(100, t, 1000);

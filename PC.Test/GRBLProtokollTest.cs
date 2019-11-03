@@ -236,7 +236,7 @@ namespace PC.Test
         public void GetHomingMessage_IsEqual()
         {
             GRBLProtokoll protokoll = new GRBLProtokoll();
-            CNCMessage cNCMessage = protokoll.GetHomingCommand();
+            CNCMessage cNCMessage = protokoll.GetHomingMessage();
 
             Assert.Equal("$H", cNCMessage.Message);
         }

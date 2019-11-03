@@ -82,7 +82,7 @@ namespace PC
         public abstract CNCMessage GetSoftResetMessage();
         public abstract CNCMessage GetKillAlarmMessage();
         public abstract CNCMessage GetSetZeroMessage();
-        public abstract CNCMessage GetHomingCommand();
+        public abstract CNCMessage GetHomingMessage();
 
     }
 }

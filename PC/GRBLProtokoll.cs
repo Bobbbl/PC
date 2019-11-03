@@ -266,7 +266,7 @@ namespace PC
 
         }
 
-        public override CNCMessage GetHomingCommand()
+        public override CNCMessage GetHomingMessage()
         {
             CNCMessage homingmessage = new CNCMessage();
 
