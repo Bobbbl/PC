@@ -83,7 +83,7 @@ namespace PC
         public abstract CNCMessage GetKillAlarmMessage();
         public abstract CNCMessage GetSetZeroMessage();
         public abstract CNCMessage GetHomingMessage();
-        public abstract CNCMessage GetSpindelSetRPMMessage();
+        public abstract CNCMessage GetSpindelSetRPMMessage(double RPM, string Direction);
 
     }
 }
