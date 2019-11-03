@@ -68,7 +68,7 @@ namespace PC
 
         public async Task Homing()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.DoHoming();
         }
 
         public async Task Unlock()
