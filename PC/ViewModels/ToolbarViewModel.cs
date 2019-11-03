@@ -78,12 +78,12 @@ namespace PC
 
         public async Task XMinus()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.JogX(-StepSizeJog, FeedRateJog);
         }
 
         public async Task XPlus()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.JogX(StepSizeJog, FeedRateJog);
         }
 
         public async Task YPlus()
