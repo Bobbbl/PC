@@ -47,6 +47,9 @@ namespace PC
         RTC_ToggleSpindleStop,
         RTC_ToggleFloodCoolant,
         RTC_ToggleMistCoolant,
+        RTC_SetSpindleSpeedClockWise,
+        RTC_SetSpindleSpeedCounterClockWise,
+        RTC_StopSpindle,
 
 
         G_SetUnitToMillimeter_G21,
