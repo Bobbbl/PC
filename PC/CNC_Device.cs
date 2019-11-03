@@ -386,6 +386,22 @@ namespace PC
             return tmp;
         }
 
+        public async Task<CNCMessage> KillAlarm()
+        {
+            CNCMessage tmp = null;
+
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetKillAlarmMessage();
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 100);
+
+            });
+
+            return tmp;
+        }
+
 
         /// <summary>
         /// Thish holds the current Interface. The Interface can be of different
