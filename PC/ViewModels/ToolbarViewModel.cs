@@ -108,7 +108,7 @@ namespace PC
 
         public async Task Spindel()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.SetSpindleSpeed(SpindelSpeed, "clockwise");
         }
 
         public async Task Reset()
