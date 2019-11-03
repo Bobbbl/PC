@@ -88,12 +88,12 @@ namespace PC
 
         public async Task YPlus()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.JogY(StepSizeJog, FeedRateJog);
         }
 
         public async Task YMinus()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.JogY(-StepSizeJog, FeedRateJog);
         }
 
         public async Task ZPlus()
