@@ -98,12 +98,12 @@ namespace PC
 
         public async Task ZPlus()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.JogZ(StepSizeJog, FeedRateJog);
         }
 
         public async Task ZMinus()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.JogZ(-StepSizeJog, FeedRateJog);
         }
 
         public async Task Spindel()
