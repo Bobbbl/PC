@@ -73,7 +73,7 @@ namespace PC
 
         public async Task Unlock()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.KillAlarm();
         }
 
         public async Task XMinus()
