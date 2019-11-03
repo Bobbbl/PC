@@ -233,6 +233,15 @@ namespace PC.Test
         }
 
         [Fact]
+        public void GetHomingMessage_IsEqual()
+        {
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+            CNCMessage cNCMessage = protokoll.GetHomingCommand();
+
+            Assert.Equal("$H", cNCMessage.Message);
+        }
+
+        [Fact]
         public void GetRelativeJogByXYZMessage_IsEqual()
         {
             // Arrange
