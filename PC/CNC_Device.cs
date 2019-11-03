@@ -56,6 +56,14 @@ namespace PC
         public float CurrentZ { get; set; }
 
         /// <summary>
+        /// Holds always the current spindle rpms at any given time
+        /// 
+        /// Returns:
+        /// A float which represents the spindle rpms at any given time
+        /// </summary>
+        public float CurrentSpindleRPM { get; set; }
+
+        /// <summary>
         /// Holds always the current coordinate of the tool as {x,y,z}
         /// 
         /// Returns:
@@ -395,8 +403,23 @@ namespace PC
                 CNCMessage message = Protokoll.GetKillAlarmMessage();
                 Interface.SendMessage(message);
                 CNCMessage t = new CNCMessage() { Message = "ok" };
-                tmp = Interface.WaitReceiveMessage(100, t, 100);
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
 
+            });
+
+            return tmp;
+        }
+
+        public async Task<CNCMessage> SpindleSpeed()
+        {
+            CNCMessage tmp = null;
+
+            await Task.Run(() =>
+            {
+                CNCMessage message = Protokoll.GetSpindelSetRPMMessage(CurrentSpindleRPM, "clockwise");
+                Interface.SendMessage(message);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
             });
 
             return tmp;
