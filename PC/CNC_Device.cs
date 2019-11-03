@@ -410,13 +410,13 @@ namespace PC
             return tmp;
         }
 
-        public async Task<CNCMessage> SpindleSpeed()
+        public async Task<CNCMessage> SetSpindleSpeed(double RPM, string Direction)
         {
             CNCMessage tmp = null;
 
             await Task.Run(() =>
             {
-                CNCMessage message = Protokoll.GetSpindelSetRPMMessage(CurrentSpindleRPM, "clockwise");
+                CNCMessage message = Protokoll.GetSpindelSetRPMMessage(RPM, Direction);
                 Interface.SendMessage(message);
                 CNCMessage t = new CNCMessage() { Message = "ok" };
                 tmp = Interface.WaitReceiveMessage(100, t, 1000);
