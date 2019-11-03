@@ -233,6 +233,22 @@ namespace PC.Test
         }
 
         [Fact]
+        public void GetSpindelSetRPMMessage_IsEqual()
+        {
+            GRBLProtokoll gRBLProtokoll = new GRBLProtokoll();
+
+            CNCMessage cNCMessage = gRBLProtokoll.GetSpindelSetRPMMessage(1000, "clockwise");
+
+
+            CNCMessage nNCMessagecounter = gRBLProtokoll.GetSpindelSetRPMMessage(1000, "counterclockwise");
+
+            Assert.Equal("M3 S1000", cNCMessage.Message.Trim());
+            Assert.Equal("M4 S1000", nNCMessagecounter.Message.Trim());
+
+
+        }
+
+        [Fact]
         public void GetSetZeroMessage_IsEqual()
         {
             GRBLProtokoll protokoll = new GRBLProtokoll();
