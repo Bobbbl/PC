@@ -276,5 +276,12 @@ namespace PC
             return homingmessage;
         }
 
+        public override CNCMessage GetSpindelSetRPMMessage()
+        {
+            CNCMessage spindelmessage = new CNCMessage();
+
+            spindelmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.))
+        }
+
     }
 }
