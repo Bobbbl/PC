@@ -223,6 +223,16 @@ namespace PC.Test
         }
 
         [Fact]
+        public void GetKillAlarmMessage_IsEqual()
+        {
+            GRBLProtokoll protokoll = new GRBLProtokoll();
+
+            CNCMessage cNCMessage = protokoll.GetKillAlarmMessage();
+
+            Assert.Equal("$X", cNCMessage.Message.Trim());
+        }
+
+        [Fact]
         public void GetSetZeroMessage_IsEqual()
         {
             GRBLProtokoll protokoll = new GRBLProtokoll();
