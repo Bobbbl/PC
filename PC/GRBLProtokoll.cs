@@ -265,5 +265,16 @@ namespace PC
             return zeromessage;
 
         }
+
+        public override CNCMessage GetHomingCommand()
+        {
+            CNCMessage homingmessage = new CNCMessage();
+
+            homingmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_RunHomincCycle));
+
+
+            return homingmessage;
+        }
+
     }
 }
