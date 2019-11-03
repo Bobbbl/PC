@@ -276,11 +276,30 @@ namespace PC
             return homingmessage;
         }
 
-        public override CNCMessage GetSpindelSetRPMMessage()
+        public override CNCMessage GetSpindelSetRPMMessage(double RPM, string Direction)
         {
-            CNCMessage spindelmessage = new CNCMessage();
 
-            spindelmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.))
+
+            CNCMessage spindelmessage = new CNCMessage();
+            string dir = Direction.Trim().ToLower();
+            if (RPM < 0)
+                return spindelmessage;
+            if (dir != "clockwise" && dir != "counterclockwise")
+                return spindelmessage;
+
+
+            if (dir == "clockwise")
+            {
+                spindelmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.RTC_SetSpindleSpeedClockWise));
+                spindelmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "S", RPM.ToString()));
+            }
+            else if (dir == "counterclockwise")
+            {
+                spindelmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.RTC_SetSpindleSpeedCounterClockWise));
+                spindelmessage.AppendCommand(CommandDict.GetCommand(GRBLCommand.GRBL_WriteValue, "S", RPM.ToString()));
+            }
+
+            return spindelmessage;
         }
 
     }
