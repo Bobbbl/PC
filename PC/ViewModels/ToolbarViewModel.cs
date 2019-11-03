@@ -113,7 +113,7 @@ namespace PC
 
         public async Task Reset()
         {
-            throw new NotImplementedException();
+            await PresentViewModel.Device.SendSoftReset();
         }
 
         public async Task SendLine()
