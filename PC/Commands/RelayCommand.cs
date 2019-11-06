@@ -7,6 +7,9 @@ namespace PC
     {
         private Action mAction;
 
+        public delegate bool CanExecutePointer();
+        public CanExecutePointer CANPointer { get; set; } = null;
+
         public event EventHandler CanExecuteChanged = (sender, e) => { };
 
         public RelayCommand(Action action)
@@ -16,7 +19,12 @@ namespace PC
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            if (CANPointer == null)
+            {
+                return true;
+            }
+
+            return CANPointer();
         }
 
         public void Execute(object parameter)
