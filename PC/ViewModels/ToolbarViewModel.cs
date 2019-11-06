@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +31,10 @@ namespace PC
         public int SpindelSpeed { get; set; }
 
         public bool SpindelIsOn { get; set; }
+
+        public string CustomLineContent { get; set; }
+
+        public string CNCFileContent { get; set; }
 
         private static bool _IsConnected;
         public static bool IsConnected
@@ -118,12 +124,20 @@ namespace PC
 
         public async Task SendLine()
         {
-            throw new NotImplementedException();
+            CNCMessage m = new CNCMessage() { Message = CustomLineContent};
+            await PresentViewModel.Device.SendCustomMessage(m);
         }
 
         public async Task Load()
         {
-            throw new NotImplementedException();
+            OpenFileDialog odialog = new OpenFileDialog();
+            if(odialog.ShowDialog() == true)
+            {
+                using (StreamReader sr = File.OpenText(odialog.FileName))
+                {
+                    CNCFileContent = sr.ReadToEnd();
+                }
+            }
         }
 
         public async Task Send()
@@ -136,19 +150,33 @@ namespace PC
         public ToolbarViewModel()
         {
             SetZeroCommand = new RelayCommand(async () => await SetZero());
+            (SetZeroCommand as RelayCommand).CANPointer += () => { return false; };
             HomingCommand = new RelayCommand(async () => await Homing());
+            (HomingCommand as RelayCommand).CANPointer += () => { return false; };
             UnlockCommand = new RelayCommand(async () => await Unlock());
+            (UnlockCommand as RelayCommand).CANPointer += () => { return false; };
             XMinusCommand = new RelayCommand(async () => await XMinus());
+            (XMinusCommand as RelayCommand).CANPointer += () => { return false; };
             XPlusCommand = new RelayCommand(async () => await XPlus());
+            (XPlusCommand as RelayCommand).CANPointer += () => { return false; };
             YPlusCommand = new RelayCommand(async () => await YPlus());
+            (YPlusCommand as RelayCommand).CANPointer += () => { return false; };
             YMinusCommand = new RelayCommand(async () => await YMinus());
+            (YMinusCommand as RelayCommand).CANPointer += () => { return false; };
             ZPlusCommand = new RelayCommand(async () => await ZPlus());
+            (ZPlusCommand as RelayCommand).CANPointer += () => { return false; };
             ZMinusCommand = new RelayCommand(async () => await ZMinus());
+            (ZMinusCommand as RelayCommand).CANPointer += () => { return false; };
             SpindelCommand = new RelayCommand(async () => await Spindel());
+            (SpindelCommand as RelayCommand).CANPointer += () => { return false; };
             ResetCommand = new RelayCommand(async () => await Reset());
+            (ResetCommand as RelayCommand).CANPointer += () => { return false; };
             SendLineButtonCommand = new RelayCommand(async () => await SendLine());
+            (SendLineButtonCommand as RelayCommand).CANPointer += () => { return false; };
             LoadCommand = new RelayCommand(async () => await Load());
+
             SendCommand = new RelayCommand(async () => await Send());
+            (SendCommand as RelayCommand).CANPointer += delegate { return IsConnected; };
         }
 
     }
