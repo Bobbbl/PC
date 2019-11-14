@@ -125,7 +125,8 @@ namespace PC
             EventHandler<PropertyChangedEventArgs> handler = StaticPropertyChanged;
             if (handler != null)
             {
-                handler(null, new PropertyChangedEventArgs(PropName));
+                PropertyChangedEventArgs e = new PropertyChangedEventArgs(PropName);
+                handler(null, e);
             }
         }
 
@@ -192,6 +193,8 @@ namespace PC
                 default:
                     break;
             }
+
+            
         }
 
         /// <summary>
