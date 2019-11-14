@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace PC
@@ -59,8 +60,6 @@ namespace PC
         public DispatcherTimer UpdateTimer { get; set; }
 
         public DispatcherTimer PollTimer { get; set; }
-
-        public bool Connected { get; set; }
 
         public bool ErrorReceived { get; set; }
 
@@ -149,12 +148,30 @@ namespace PC
                     }
                     // Make new device
                     CNCInterface iface = new SerialGRBLInterface(CurrentSelectedPortName, CurrentSelectedBaudRate);
+                    (iface as SerialGRBLInterface).OpenPortFailed += (s, k) =>
+                    {
+                        ToolbarViewModel.IsConnected = false;
+                    };
                     CNCProtokoll protokoll = new GRBLProtokoll();
                     Device = new CNC_Device(iface, protokoll);
                     Device.PropertyChanged += Device_PropertyChanged;
-                    Device.CurrentX = 5;
+
 
                     break;
+
+                case nameof(Device):
+
+                    //PortViewModel.PortisList.ForEach(porti => porti.IndicatorColor = Brushes.Transparent);
+
+                    //XAMLFiles.Portis p = PortViewModel.PortisList.Find(
+                    //    porti => 
+                    //    (Device.Interface as SerialGRBLInterface).SerialInterface.PortName == porti.PortName);
+                    //p.IndicatorColor = Brushes.ForestGreen;
+
+
+                    break;
+
+
                 default:
                     break;
             }

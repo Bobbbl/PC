@@ -134,6 +134,8 @@ namespace PC
             {
                 if (OpenPortFailed != null)
                     OpenPortFailed(this, new EventArgs());
+                // TODO: This must be first a field of SerialGRBLInterface. Then the viewmodel can check the 
+                // connected field of the class. It should not go directly through to the viewmodel. bad style
                 ToolbarViewModel.IsConnected = false;
             }
 

@@ -19,7 +19,7 @@
                         MaxWidth="300"
                         MinWidth="300"
                         MaxHeight="250"
-                        MinHeight="250" SelectionChanged="TabControl_SelectionChanged">
+                        MinHeight="250">
         <!--Jog Tab-->
         <TabItem Header="Jog">
             <!--Basic Definition Grid-->

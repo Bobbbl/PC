@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PC
 {
@@ -45,7 +46,8 @@ namespace PC
             }
             set
             {
-                _IsConnected = value;
+                if (value != _IsConnected)
+                    _IsConnected = value;
                 RaiseStaticPropertyChanged("IsConnected");
             }
         }
@@ -124,14 +126,14 @@ namespace PC
 
         public async Task SendLine()
         {
-            CNCMessage m = new CNCMessage() { Message = CustomLineContent};
+            CNCMessage m = new CNCMessage() { Message = CustomLineContent };
             await PresentViewModel.Device.SendCustomMessage(m);
         }
 
         public async Task Load()
         {
             OpenFileDialog odialog = new OpenFileDialog();
-            if(odialog.ShowDialog() == true)
+            if (odialog.ShowDialog() == true)
             {
                 using (StreamReader sr = File.OpenText(odialog.FileName))
                 {
@@ -177,7 +179,32 @@ namespace PC
 
             SendCommand = new RelayCommand(async () => await Send());
             (SendCommand as RelayCommand).CANPointer += delegate { return IsConnected; };
+
+            StaticPropertyChanged += ToolbarViewModel_StaticPropertyChanged;
         }
 
+        private void ToolbarViewModel_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(IsConnected):
+                    if (IsConnected)
+                    {
+                        PortViewModel.PortisList.ForEach(porti => porti.IndicatorColor = Brushes.Transparent);
+
+                        XAMLFiles.Portis p = PortViewModel.PortisList.Find(
+                            porti =>
+                            (PresentViewModel.Device.Interface as SerialGRBLInterface).SerialInterface.PortName == porti.PortName);
+                        p.IndicatorColor = Brushes.ForestGreen;
+                    }
+                    else
+                    {
+                        PortViewModel.PortisList.ForEach(porti => porti.IndicatorColor = Brushes.Transparent);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

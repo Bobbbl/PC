@@ -23,6 +23,7 @@ namespace PC.XAMLFiles
     {
         public event PortisEventClickedEventHandler PortisClickedEvent;
 
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,6 +38,8 @@ namespace PC.XAMLFiles
         }
         #endregion
 
+
+        public Brush IndicatorColor { get; set; } = Brushes.Transparent;
         public string PortName { get; set; } = "Default";
         public int BaudRate { get; set; } = 115200;
 

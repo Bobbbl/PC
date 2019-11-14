@@ -6,9 +6,11 @@
              xmlns:local="clr-namespace:PC.XAMLFiles"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50"
-             Height="50" Width="50"  HorizontalAlignment="Left" Padding="2" Background="Red">
+             Height="50" Width="50"  HorizontalAlignment="Left" Padding="2">
+
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" Background="WhiteSmoke" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+        
+        <Border BorderBrush="Black" BorderThickness="1" MouseLeftButtonDown="Border_MouseLeftButtonDown" Background="{Binding IndicatorColor, ElementName=userControl}" >
             <TextBlock x:Name="PortNamePresenter" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding PortName, ElementName=userControl, FallbackValue=Void}"></TextBlock>
 
         </Border>

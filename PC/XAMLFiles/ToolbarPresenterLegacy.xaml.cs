@@ -24,5 +24,6 @@ namespace PC.XAMLFiles
         {
             InitializeComponent();
         }
+
     }
 }

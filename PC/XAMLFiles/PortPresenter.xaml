@@ -14,7 +14,7 @@
     <Grid Name="Container" MinHeight="80">
         <Border BorderBrush="Black" BorderThickness="3" Background="WhiteSmoke">
             <ItemsControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                          Margin="10" ItemsSource="{Binding PortList, Converter={ViewModels:PortToPortisConverter}}">
+                          Margin="10" ItemsSource="{Binding PortisList}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel></WrapPanel>
