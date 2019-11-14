@@ -125,7 +125,8 @@ namespace PC
         {
             // Default Settings
             System.IO.Ports.SerialPort sport = new System.IO.Ports.SerialPort();
-            sport.PortName = PortName;
+            this.Portname = PortName;
+            sport.PortName = this.Portname;
             sport.BaudRate = BaudRate;
             sport.Parity = System.IO.Ports.Parity.None;
             sport.DataBits = 8;
@@ -137,7 +138,6 @@ namespace PC
             try
             {
                 sport.Open();
-                ToolbarViewModel.IsConnected = true;
             }
             catch (Exception ex)
             {
@@ -146,7 +146,9 @@ namespace PC
                 // TODO: This must be first a field of SerialGRBLInterface. Then the viewmodel can check the 
                 // connected field of the class. It should not go directly through to the viewmodel. bad style
                 ToolbarViewModel.IsConnected = false;
+                
             }
+            ToolbarViewModel.IsConnected = true;
 
             SerialInterface = sport;
         }

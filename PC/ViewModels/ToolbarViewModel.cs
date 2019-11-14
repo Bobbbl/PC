@@ -37,7 +37,7 @@ namespace PC
 
         public string CNCFileContent { get; set; }
 
-        private static bool _IsConnected;
+        private static bool _IsConnected = false;
         public static bool IsConnected
         {
             get
@@ -47,8 +47,11 @@ namespace PC
             set
             {
                 if (value != _IsConnected)
+                {
                     _IsConnected = value;
-                RaiseStaticPropertyChanged("IsConnected");
+                    RaiseStaticPropertyChanged("IsConnected");
+                }
+
             }
         }
 
@@ -192,9 +195,14 @@ namespace PC
                     {
                         PortViewModel.PortisList.ForEach(porti => porti.IndicatorColor = Brushes.Transparent);
 
+                        if (PresentViewModel.Device == null)
+                        {
+                            return;
+                        }
+
                         XAMLFiles.Portis p = PortViewModel.PortisList.Find(
                             porti =>
-                            (PresentViewModel.Device.Interface as SerialGRBLInterface).SerialInterface.PortName == porti.PortName);
+                            PresentViewModel.Device.Interface.Portname == porti.PortName);
                         p.IndicatorColor = Brushes.ForestGreen;
                     }
                     else

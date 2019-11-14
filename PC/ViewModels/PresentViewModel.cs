@@ -73,8 +73,12 @@ namespace PC
             }
             set
             {
-                _CurrentSelectedPortName = value;
-                RaiseStaticPropertyChanged("CurrentSelectedPortName");
+                if(value != _CurrentSelectedPortName)
+                {
+                    _CurrentSelectedPortName = value;
+                    RaiseStaticPropertyChanged("CurrentSelectedPortName");
+                }
+                
             }
         }
 
@@ -104,8 +108,12 @@ namespace PC
             }
             set
             {
-                _Device = value;
-                RaiseStaticPropertyChanged(nameof(Device));
+                if(_Device != value)
+                {
+                    _Device = value;
+                    RaiseStaticPropertyChanged(nameof(Device));
+                }
+                
             }
         }
 
@@ -145,7 +153,16 @@ namespace PC
                     if (Device != null)
                     {
                         Device.Interface.CloseConnection();
+                        Device = null;
                     }
+
+                    if(Device != null && Device.Interface.Portname == CurrentSelectedPortName)
+                    {
+                        Device.Interface.CloseConnection();
+                        Device = null;
+                        return;
+                    }
+
                     // Make new device
                     CNCInterface iface = new SerialGRBLInterface(CurrentSelectedPortName, CurrentSelectedBaudRate);
                     (iface as SerialGRBLInterface).OpenPortFailed += (s, k) =>

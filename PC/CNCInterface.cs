@@ -12,6 +12,8 @@ namespace PC
         public event CNCMessageEventHandler MessageReceived;
         public event CNCMessageEventHandler MessageSent;
 
+        public string Portname { get; set; } = "";
+
         public void OnMessageReceived(object sender, CNCMessage message)
         {
             if (MessageReceived != null)

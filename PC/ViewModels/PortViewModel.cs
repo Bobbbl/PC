@@ -40,8 +40,12 @@ namespace PC
             }
             set
             {
-                _PortisList = value;
-                RaiseStaticPropertyChanged(nameof(PortisList));
+                if (_PortisList != value)
+                {
+                    _PortisList = value;
+                    RaiseStaticPropertyChanged(nameof(PortisList));
+                }
+
             }
         }
 
