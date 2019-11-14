@@ -18,6 +18,7 @@ namespace PC
         public event EventHandler UnlockNeededMessageReceived;
         public event EventHandler StatusReportMessageReceived;
         public event EventHandler OpenPortFailed; 
+        public event EventHandler ClosePortFailed;
 
         public CNCMessage LastMessageReceived { get; set; }
 
@@ -107,7 +108,15 @@ namespace PC
 
         public override void CloseConnection()
         {
-            SerialInterface.Close();
+            try
+            {
+                SerialInterface.Close();
+                ToolbarViewModel.IsConnected = false;
+            }
+            catch (Exception)
+            {
+                ClosePortFailed(this, new EventArgs());
+            }
         }
 
         public SerialPort SerialInterface { get; set; }
