@@ -149,6 +149,13 @@ namespace PC
             {
                 case nameof(PresentViewModel.CurrentSelectedPortName):
 
+                    if (Device != null && Device.Interface.Portname == CurrentSelectedPortName)
+                    {
+                        Device.Interface.CloseConnection();
+                        _Device = null;
+                        return;
+                    }
+
                     //Delete old device and, most importantly, close old connection
                     if (Device != null)
                     {
@@ -156,12 +163,7 @@ namespace PC
                         _Device = null;
                     }
 
-                    if (Device != null && Device.Interface.Portname == CurrentSelectedPortName)
-                    {
-                        Device.Interface.CloseConnection();
-                        _Device = null;
-                        return;
-                    }
+
 
                     // Make new device
                     CNCInterface iface = new SerialGRBLInterface(CurrentSelectedPortName, CurrentSelectedBaudRate);
@@ -173,6 +175,10 @@ namespace PC
                         ToolbarViewModel.IsConnected = true;
                     };
                     (iface as SerialGRBLInterface).OpenPortFailed += (s, k) =>
+                    {
+                        ToolbarViewModel.IsConnected = false;
+                    };
+                    (iface as SerialGRBLInterface).PortClosed += (s, k) =>
                     {
                         ToolbarViewModel.IsConnected = false;
                     };
