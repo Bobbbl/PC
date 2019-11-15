@@ -75,11 +75,8 @@ namespace PC
             }
             set
             {
-                if (value != _CurrentSelectedPortName)
-                {
-                    _CurrentSelectedPortName = value;
-                    RaiseStaticPropertyChanged("CurrentSelectedPortName");
-                }
+                _CurrentSelectedPortName = value;
+                RaiseStaticPropertyChanged("CurrentSelectedPortName");
 
             }
         }
