@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Timers;
@@ -13,6 +14,20 @@ namespace PC
         public event CNCMessageEventHandler MessageSent;
 
         public string Portname { get; set; } = "";
+
+        private ObservableCollection<string> _SendReceiveBuffer = new ObservableCollection<string>();
+        public ObservableCollection<string> SendReceiveBuffer
+        {
+            get
+            {
+                return _SendReceiveBuffer;
+            }
+
+            set
+            {
+                _SendReceiveBuffer = value;
+            }
+        }
 
         public void OnMessageReceived(object sender, CNCMessage message)
         {

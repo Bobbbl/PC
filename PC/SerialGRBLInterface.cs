@@ -30,6 +30,7 @@ namespace PC
             PortClosed(Portname, SerialInterface.BaudRate);
         }
 
+
         public CNCMessage LastMessageReceived { get; set; }
 
         public override CNCMessage ReceiveMessage(int TimeOut = 100)
@@ -49,6 +50,8 @@ namespace PC
             {
                 rmessage.Message = "TIMEOUT";
             }
+
+            SendReceiveBuffer.Add(rmessage.Message);
 
             return rmessage;
         }
@@ -114,6 +117,8 @@ namespace PC
             {
                 SerialInterface.WriteLine(message.Message);
             }
+
+            SendReceiveBuffer.Add(message.Message);
         }
 
         public override void CloseConnection()

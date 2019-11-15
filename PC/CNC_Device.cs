@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -79,6 +80,18 @@ namespace PC
         /// acceleration of the tool!
         /// </summary>
         public float CurrentFeed { get; set; }
+
+        public ObservableCollection<string> SendReceiveBuffer
+        {
+            get
+            {
+                return Interface.SendReceiveBuffer;
+            }
+            set
+            {
+                Interface.SendReceiveBuffer = value;
+            }
+        }
 
         /// <summary>
         /// Private Function which is deriving the current modified feed in the cnc-controller

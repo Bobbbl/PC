@@ -184,6 +184,14 @@ namespace PC
                     };
                     Device.PropertyChanged += Device_PropertyChanged;
                     (iface as SerialGRBLInterface).FirePortOpened();
+                    Device.SendReceiveBuffer.CollectionChanged += (s, k) =>
+                    {
+                        foreach (var item in k.NewItems)
+                        {
+                            ConsoleViewModel.ConsoleContent += item;
+                            ConsoleViewModel.ConsoleContent += "\n";
+                        }
+                    };
 
                     break;
 

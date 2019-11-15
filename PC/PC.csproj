@@ -87,6 +87,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\ObservableCollectionToString.cs" />
     <Compile Include="Converters\PortToPortisConverter.cs" />
     <Compile Include="PortisEventHandler.cs" />
     <Compile Include="PortisEventsArgs.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="GRBLCommandDictionary.cs" />
     <Compile Include="GRBLProtokoll.cs" />
     <Compile Include="MachineStates.cs" />
+    <Compile Include="ViewModels\ConsoleViewModel.cs" />
     <Compile Include="ViewModels\PortViewModel.cs" />
     <Compile Include="ViewModels\PresentViewModel.cs" />
     <Compile Include="SerialGRBLInterface.cs" />

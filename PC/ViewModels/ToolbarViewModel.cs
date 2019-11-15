@@ -155,29 +155,29 @@ namespace PC
         public ToolbarViewModel()
         {
             SetZeroCommand = new RelayCommand(async () => await SetZero());
-            (SetZeroCommand as RelayCommand).CANPointer += () => { return false; };
+            (SetZeroCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             HomingCommand = new RelayCommand(async () => await Homing());
-            (HomingCommand as RelayCommand).CANPointer += () => { return false; };
+            (HomingCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             UnlockCommand = new RelayCommand(async () => await Unlock());
-            (UnlockCommand as RelayCommand).CANPointer += () => { return false; };
+            (UnlockCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             XMinusCommand = new RelayCommand(async () => await XMinus());
-            (XMinusCommand as RelayCommand).CANPointer += () => { return false; };
+            (XMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             XPlusCommand = new RelayCommand(async () => await XPlus());
-            (XPlusCommand as RelayCommand).CANPointer += () => { return false; };
+            (XPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             YPlusCommand = new RelayCommand(async () => await YPlus());
-            (YPlusCommand as RelayCommand).CANPointer += () => { return false; };
+            (YPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             YMinusCommand = new RelayCommand(async () => await YMinus());
-            (YMinusCommand as RelayCommand).CANPointer += () => { return false; };
+            (YMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             ZPlusCommand = new RelayCommand(async () => await ZPlus());
-            (ZPlusCommand as RelayCommand).CANPointer += () => { return false; };
+            (ZPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             ZMinusCommand = new RelayCommand(async () => await ZMinus());
-            (ZMinusCommand as RelayCommand).CANPointer += () => { return false; };
+            (ZMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             SpindelCommand = new RelayCommand(async () => await Spindel());
-            (SpindelCommand as RelayCommand).CANPointer += () => { return false; };
+            (SpindelCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             ResetCommand = new RelayCommand(async () => await Reset());
             (ResetCommand as RelayCommand).CANPointer += () => { return false; };
             SendLineButtonCommand = new RelayCommand(async () => await SendLine());
-            (SendLineButtonCommand as RelayCommand).CANPointer += () => { return false; };
+            (SendLineButtonCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             LoadCommand = new RelayCommand(async () => await Load());
 
             SendCommand = new RelayCommand(async () => await Send());
@@ -209,6 +209,21 @@ namespace PC
                     {
                         PortViewModel.PortisList.ForEach(porti => porti.IndicatorColor = Brushes.Transparent);
                     }
+
+                    (SetZeroCommand as RelayCommand).FireCanExecuteChanged();
+                    (HomingCommand as RelayCommand).FireCanExecuteChanged();
+                    (UnlockCommand as RelayCommand).FireCanExecuteChanged();
+                    (XMinusCommand as RelayCommand).FireCanExecuteChanged();
+                    (XPlusCommand as RelayCommand).FireCanExecuteChanged();
+                    (YPlusCommand as RelayCommand).FireCanExecuteChanged();
+                    (YMinusCommand as RelayCommand).FireCanExecuteChanged();
+                    (ZPlusCommand as RelayCommand).FireCanExecuteChanged();
+                    (ZMinusCommand as RelayCommand).FireCanExecuteChanged();
+                    (SpindelCommand as RelayCommand).FireCanExecuteChanged();
+                    (ResetCommand as RelayCommand).FireCanExecuteChanged();
+                    (SendLineButtonCommand as RelayCommand).FireCanExecuteChanged();
+                    (SendCommand as RelayCommand).FireCanExecuteChanged();
+
                     break;
                 default:
                     break;

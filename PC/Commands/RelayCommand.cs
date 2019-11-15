@@ -12,6 +12,11 @@ namespace PC
 
         public event EventHandler CanExecuteChanged = (sender, e) => { };
 
+        public void FireCanExecuteChanged()
+        {
+            CanExecuteChanged(null, null);
+        }
+
         public RelayCommand(Action action)
         {
             mAction = action;
