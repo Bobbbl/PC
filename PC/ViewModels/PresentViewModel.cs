@@ -25,6 +25,8 @@ namespace PC
             set
             {
                 _CurrentX = value;
+                // TODO: Change hard coded CurrentX etc to nameof(...)
+                // This will be more stable
                 RaiseStaticPropertyChanged("CurrentX");
             }
         }
@@ -126,7 +128,7 @@ namespace PC
             if (handler != null)
             {
                 PropertyChangedEventArgs e = new PropertyChangedEventArgs(PropName);
-                handler(null, e);
+                handler(typeof(PresentViewModel), e);
             }
         }
 
@@ -154,37 +156,35 @@ namespace PC
                     if (Device != null)
                     {
                         Device.Interface.CloseConnection();
-                        Device = null;
+                        _Device = null;
                     }
 
-                    if(Device != null && Device.Interface.Portname == CurrentSelectedPortName)
+                    if (Device != null && Device.Interface.Portname == CurrentSelectedPortName)
                     {
                         Device.Interface.CloseConnection();
-                        Device = null;
+                        _Device = null;
                         return;
                     }
 
                     // Make new device
                     CNCInterface iface = new SerialGRBLInterface(CurrentSelectedPortName, CurrentSelectedBaudRate);
+                    CNCProtokoll protokoll = new GRBLProtokoll();
+
+                    _Device = new CNC_Device(iface, protokoll);
+                    (iface as SerialGRBLInterface).PortOpened += (s, k) =>
+                    {
+                        ToolbarViewModel.IsConnected = true;
+                    };
                     (iface as SerialGRBLInterface).OpenPortFailed += (s, k) =>
                     {
                         ToolbarViewModel.IsConnected = false;
                     };
-                    CNCProtokoll protokoll = new GRBLProtokoll();
-                    Device = new CNC_Device(iface, protokoll);
                     Device.PropertyChanged += Device_PropertyChanged;
-
+                    (iface as SerialGRBLInterface).FirePortOpened();
 
                     break;
 
                 case nameof(Device):
-
-                    //PortViewModel.PortisList.ForEach(porti => porti.IndicatorColor = Brushes.Transparent);
-
-                    //XAMLFiles.Portis p = PortViewModel.PortisList.Find(
-                    //    porti => 
-                    //    (Device.Interface as SerialGRBLInterface).SerialInterface.PortName == porti.PortName);
-                    //p.IndicatorColor = Brushes.ForestGreen;
 
 
                     break;
@@ -194,7 +194,7 @@ namespace PC
                     break;
             }
 
-            
+
         }
 
         /// <summary>

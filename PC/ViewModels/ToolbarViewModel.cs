@@ -20,7 +20,7 @@ namespace PC
             EventHandler<PropertyChangedEventArgs> handler = StaticPropertyChanged;
             if (handler != null)
             {
-                handler(null, new PropertyChangedEventArgs(PropName));
+                handler(typeof(ToolbarViewModel), new PropertyChangedEventArgs(PropName));
             }
         }
         #endregion
