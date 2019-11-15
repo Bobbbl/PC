@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PC
 {
@@ -26,6 +27,20 @@ namespace PC
         #endregion
 
 
+        public ICommand ClearCommand { get; set; }
+
+        private async Task Clear()
+        {
+            await Task.Run(() =>
+            {
+                ConsoleContent = string.Empty;
+
+                if (PresentViewModel.Device != null)
+                    PresentViewModel.Device.SendReceiveBuffer.Clear();
+            });
+
+        }
+
         private static string _ConsoleContent = string.Empty;
         public static string ConsoleContent
         {
@@ -40,6 +55,11 @@ namespace PC
             }
         }
 
+
+        public ConsoleViewModel()
+        {
+            ClearCommand = new RelayCommand(() => Clear());
+        }
 
     }
 }

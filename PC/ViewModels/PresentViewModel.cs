@@ -186,6 +186,11 @@ namespace PC
                     (iface as SerialGRBLInterface).FirePortOpened();
                     Device.SendReceiveBuffer.CollectionChanged += (s, k) =>
                     {
+                        if(k.NewItems == null)
+                        {
+                            return;
+                        }
+
                         foreach (var item in k.NewItems)
                         {
                             ConsoleViewModel.ConsoleContent += item;
