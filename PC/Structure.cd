@@ -50,14 +50,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="PC.GRBLCommandDictionary">
-    <Position X="12" Y="9.75" Width="2" />
+    <Position X="10.25" Y="11" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAIAAAAAACAAAAAAAAAAAAAAAABAAAA=</HashCode>
       <FileName>GRBLCommandDictionary.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="PC.CNC_Device" Collapsed="true">
-    <Position X="3.75" Y="7.25" Width="2.5" />
+  <Class Name="PC.CNC_Device">
+    <Position X="3.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAABCIAACYAwAAABhAAABAgAgMQwCAAABEtAkIIAI=</HashCode>
       <FileName>CNC_Device.cs</FileName>

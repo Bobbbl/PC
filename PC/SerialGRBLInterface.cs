@@ -49,10 +49,11 @@ namespace PC
             catch (TimeoutException ex)
             {
                 rmessage.Message = "TIMEOUT";
+                return rmessage;
             }
 
+            
             SendReceiveBuffer.Add(rmessage.Message);
-
             return rmessage;
         }
 
@@ -67,7 +68,7 @@ namespace PC
                 try
                 {
                     SerialInterface.ReadTimeout = TimeOut;
-                    rmessage.Message = SerialInterface.ReadLine();
+                    rmessage = ReceiveMessage(100);
                     LastMessageReceived = rmessage;
                     OnMessageReceived(this, rmessage);
                 }
@@ -86,7 +87,7 @@ namespace PC
                     try
                     {
                         SerialInterface.ReadTimeout = TimeOut;
-                        rmessage.Message = SerialInterface.ReadLine();
+                        rmessage = ReceiveMessage(100);
                         LastMessageReceived = rmessage;
                         OnMessageReceived(this, rmessage);
                     }

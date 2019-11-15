@@ -247,12 +247,13 @@ namespace PC
 
                 GRBLProtokoll pr = new GRBLProtokoll();
                 CNCMessage m = pr.GetCurrentFeedMessage();
-                CNCMessage start = new CNCMessage() { Message = "Grbl 1.1g ['$' for help]" };
-                var an = Interface.WaitReceiveMessage(100, start, 2000);
+                //CNCMessage start = new CNCMessage() { Message = "Grbl 1.1g ['$' for help]" };
+                //var an = Interface.WaitReceiveMessage(100, start, 2000);
 
                 CNCMessage message = Protokoll.GetJogByYMessage(Y, Feed);
                 Interface.SendMessage(message);
-                tmp = Interface.ReceiveMessage(100);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
             });
 
             return tmp;
