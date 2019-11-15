@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 
 namespace PC
 {
@@ -81,6 +82,29 @@ namespace PC
         /// </summary>
         public float CurrentFeed { get; set; }
 
+        private DispatcherTimer PositionRefreshTimer { get; set; } = new DispatcherTimer();
+        private int _RefreshInterval;
+
+        public int RefreshInterval
+        {
+            get { return _RefreshInterval; }
+            set
+            {
+                if (value != _RefreshInterval && value >= 0)
+                    _RefreshInterval = value;
+
+                if (value <= 0)
+                    PositionRefreshTimer.Stop();
+                else
+                {
+                    PositionRefreshTimer.Stop();
+                    PositionRefreshTimer.Interval = new TimeSpan(0,0,0,0,value);
+                    PositionRefreshTimer.Start();
+                }
+            }
+        }
+
+
         public ObservableCollection<string> SendReceiveBuffer
         {
             get
@@ -123,9 +147,17 @@ namespace PC
             {
                 CNCMessage message = Protokoll.GetCurrentXMessage();
                 Interface.SendMessage(message);
-                CNCMessage output = Interface.ReceiveMessage(100);
-                var tmp = Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[2].Value;
-                r = Convert.ToSingle(tmp, CultureInfo.InvariantCulture);
+
+                CNCMessage output = Interface.WaitReceiveMessageContaining(100, "WPos", 1000);
+                var tmp = Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]))").Groups[2].Value;
+                try
+                {
+                    r = Convert.ToSingle(tmp, CultureInfo.InvariantCulture);
+                }
+                catch (FormatException ex)
+                {
+                    r = 0;
+                }
             });
 
             return r;
@@ -176,10 +208,21 @@ namespace PC
             {
                 CNCMessage message = Protokoll.GetCurrentXYZMessage();
                 Interface.SendMessage(message);
-                CNCMessage output = Interface.ReceiveMessage(100);
-                r[0] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[2].Value, CultureInfo.InvariantCulture);
-                r[1] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[3].Value, CultureInfo.InvariantCulture);
-                r[2] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]+))").Groups[4].Value, CultureInfo.InvariantCulture);
+                CNCMessage output = Interface.WaitReceiveMessageContaining(10, "WPos", 2000);
+
+
+                try
+                {
+                    r[0] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]))").Groups[2].Value, CultureInfo.InvariantCulture);
+                    r[1] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]))").Groups[3].Value, CultureInfo.InvariantCulture);
+                    r[2] = Convert.ToSingle(Regex.Match(output.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]))").Groups[4].Value, CultureInfo.InvariantCulture);
+                }
+                catch (Exception ex)
+                {
+                    r[0] = CurrentX;
+                    r[1] = CurrentY;
+                    r[2] = CurrentZ;
+                }
 
             });
 
@@ -479,6 +522,20 @@ namespace PC
         {
             Interface = IFace;
             Protokoll = protokoll;
+            PositionRefreshTimer.Tick += (s, e) => PositionRefreshTimer_Tick(s,e);
+        }
+
+        private async Task PositionRefreshTimer_Tick(object sender, EventArgs e)
+        {
+            PositionRefreshTimer.Stop();
+            var farray = await GetCurrentXYZ();
+
+            CurrentX = farray[0];
+            CurrentY = farray[1];
+            CurrentZ = farray[2];
+
+            if (RefreshInterval > 0)
+                PositionRefreshTimer.Start();
         }
 
         ~CNC_Device()

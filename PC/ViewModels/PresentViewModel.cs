@@ -152,6 +152,7 @@ namespace PC
                     if (Device != null && Device.Interface.Portname == CurrentSelectedPortName)
                     {
                         Device.Interface.CloseConnection();
+                        Device.RefreshInterval = 0;
                         _Device = null;
                         return;
                     }
@@ -160,6 +161,7 @@ namespace PC
                     if (Device != null)
                     {
                         Device.Interface.CloseConnection();
+                        Device.RefreshInterval = 0;
                         _Device = null;
                     }
 
@@ -181,6 +183,7 @@ namespace PC
                     (iface as SerialGRBLInterface).PortClosed += (s, k) =>
                     {
                         ToolbarViewModel.IsConnected = false;
+                        Device.RefreshInterval = 0;
                     };
                     Device.PropertyChanged += Device_PropertyChanged;
                     (iface as SerialGRBLInterface).FirePortOpened();
@@ -197,6 +200,9 @@ namespace PC
                             ConsoleViewModel.ConsoleContent += "\n";
                         }
                     };
+
+
+                    Device.RefreshInterval = 1000;
 
                     break;
 

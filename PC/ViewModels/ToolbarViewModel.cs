@@ -74,7 +74,8 @@ namespace PC
 
         public async Task SetZero()
         {
-            await PresentViewModel.Device.SendSetZero();
+            var task = PresentViewModel.Device.SendSetZero();
+            task.RunSynchronously();
         }
 
         public async Task Homing()
@@ -89,7 +90,9 @@ namespace PC
 
         public async Task XMinus()
         {
-            await PresentViewModel.Device.JogX(-StepSizeJog, FeedRateJog);
+            var task = PresentViewModel.Device.JogX(-StepSizeJog, FeedRateJog);
+            task.RunSynchronously();
+
         }
 
         public async Task XPlus()
@@ -154,13 +157,13 @@ namespace PC
 
         public ToolbarViewModel()
         {
-            SetZeroCommand = new RelayCommand(async () => await SetZero());
+            SetZeroCommand = new RelayCommand( () =>  SetZero());
             (SetZeroCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             HomingCommand = new RelayCommand(async () => await Homing());
             (HomingCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             UnlockCommand = new RelayCommand(async () => await Unlock());
             (UnlockCommand as RelayCommand).CANPointer += () => { return IsConnected; };
-            XMinusCommand = new RelayCommand(async () => await XMinus());
+            XMinusCommand = new RelayCommand(() => XMinus());
             (XMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             XPlusCommand = new RelayCommand(async () => await XPlus());
             (XPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };

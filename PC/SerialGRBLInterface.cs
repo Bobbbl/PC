@@ -51,9 +51,70 @@ namespace PC
                 rmessage.Message = "TIMEOUT";
                 return rmessage;
             }
+            catch(InvalidOperationException ex)
+            {
+                rmessage.Message = ex.Message;
+                CloseConnection();
+                return rmessage;
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                rmessage.Message = ex.Message;
+                return rmessage;
+            }
 
             
             SendReceiveBuffer.Add(rmessage.Message);
+            return rmessage;
+        }
+
+        public override CNCMessage WaitReceiveMessageContaining(int timeout, string containing, int waittimout)
+        {
+            CNCMessage rmessage = new CNCMessage() { Message = "" };
+
+            LastMessageReceived = null;
+
+            if (waittimout == 0)
+            {
+                try
+                {
+                    SerialInterface.ReadTimeout = timeout;
+                    rmessage = ReceiveMessage(timeout);
+                    LastMessageReceived = rmessage;
+                    OnMessageReceived(this, rmessage);
+                }
+                catch (TimeoutException ex)
+                {
+                    rmessage.Message = "TIMEOUT";
+                }
+
+            }
+            else
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (!rmessage.Message.Contains(containing))
+                {
+                    try
+                    {
+                        SerialInterface.ReadTimeout = timeout;
+                        rmessage = ReceiveMessage(timeout);
+                        LastMessageReceived = rmessage;
+                        OnMessageReceived(this, rmessage);
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        rmessage.Message = "TIMEOUT";
+                    }
+
+                    if (sw.ElapsedMilliseconds >= waittimout)
+                        return rmessage;
+                }
+            }
+
+
+
+
             return rmessage;
         }
 
@@ -68,7 +129,7 @@ namespace PC
                 try
                 {
                     SerialInterface.ReadTimeout = TimeOut;
-                    rmessage = ReceiveMessage(100);
+                    rmessage = ReceiveMessage(TimeOut);
                     LastMessageReceived = rmessage;
                     OnMessageReceived(this, rmessage);
                 }
@@ -87,7 +148,7 @@ namespace PC
                     try
                     {
                         SerialInterface.ReadTimeout = TimeOut;
-                        rmessage = ReceiveMessage(100);
+                        rmessage = ReceiveMessage(TimeOut);
                         LastMessageReceived = rmessage;
                         OnMessageReceived(this, rmessage);
                     }
@@ -116,7 +177,15 @@ namespace PC
             }
             else
             {
-                SerialInterface.WriteLine(message.Message);
+                try
+                {
+                    SerialInterface.WriteLine(message.Message);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    SendReceiveBuffer.Add(ex.Message);
+                    return;
+                }
             }
 
             SendReceiveBuffer.Add(message.Message);
