@@ -300,27 +300,20 @@
 
             <TextBlock Grid.Row="0" Grid.Column="1"
                                HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                Text="{Binding CurrentX}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG">
-                <TextBlock.DataContext>
-                    <local:PresentViewModel/>
-                </TextBlock.DataContext>
+                                Text="{Binding CurrentX, FallbackValue=0}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
             </TextBlock>
 
 
             <TextBlock Grid.Row="1" Grid.Column="1"
                                HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                Text="{Binding CurrentY}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG">
-                <TextBlock.DataContext>
-                    <local:PresentViewModel/>
-                </TextBlock.DataContext>
+                                Text="{Binding CurrentY, FallbackValue=0}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
+
             </TextBlock>
 
             <TextBlock Grid.Row="2" Grid.Column="1"
                                HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                Text="{Binding CurrentZ}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG">
-                <TextBlock.DataContext>
-                    <local:PresentViewModel/>
-                </TextBlock.DataContext>
+                                Text="{Binding CurrentZ, FallbackValue=0}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
+
             </TextBlock>
 
 
