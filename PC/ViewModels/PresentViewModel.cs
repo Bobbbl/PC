@@ -73,12 +73,12 @@ namespace PC
             }
             set
             {
-                if(value != _CurrentSelectedPortName)
+                if (value != _CurrentSelectedPortName)
                 {
                     _CurrentSelectedPortName = value;
                     RaiseStaticPropertyChanged("CurrentSelectedPortName");
                 }
-                
+
             }
         }
 
@@ -108,12 +108,12 @@ namespace PC
             }
             set
             {
-                if(_Device != value)
+                if (_Device != value)
                 {
                     _Device = value;
-                    RaiseStaticPropertyChanged(nameof(Device));
+                    RaiseStaticPropertyChanged("Device");
                 }
-                
+
             }
         }
 

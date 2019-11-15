@@ -10,15 +10,25 @@ namespace PC
     public class SerialGRBLInterface
         : CNCInterface
     {
-        public event EventHandler StartUpMessageReceived;
-        public event EventHandler AlarmMessageReceived;
-        public event EventHandler LimitMessageReceived;
-        public event EventHandler AbortDuringCycleMessageReceived;
-        public event EventHandler ProbeFailMessageReceived;
-        public event EventHandler UnlockNeededMessageReceived;
-        public event EventHandler StatusReportMessageReceived;
-        public event EventHandler OpenPortFailed; 
-        public event EventHandler ClosePortFailed;
+        public event EventHandler StartUpMessageReceived = (a, b) => { };
+        public event EventHandler AlarmMessageReceived = (a, b) => { };
+        public event EventHandler LimitMessageReceived = (a, b) => { };
+        public event EventHandler AbortDuringCycleMessageReceived = (a, b) => { };
+        public event EventHandler ProbeFailMessageReceived = (a, b) => { };
+        public event EventHandler UnlockNeededMessageReceived = (a, b) => { };
+        public event EventHandler StatusReportMessageReceived = (a, b) => { };
+        public event EventHandler OpenPortFailed = (a, b) => { };
+        public event EventHandler ClosePortFailed = (a, b) => { };
+        public event Action<string, int> PortOpened = (a, b) => { };
+        public event Action<string, int> PortClosed = (a, b) => { };
+        public void FirePortOpened()
+        {
+            PortOpened(Portname, SerialInterface.BaudRate);
+        }
+        public void FirePortClosed(string portname, int baudrate)
+        {
+            PortClosed(Portname, SerialInterface.BaudRate);
+        }
 
         public CNCMessage LastMessageReceived { get; set; }
 
@@ -45,7 +55,7 @@ namespace PC
 
         public override CNCMessage WaitReceiveMessage(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0)
         {
-            CNCMessage rmessage = new CNCMessage() { Message = ""};
+            CNCMessage rmessage = new CNCMessage() { Message = "" };
 
             LastMessageReceived = null;
 
@@ -111,7 +121,7 @@ namespace PC
             try
             {
                 SerialInterface.Close();
-                ToolbarViewModel.IsConnected = false;
+                PortClosed(Portname, SerialInterface.BaudRate);
             }
             catch (Exception)
             {
@@ -138,17 +148,13 @@ namespace PC
             try
             {
                 sport.Open();
+                PortOpened(Portname, BaudRate);
+
             }
             catch (Exception ex)
             {
-                if (OpenPortFailed != null)
-                    OpenPortFailed(this, new EventArgs());
-                // TODO: This must be first a field of SerialGRBLInterface. Then the viewmodel can check the 
-                // connected field of the class. It should not go directly through to the viewmodel. bad style
-                ToolbarViewModel.IsConnected = false;
-                
+                OpenPortFailed(this, new EventArgs());
             }
-            ToolbarViewModel.IsConnected = true;
 
             SerialInterface = sport;
         }
