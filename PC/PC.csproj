@@ -87,6 +87,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\FloatToString.cs" />
     <Compile Include="Converters\ObservableCollectionToString.cs" />
     <Compile Include="Converters\PortToPortisConverter.cs" />
     <Compile Include="PortisEventHandler.cs" />

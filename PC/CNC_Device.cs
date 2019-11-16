@@ -268,14 +268,19 @@ namespace PC
             return tmp;
         }
 
-        public CNCMessage JogX(double X, double Feed)
+        public async Task<CNCMessage> JogX(double X, double Feed)
         {
             CNCMessage tmp = null;
 
-            CNCMessage message = Protokoll.GetJogByXMessage(X, Feed);
-            CNCMessage t = new CNCMessage() { Message = "ok" };
-            Interface.SendMessage(message);
-            tmp = Interface.WaitReceiveMessage(100, t, 1000);
+            await Task.Run(() =>
+
+
+            {
+                CNCMessage message = Protokoll.GetJogByXMessage(X, Feed);
+                CNCMessage t = new CNCMessage() { Message = "ok" };
+                Interface.SendMessage(message);
+                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+            });
 
 
             return tmp;
