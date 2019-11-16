@@ -201,8 +201,8 @@ namespace PC
                         }
                     };
 
-
-                    Device.RefreshInterval = 1000;
+                    // TODO: Add Refresh Rate Textbox to ToolbarPresenter and bind it!
+                    Device.RefreshInterval = 100;
 
                     break;
 
