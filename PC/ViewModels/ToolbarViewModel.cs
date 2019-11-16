@@ -74,8 +74,7 @@ namespace PC
 
         public async Task SetZero()
         {
-            var task = PresentViewModel.Device.SendSetZero();
-            task.RunSynchronously();
+            await PresentViewModel.Device.SendSetZero();
         }
 
         public async Task Homing()
@@ -90,34 +89,32 @@ namespace PC
 
         public async Task XMinus()
         {
-            var task = PresentViewModel.Device.JogX(-StepSizeJog, FeedRateJog);
-            task.RunSynchronously();
-
+            await PresentViewModel.Device.RelativeJogX(-StepSizeJog, FeedRateJog);
         }
 
         public async Task XPlus()
         {
-            await PresentViewModel.Device.JogX(StepSizeJog, FeedRateJog);
+            await PresentViewModel.Device.RelativeJogX(StepSizeJog, FeedRateJog);
         }
 
         public async Task YPlus()
         {
-            await PresentViewModel.Device.JogY(StepSizeJog, FeedRateJog);
+            await PresentViewModel.Device.RelativeJogY(StepSizeJog, FeedRateJog);
         }
 
         public async Task YMinus()
         {
-            await PresentViewModel.Device.JogY(-StepSizeJog, FeedRateJog);
+            await PresentViewModel.Device.RelativeJogY(-StepSizeJog, FeedRateJog);
         }
 
         public async Task ZPlus()
         {
-            await PresentViewModel.Device.JogZ(StepSizeJog, FeedRateJog);
+            await PresentViewModel.Device.RelativeJogZ(StepSizeJog, FeedRateJog);
         }
 
         public async Task ZMinus()
         {
-            await PresentViewModel.Device.JogZ(-StepSizeJog, FeedRateJog);
+            await PresentViewModel.Device.RelativeJogZ(-StepSizeJog, FeedRateJog);
         }
 
         public async Task Spindel()
@@ -157,15 +154,15 @@ namespace PC
 
         public ToolbarViewModel()
         {
-            SetZeroCommand = new RelayCommand( () =>  SetZero());
+            SetZeroCommand = new RelayCommand(async () => await SetZero());
             (SetZeroCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             HomingCommand = new RelayCommand(async () => await Homing());
             (HomingCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             UnlockCommand = new RelayCommand(async () => await Unlock());
             (UnlockCommand as RelayCommand).CANPointer += () => { return IsConnected; };
-            XMinusCommand = new RelayCommand(() => XMinus());
+            XMinusCommand = new RelayCommand(async() => await XMinus());
             (XMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
-            XPlusCommand = new RelayCommand(async () => await XPlus());
+            XPlusCommand = new RelayCommand(async() => await XPlus());
             (XPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             YPlusCommand = new RelayCommand(async () => await YPlus());
             (YPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };

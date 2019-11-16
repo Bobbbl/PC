@@ -9,7 +9,7 @@ namespace PC
     {
 
 
-        public string Message { get; set; }
+        public string Message { get; set; } = String.Empty;
 
         public bool GRBLCommand { get; set; }
 

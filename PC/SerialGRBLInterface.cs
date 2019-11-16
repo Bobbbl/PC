@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PC
 {
@@ -33,6 +34,49 @@ namespace PC
 
         public CNCMessage LastMessageReceived { get; set; }
 
+        public override async Task<CNCMessage> ReceiveMessageAsync(int timeout = 100)
+        {
+            CNCMessage rmessage = new CNCMessage();
+
+            LastMessageReceived = null;
+
+            try
+            {
+                SerialInterface.ReadTimeout = timeout;
+                var tmp = new byte[1];
+                byte recbyte = 0x00;
+                string recstring = string.Empty;
+                while (!recstring.Contains("\n") && !recstring.Contains("\r"))
+                {
+                    await SerialInterface.BaseStream.ReadAsync(tmp, 0, 1);
+                    recstring += Encoding.ASCII.GetString(tmp);
+                }
+                rmessage.Message = BitConverter.ToString(tmp).Trim();
+                LastMessageReceived = rmessage;
+                OnMessageReceived(this, rmessage);
+            }
+            catch (TimeoutException ex)
+            {
+                rmessage.Message = "TIMEOUT";
+                return rmessage;
+            }
+            catch (InvalidOperationException ex)
+            {
+                rmessage.Message = ex.Message;
+                CloseConnection();
+                return rmessage;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                rmessage.Message = ex.Message;
+                return rmessage;
+            }
+
+
+            SendReceiveBuffer.Add(rmessage.Message);
+            return rmessage;
+        }
+
         public override CNCMessage ReceiveMessage(int TimeOut = 100)
         {
             CNCMessage rmessage = new CNCMessage();
@@ -42,7 +86,8 @@ namespace PC
             try
             {
                 SerialInterface.ReadTimeout = TimeOut;
-                rmessage.Message = SerialInterface.ReadLine();
+                if (SerialInterface.BytesToRead >= 0)
+                    rmessage.Message = SerialInterface.ReadLine();
                 LastMessageReceived = rmessage;
                 OnMessageReceived(this, rmessage);
             }
@@ -51,19 +96,43 @@ namespace PC
                 rmessage.Message = "TIMEOUT";
                 return rmessage;
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 rmessage.Message = ex.Message;
                 CloseConnection();
+                SendReceiveBuffer.Add(rmessage.Message);
                 return rmessage;
             }
-            catch(ArgumentOutOfRangeException ex)
+            catch (ArgumentOutOfRangeException ex)
             {
                 rmessage.Message = ex.Message;
+                SendReceiveBuffer.Add(rmessage.Message);
+                return rmessage;
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                // This happens if while this thread is reading bytes from SerialPort, a other
+                // thread is reading the bytes from port. this can then result in an -1 data pointer
+                // (SerialPort is not thread save). 
+                // The good news are; this only means the message was already read from port and nothing
+                // else is to do.
+                Debugger.Break();
+                rmessage.Message = "-";
+                return rmessage;
+            }
+            catch (OverflowException ex)
+            {
+                // This happens if while this thread is reading bytes from SerialPort, a other
+                // thread is reading the bytes from port. this can then result in an -1 data pointer
+                // (SerialPort is not thread save). 
+                // The good news are; this only means the message was already read from port and nothing
+                // else is to do.
+                Debugger.Break();
+                rmessage.Message = "-";
                 return rmessage;
             }
 
-            
+
             SendReceiveBuffer.Add(rmessage.Message);
             return rmessage;
         }
@@ -118,6 +187,57 @@ namespace PC
             return rmessage;
         }
 
+        public override async Task<CNCMessage> WaitReceiveMessageContainingAsync(int timeout, string containing, int waittimout)
+        {
+            CNCMessage rmessage = new CNCMessage() { Message = "" };
+
+            LastMessageReceived = null;
+
+            if (waittimout == 0)
+            {
+                try
+                {
+                    SerialInterface.ReadTimeout = timeout;
+                    rmessage = await ReceiveMessageAsync(timeout);
+                    LastMessageReceived = rmessage;
+                    OnMessageReceived(this, rmessage);
+                }
+                catch (TimeoutException ex)
+                {
+                    rmessage.Message = "TIMEOUT";
+                }
+
+            }
+            else
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (!rmessage.Message.Contains(containing))
+                {
+                    try
+                    {
+                        SerialInterface.ReadTimeout = timeout;
+                        rmessage = await ReceiveMessageAsync(timeout);
+                        LastMessageReceived = rmessage;
+                        OnMessageReceived(this, rmessage);
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        rmessage.Message = "TIMEOUT";
+                    }
+
+                    if (sw.ElapsedMilliseconds >= waittimout)
+                        return rmessage;
+                }
+            }
+
+
+
+
+            return rmessage;
+        }
+
+
         public override CNCMessage WaitReceiveMessage(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0)
         {
             CNCMessage rmessage = new CNCMessage() { Message = "" };
@@ -149,6 +269,55 @@ namespace PC
                     {
                         SerialInterface.ReadTimeout = TimeOut;
                         rmessage = ReceiveMessage(TimeOut);
+                        LastMessageReceived = rmessage;
+                        OnMessageReceived(this, rmessage);
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        rmessage.Message = "TIMEOUT";
+                    }
+
+                    if (sw.ElapsedMilliseconds >= WaitTimeout)
+                        return rmessage;
+                }
+            }
+
+
+
+
+            return rmessage;
+        }
+        public override async Task<CNCMessage> WaitReceiveMessageAsync(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0)
+        {
+            CNCMessage rmessage = new CNCMessage() { Message = "" };
+
+            LastMessageReceived = null;
+
+            if (WaitTimeout == 0)
+            {
+                try
+                {
+                    SerialInterface.ReadTimeout = TimeOut;
+                    rmessage = await ReceiveMessageAsync(TimeOut);
+                    LastMessageReceived = rmessage;
+                    OnMessageReceived(this, rmessage);
+                }
+                catch (TimeoutException ex)
+                {
+                    rmessage.Message = "TIMEOUT";
+                }
+
+            }
+            else
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (!rmessage.Message.Contains(WaitForMessage.Message))
+                {
+                    try
+                    {
+                        SerialInterface.ReadTimeout = TimeOut;
+                        rmessage = await ReceiveMessageAsync(TimeOut);
                         LastMessageReceived = rmessage;
                         OnMessageReceived(this, rmessage);
                     }

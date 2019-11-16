@@ -98,7 +98,7 @@ namespace PC
                 else
                 {
                     PositionRefreshTimer.Stop();
-                    PositionRefreshTimer.Interval = new TimeSpan(0,0,0,0,value);
+                    PositionRefreshTimer.Interval = new TimeSpan(0, 0, 0, 0, value);
                     PositionRefreshTimer.Start();
                 }
             }
@@ -268,16 +268,15 @@ namespace PC
             return tmp;
         }
 
-        public async Task<CNCMessage> JogX(double X, double Feed)
+        public CNCMessage JogX(double X, double Feed)
         {
             CNCMessage tmp = null;
-            await Task.Run(() =>
-            {
-                CNCMessage message = Protokoll.GetJogByXMessage(X, Feed);
-                CNCMessage t = new CNCMessage() { Message = "ok" };
-                Interface.SendMessage(message);
-                tmp = Interface.WaitReceiveMessage(100, t, 1000);
-            });
+
+            CNCMessage message = Protokoll.GetJogByXMessage(X, Feed);
+            CNCMessage t = new CNCMessage() { Message = "ok" };
+            Interface.SendMessage(message);
+            tmp = Interface.WaitReceiveMessage(100, t, 1000);
+
 
             return tmp;
         }
@@ -371,12 +370,12 @@ namespace PC
         {
             CNCMessage tmp = null;
 
+            CNCMessage message = Protokoll.GetRelativeJogByXMessage(X, F);
+            Interface.SendMessage(message);
+            CNCMessage t = new CNCMessage() { Message = "ok" };
+
             await Task.Run(() =>
             {
-
-                CNCMessage message = Protokoll.GetRelativeJogByXMessage(X, F);
-                Interface.SendMessage(message);
-                CNCMessage t = new CNCMessage() { Message = "ok" };
                 tmp = Interface.WaitReceiveMessage(100, t, 1000);
 
             });
@@ -522,7 +521,7 @@ namespace PC
         {
             Interface = IFace;
             Protokoll = protokoll;
-            PositionRefreshTimer.Tick += (s, e) => PositionRefreshTimer_Tick(s,e);
+            PositionRefreshTimer.Tick += async (s, e) => await PositionRefreshTimer_Tick(s, e);
         }
 
         private async Task PositionRefreshTimer_Tick(object sender, EventArgs e)

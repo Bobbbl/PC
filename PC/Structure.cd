@@ -10,14 +10,14 @@
   <Class Name="PC.CNCInterface">
     <Position X="7" Y="1.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAABAAQCAAACYAACAAABAQAKAAAABAAAAAIACIAgg=</HashCode>
+      <HashCode>AAAAABAAQCAAACYAACAAABAQAKAARABAAAAAIACIAgg=</HashCode>
       <FileName>CNCInterface.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PC.SerialGRBLInterface">
     <Position X="10.25" Y="5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAIAACAAAAAVIBAECAEARAQAKEAAADAAAQAAgAAAAA=</HashCode>
+      <HashCode>AAAIAACAAAAAVIBAECAEARAQAKEARADAAAQAAgAAAAA=</HashCode>
       <FileName>SerialGRBLInterface.cs</FileName>
     </TypeIdentifier>
   </Class>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace PC
@@ -83,10 +84,14 @@ namespace PC
         public abstract void SendMessage(CNCMessage message);
 
         public abstract CNCMessage ReceiveMessage(int TimeOut);
+        public abstract Task<CNCMessage> ReceiveMessageAsync(int TimeOut);
 
         public abstract CNCMessage WaitReceiveMessage(int TimeOut, CNCMessage WaitForMessage, int WaitTimout);
+        public abstract Task<CNCMessage> WaitReceiveMessageAsync(int TimeOut, CNCMessage WaitForMessage, int WaitTimout);
 
         public abstract CNCMessage WaitReceiveMessageContaining(int timeout, string containing, int waittimout);
+        public abstract Task<CNCMessage> WaitReceiveMessageContainingAsync(int timeout, string containing, int waittimout);
+
 
         public abstract void CloseConnection();
 
