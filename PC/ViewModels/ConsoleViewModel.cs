@@ -26,6 +26,22 @@ namespace PC
 
         #endregion
 
+        private static bool _Verbose = false;
+        public static bool Verbose
+        {
+            get
+            {
+                return _Verbose;
+            }
+            set
+            {
+                if(_Verbose != value)
+                {
+                    _Verbose = value;
+                    RaiseStaticPropertyChanged(nameof(Verbose));
+                }
+            }
+        }
 
         public ICommand ClearCommand { get; set; }
 

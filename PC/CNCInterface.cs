@@ -81,15 +81,15 @@ namespace PC
         }
 
         public List<CNCMessage> MessageBuffer { get; set; } = new List<CNCMessage>();
-        public abstract void SendMessage(CNCMessage message);
+        public abstract void SendMessage(CNCMessage message, bool logging = true);
 
-        public abstract CNCMessage ReceiveMessage(int TimeOut);
+        public abstract CNCMessage ReceiveMessage(int TimeOut, bool logging = true);
         public abstract Task<CNCMessage> ReceiveMessageAsync(int TimeOut);
 
-        public abstract CNCMessage WaitReceiveMessage(int TimeOut, CNCMessage WaitForMessage, int WaitTimout);
+        public abstract CNCMessage WaitReceiveMessage(int TimeOut, CNCMessage WaitForMessage, int WaitTimout, bool logging = true);
         public abstract Task<CNCMessage> WaitReceiveMessageAsync(int TimeOut, CNCMessage WaitForMessage, int WaitTimout);
 
-        public abstract CNCMessage WaitReceiveMessageContaining(int timeout, string containing, int waittimout);
+        public abstract CNCMessage WaitReceiveMessageContaining(int timeout, string containing, int waittimout, bool logging = true);
         public abstract Task<CNCMessage> WaitReceiveMessageContainingAsync(int timeout, string containing, int waittimout);
 
 

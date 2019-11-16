@@ -77,7 +77,7 @@ namespace PC
             return rmessage;
         }
 
-        public override CNCMessage ReceiveMessage(int TimeOut = 100)
+        public override CNCMessage ReceiveMessage(int TimeOut = 100, bool logging = true)
         {
             CNCMessage rmessage = new CNCMessage();
 
@@ -100,13 +100,15 @@ namespace PC
             {
                 rmessage.Message = ex.Message;
                 CloseConnection();
-                SendReceiveBuffer.Add(rmessage.Message);
+                if (logging)
+                    SendReceiveBuffer.Add(rmessage.Message);
                 return rmessage;
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 rmessage.Message = ex.Message;
-                SendReceiveBuffer.Add(rmessage.Message);
+                if (logging)
+                    SendReceiveBuffer.Add(rmessage.Message);
                 return rmessage;
             }
             catch (IndexOutOfRangeException ex)
@@ -133,11 +135,12 @@ namespace PC
             }
 
 
-            SendReceiveBuffer.Add(rmessage.Message);
+            if (logging)
+                SendReceiveBuffer.Add(rmessage.Message);
             return rmessage;
         }
 
-        public override CNCMessage WaitReceiveMessageContaining(int timeout, string containing, int waittimout)
+        public override CNCMessage WaitReceiveMessageContaining(int timeout, string containing, int waittimout, bool logging = true)
         {
             CNCMessage rmessage = new CNCMessage() { Message = "" };
 
@@ -148,7 +151,7 @@ namespace PC
                 try
                 {
                     SerialInterface.ReadTimeout = timeout;
-                    rmessage = ReceiveMessage(timeout);
+                    rmessage = ReceiveMessage(timeout, logging: logging);
                     LastMessageReceived = rmessage;
                     OnMessageReceived(this, rmessage);
                 }
@@ -167,7 +170,7 @@ namespace PC
                     try
                     {
                         SerialInterface.ReadTimeout = timeout;
-                        rmessage = ReceiveMessage(timeout);
+                        rmessage = ReceiveMessage(timeout, logging: logging);
                         LastMessageReceived = rmessage;
                         OnMessageReceived(this, rmessage);
                     }
@@ -238,7 +241,7 @@ namespace PC
         }
 
 
-        public override CNCMessage WaitReceiveMessage(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0)
+        public override CNCMessage WaitReceiveMessage(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0, bool logging = true)
         {
             CNCMessage rmessage = new CNCMessage() { Message = "" };
 
@@ -249,7 +252,7 @@ namespace PC
                 try
                 {
                     SerialInterface.ReadTimeout = TimeOut;
-                    rmessage = ReceiveMessage(TimeOut);
+                    rmessage = ReceiveMessage(TimeOut, logging: logging);
                     LastMessageReceived = rmessage;
                     OnMessageReceived(this, rmessage);
                 }
@@ -268,7 +271,7 @@ namespace PC
                     try
                     {
                         SerialInterface.ReadTimeout = TimeOut;
-                        rmessage = ReceiveMessage(TimeOut);
+                        rmessage = ReceiveMessage(TimeOut, logging: logging);
                         LastMessageReceived = rmessage;
                         OnMessageReceived(this, rmessage);
                     }
@@ -337,7 +340,7 @@ namespace PC
             return rmessage;
         }
 
-        public override void SendMessage(CNCMessage message)
+        public override void SendMessage(CNCMessage message, bool logging = true)
         {
             if (AutoPoll)
             {
@@ -357,8 +360,10 @@ namespace PC
                 }
             }
 
-            SendReceiveBuffer.Add(message.Message);
+            if (logging)
+                SendReceiveBuffer.Add(message.Message);
         }
+
 
         public override void CloseConnection()
         {

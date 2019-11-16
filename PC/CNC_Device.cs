@@ -207,8 +207,20 @@ namespace PC
             await Task.Run(() =>
             {
                 CNCMessage message = Protokoll.GetCurrentXYZMessage();
-                Interface.SendMessage(message);
-                CNCMessage output = Interface.WaitReceiveMessageContaining(10, "WPos", 2000);
+                if (ConsoleViewModel.Verbose)
+                {
+                    Interface.SendMessage(message);
+                }
+                else
+                {
+                    Interface.SendMessage(message, false);
+                }
+
+                CNCMessage output;
+                if (ConsoleViewModel.Verbose)
+                    output = Interface.WaitReceiveMessageContaining(10, "WPos", 2000);
+                else
+                    output = Interface.WaitReceiveMessageContaining(10, "WPos", 2000, logging: false);
 
 
                 try
