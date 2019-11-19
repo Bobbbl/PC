@@ -3,10 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:h="http://helix-toolkit.org/wpf"
              xmlns:local="clr-namespace:PC.XAMLFiles"
+             xmlns:i1="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="clr-namespace:PC"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             >
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="3"></Border>
+        <Border BorderBrush="Black" BorderThickness="3">
+            <h:HelixViewport3D>
+                <!--Light-->
+                <h:DefaultLights/>
+                <!--Grid-->
+                <h:GridLinesVisual3D/>
+                <!--Camera-->
+                <h:HelixViewport3D.DefaultCamera>
+                    <PerspectiveCamera Position="-20 -40 20" LookDirection="17 34 -17" UpDirection="0 0 1"/>
+                </h:HelixViewport3D.DefaultCamera>
+
+            </h:HelixViewport3D>
+        </Border>
     </Grid>
 </UserControl>

@@ -5,39 +5,38 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PC"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="500" d:DesignWidth="300" MaxWidth="300">
     <UserControl.Resources>
         <local:FloatToString x:Key="FloatToString"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <local:ToolbarViewModel></local:ToolbarViewModel>
     </UserControl.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-    <TabControl Grid.Row="0"
+    <StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TabControl Grid.Row="0"
                         Grid.Column="0"
-                        MaxWidth="300"
-                        MinWidth="300"
-                        MaxHeight="250"
-                        MinHeight="250">
-        <!--Jog Tab-->
-        <TabItem Header="Jog">
-            <!--Basic Definition Grid-->
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <!--MM Indicator-->
-                <Border Grid.Column="0"
+                        Margin="0"
+                        MaxHeight="250">
+                <!--Jog Tab-->
+                <TabItem Header="Jog">
+                    <!--Basic Definition Grid-->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!--MM Indicator-->
+                        <Border Grid.Column="0"
                                 Background="White"
                                 CornerRadius="2"
                                 BorderBrush="Black"
@@ -47,115 +46,115 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 >
-                    <TextBlock><Run Text="MM"/></TextBlock>
-                </Border>
+                            <TextBlock><Run Text="MM"/></TextBlock>
+                        </Border>
 
-                <!--Basic Definitions-->
-                <StackPanel Grid.Column="1" Orientation="Vertical">
-                    <!--Step Size-->
-                    <StackPanel Orientation="Horizontal">
-                        <Label Width="90" Content="XY Step Size"/>
-                        <TextBox MinWidth="50"
+                        <!--Basic Definitions-->
+                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                            <!--Step Size-->
+                            <StackPanel Orientation="Horizontal">
+                                <Label Width="90" Content="XY Step Size"/>
+                                <TextBox MinWidth="50"
                                          Margin="5"
                                          Text="{Binding StepSizeJog}"/>
-                    </StackPanel>
-                    <!--Feed Rate-->
-                    <StackPanel Orientation="Horizontal">
-                        <Label Width="90" Content="Feed Rate"/>
-                        <TextBox MinWidth="50"
+                            </StackPanel>
+                            <!--Feed Rate-->
+                            <StackPanel Orientation="Horizontal">
+                                <Label Width="90" Content="Feed Rate"/>
+                                <TextBox MinWidth="50"
                                          Margin="5"
                                          Text="{Binding FeedRateJog}"/>
 
-                    </StackPanel>
-                    <!--Spindel Speed-->
-                    <StackPanel Orientation="Horizontal">
-                        <Label Width="90" Content="Spindel Speed"/>
-                        <TextBox MinWidth="50"
+                            </StackPanel>
+                            <!--Spindel Speed-->
+                            <StackPanel Orientation="Horizontal">
+                                <Label Width="90" Content="Spindel Speed"/>
+                                <TextBox MinWidth="50"
                                          Margin="5"
                                          Text="{Binding SpindelSpeed}"/>
 
-                    </StackPanel>
-                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
 
-                <!--Basic Movement-->
-                <Grid Grid.Row="1"
+                        <!--Basic Movement-->
+                        <Grid Grid.Row="1"
                               Grid.ColumnSpan="2">
-                    <Grid.Resources>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Width" Value="30"/>
-                            <Setter Property="Height" Value="30"/>
-                            <Setter Property="Margin" Value="2"/>
-                            <Setter Property="Background" Value="White"/>
-                            <Setter Property="IsEnabled" Value="{Binding Connected}"/>
-                        </Style>
+                            <Grid.Resources>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Width" Value="30"/>
+                                    <Setter Property="Height" Value="30"/>
+                                    <Setter Property="Margin" Value="2"/>
+                                    <Setter Property="Background" Value="White"/>
+                                    <Setter Property="IsEnabled" Value="{Binding Connected}"/>
+                                </Style>
 
-                    </Grid.Resources>
+                            </Grid.Resources>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                    <!--Homing-->
-                    <Button Grid.Row="2"
+                            <!--Homing-->
+                            <Button Grid.Row="2"
                                     Grid.Column="2"
                                     FontSize="7"
                                     Background="LightYellow"
                                     Command="{Binding SetZeroCommand}" Content="Zero"/>
 
-                    <!--Homing-->
-                    <Button Grid.Row="2"
+                            <!--Homing-->
+                            <Button Grid.Row="2"
                                     Grid.Column="0"
                                     FontSize="7"
                                     Background="White"
                                     Command="{Binding HomingCommand}" Content="Homing"/>
 
-                    <!--Unlock-->
-                    <Button Grid.Row="0"
+                            <!--Unlock-->
+                            <Button Grid.Row="0"
                                     Grid.Column="0"
                                     FontSize="8"
                                     Background="LightGreen"
                                     Command="{Binding UnlockCommand}" Content="Unlock"/>
 
-                    <!-- -X -->
-                    <Button Grid.Row="1"
+                            <!-- -X -->
+                            <Button Grid.Row="1"
                                     Grid.Column="0"
                                     Command="{Binding XMinusCommand}" Content="-X"/>
 
-                    <!-- X+ -->
-                    <Button Grid.Row="1"
+                            <!-- X+ -->
+                            <Button Grid.Row="1"
                                     Grid.Column="2"
                                     Command="{Binding XPlusCommand}" Content="X+"/>
 
-                    <!-- +Y -->
-                    <Button Grid.Row="0"
+                            <!-- +Y -->
+                            <Button Grid.Row="0"
                                     Grid.Column="1"
                                     Command="{Binding YPlusCommand}" Content="Y+"/>
 
-                    <!-- -Y -->
-                    <Button Grid.Row="2"
+                            <!-- -Y -->
+                            <Button Grid.Row="2"
                                     Grid.Column="1"
                                     Command="{Binding YMinusCommand}" Content="-Y"/>
 
-                    <!-- +Z -->
-                    <Button Grid.Row="0"
+                            <!-- +Z -->
+                            <Button Grid.Row="0"
                                     Grid.Column="3"
                                     Command="{Binding ZPlusCommand}" Content="Z+"/>
 
-                    <!-- -Z -->
-                    <Button Grid.Row="3"
+                            <!-- -Z -->
+                            <Button Grid.Row="3"
                                     Grid.Column="3"
                                     Command="{Binding ZMinusCommand}" Content="Z-"/>
 
-                    <!--Spindel ein-->
-                    <Border Grid.Row="0"
+                            <!--Spindel ein-->
+                            <Border Grid.Row="0" MaxHeight="50"
                                     Grid.Column="2"
                                     BorderBrush="Black"
                                     BorderThickness="2"
@@ -164,45 +163,45 @@
                                      RenderTransformOrigin="0.5, 0.5"
                                     IsHitTestVisible="{Binding Connected}"
                                     >
-                        <Border.RenderTransform>
-                            <RotateTransform x:Name="NoFreeze"/>
-                        </Border.RenderTransform>
-                        <Border.InputBindings>
-                            <MouseBinding MouseAction="LeftClick"
+                                <Border.RenderTransform>
+                                    <RotateTransform x:Name="NoFreeze"/>
+                                </Border.RenderTransform>
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"
                                                   Command="{Binding SpindelCommand}"
                                                   />
-                        </Border.InputBindings>
+                                </Border.InputBindings>
 
-                        <Border.Style>
-                            <Style  TargetType="{x:Type Border}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SpindelIsOn}" Value="true">
-                                        <DataTrigger.EnterActions>
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                <Border.Style>
+                                    <Style  TargetType="{x:Type Border}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SpindelIsOn}" Value="true">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                                                                 To="-360"
                                                                              Duration="0:0:1"
                                                                              RepeatBehavior="Forever"
                                                                              />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </DataTrigger.EnterActions>
-                                        <DataTrigger.ExitActions>
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                                                                 To="0" Duration="0:0:1"
                                                                              />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </DataTrigger.ExitActions>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <Grid>
-                            <Border 
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Grid>
+                                    <Border 
                                     
                                     BorderThickness="2"
                                     Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
@@ -211,116 +210,118 @@
                                     IsHitTestVisible="{Binding Connected}"
                                     x:Name="SpindelButtonMask"
                                     />
-                            <Image HorizontalAlignment="Center"
+                                    <Image HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Margin="1" Source="/Symbols/Spindel.png">
-                                <Image.OpacityMask>
-                                    <VisualBrush Visual="{Binding ElementName=SpindelButtonMask}"/>
-                                </Image.OpacityMask>
-                            </Image>
-                        </Grid>
+                                        <Image.OpacityMask>
+                                            <VisualBrush Visual="{Binding ElementName=SpindelButtonMask}"/>
+                                        </Image.OpacityMask>
+                                    </Image>
+                                </Grid>
 
 
 
-                    </Border>
+                            </Border>
 
 
-                    <!-- Reset -->
-                    <Button Grid.Row="1"
+                            <!-- Reset -->
+                            <Button Grid.Row="1"
                                     Grid.Column="1"
                                     FontSize="8"
                                     Background="LightCoral"
                                     Command="{Binding ResetCommand}" Content="Reset"/>
 
-                </Grid>
+                        </Grid>
 
-                <!--Console Line-->
-                <Grid       Grid.Column="0"
+                        <!--Console Line-->
+                        <Grid       Grid.Column="0"
                                    Grid.Row="2"
                                     Grid.ColumnSpan="2"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Bottom">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0"
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
                                      Text="{Binding CustomLineContent}"/>
-                    <Button Grid.Column="1"
+                            <Button Grid.Column="1"
                                     Command="{Binding SendLineButtonCommand}" Content="Send"/>
-                </Grid>
-            </Grid>
+                        </Grid>
+                    </Grid>
 
 
 
-        </TabItem>
+                </TabItem>
 
-        <!--File Tab-->
-        <TabItem Header="File">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="0.1*"/>
-                </Grid.RowDefinitions>
+                <!--File Tab-->
+                <TabItem Header="File">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.1*"/>
+                        </Grid.RowDefinitions>
 
-                <!--File Buttons-->
-                <WrapPanel Orientation="Horizontal">
-                    <Button Background="LightCoral"
+                        <!--File Buttons-->
+                        <WrapPanel Orientation="Horizontal">
+                            <Button Background="LightCoral"
                                     Command="{Binding LoadCommand}" Content="Load"/>
-                        <Button Background="LightCoral"
+                            <Button Background="LightCoral"
                                     Command="{Binding SendCommand}" Content="Send">
-                        </Button>
-                    </WrapPanel>
+                            </Button>
+                        </WrapPanel>
 
-                <!--File Content-->
+                        <!--File Content-->
 
-                <TextBox IsReadOnly="True" Grid.Row="1" Text="{Binding CNCFileContent}"/>
-                <ProgressBar Grid.Row="2"
+                        <TextBox IsReadOnly="True" Grid.Row="1" Text="{Binding CNCFileContent}"/>
+                        <ProgressBar Grid.Row="2"
                                      Value="{Binding StreamProgress}"
                                      Maximum="1"
                                      Minimum="0"/>
-            </Grid>
-        </TabItem>
+                    </Grid>
+                </TabItem>
 
-    </TabControl>
+            </TabControl>
 
-        <!-- Controller State Grid -->
-        <Grid Grid.Row="2" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
+            <!-- Controller State Grid -->
+            <Grid VerticalAlignment="Center" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Script MT Bold">X</Label>
-            <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Script MT Bold">Y</Label>
-            <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Script MT Bold">Z</Label>
+                <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Script MT Bold">X</Label>
+                <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Script MT Bold">Y</Label>
+                <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Script MT Bold">Z</Label>
 
-            <TextBlock Grid.Row="0" Grid.Column="1"
+                <TextBlock Grid.Row="0" Grid.Column="1"
                                HorizontalAlignment="Center" VerticalAlignment="Center" 
                                 Text="{Binding CurrentX, Converter={StaticResource FloatToString}, FallbackValue=0}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
-            </TextBlock>
+                </TextBlock>
 
 
-            <TextBlock Grid.Row="1" Grid.Column="1"
+                <TextBlock Grid.Row="1" Grid.Column="1"
                                HorizontalAlignment="Center" VerticalAlignment="Center" 
                                 Text="{Binding CurrentY, Converter={StaticResource FloatToString}, FallbackValue=0}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
 
-            </TextBlock>
+                </TextBlock>
 
-            <TextBlock Grid.Row="2" Grid.Column="1"
+                <TextBlock Grid.Row="2" Grid.Column="1"
                                HorizontalAlignment="Center" VerticalAlignment="Center" 
                                 Text="{Binding CurrentZ, Converter={StaticResource FloatToString}, FallbackValue=0}" FontSize="50" FontFamily="/PC;component/Fonts/#NI7SEG" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
 
-            </TextBlock>
+                </TextBlock>
 
+
+            </Grid>
 
         </Grid>
 
-    </Grid>
+    </StackPanel>
 </UserControl>

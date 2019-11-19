@@ -92,6 +92,7 @@
     <Compile Include="Converters\PortToPortisConverter.cs" />
     <Compile Include="PortisEventHandler.cs" />
     <Compile Include="PortisEventsArgs.cs" />
+    <Compile Include="SphereManipulator.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="CNCEventsArgs.cs" />
     <Compile Include="CNCMessageEventHandler.cs" />
