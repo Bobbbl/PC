@@ -10,8 +10,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              >
+    <UserControl.Resources>
+        <l:FloatToString x:Key="FloatToString"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <l:PlotViewModel/>
+    </UserControl.DataContext>
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.07*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Black" BorderThickness="3"  Grid.Row="0">
             <h:HelixViewport3D>
                 <!--Camera-->
                 <h:HelixViewport3D.DefaultCamera>
@@ -21,8 +31,8 @@
                 <h:DefaultLights/>
                 <!--Grid-->
                 <h:GridLinesVisual3D/>
-
-                <l:SphereManipulator Diameter="4" Length="4" Position="0,0,0" Direction="0,0,1" Color="Yellow">
+                <!--Wheel-->
+                <l:SphereManipulator Diameter="4" Length="4" Position="{Binding WheelPosition}" Direction="0,0,1" Color="Yellow">
 
                 </l:SphereManipulator>
 
@@ -30,5 +40,13 @@
 
             </h:HelixViewport3D>
         </Border>
+        <WrapPanel Orientation="Horizontal" Grid.Row="1">
+            <Label>X:</Label>
+            <Label Content="{Binding WheelPosition.X, Converter={StaticResource FloatToString}}" ></Label>
+            <Label>Y:</Label>
+            <Label Content="{Binding WheelPosition.Y, Converter={StaticResource FloatToString}}" ></Label>
+            <Label>Z:</Label>
+            <Label Content="{Binding WheelPosition.Z, Converter={StaticResource FloatToString}}" ></Label>
+        </WrapPanel>
     </Grid>
 </UserControl>

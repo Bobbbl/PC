@@ -231,18 +231,19 @@ namespace PC
                 case nameof(Device.CurrentX):
                     double x = Device.CurrentX;
                     PresentViewModel.CurrentX = x;
-                    PlotViewModel.WheelPosition.X = x;
+                    PlotViewModel.SetWheelXPosition(x);
                     break;
 
                 case nameof(Device.CurrentY):
                     double y = Device.CurrentY;
                     PresentViewModel.CurrentY = y;
-                    PlotViewModel.WheelPosition.Y = y;
+                    PlotViewModel.SetWheelYPosition(y);
                     break;
 
                 case nameof(Device.CurrentZ):
                     double z = Device.CurrentZ;
-                    PresentViewModel.CurrentZ = z; 
+                    PresentViewModel.CurrentZ = z;
+                    PlotViewModel.SetWheelZPosition(z);
                     break;
 
                 default:
