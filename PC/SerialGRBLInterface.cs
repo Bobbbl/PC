@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -134,7 +132,7 @@ namespace PC
                 rmessage.Message = "-";
                 return rmessage;
             }
-            catch(IOException ex)
+            catch (IOException ex)
             {
                 // The I/O operation has been aborted because of either a thread exit or an application request.\r\n
                 Debugger.Break();

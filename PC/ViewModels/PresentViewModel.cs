@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace PC
@@ -187,7 +181,7 @@ namespace PC
                     (iface as SerialGRBLInterface).FirePortOpened();
                     Device.SendReceiveBuffer.CollectionChanged += (s, k) =>
                     {
-                        if(k.NewItems == null)
+                        if (k.NewItems == null)
                         {
                             return;
                         }

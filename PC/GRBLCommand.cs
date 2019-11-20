@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace PC
+﻿namespace PC
 {
     // https://github.com/gnea/grbl/wiki/Grbl-v1.1-Commands
 
@@ -59,7 +54,7 @@ namespace PC
         L1,
         L2,
         L20,
-        
+
         P_Tool1,
         P_Tool2,
         P_Tool3,

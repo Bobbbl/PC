@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PC
 {
@@ -82,12 +80,12 @@ namespace PC
 
             r = _CommandString[command];
 
-            if(r.Contains("@@"))
+            if (r.Contains("@@"))
             {
                 r = r.Replace("@@", bezeichner);
             }
 
-            if(r.Contains("%%%"))
+            if (r.Contains("%%%"))
             {
                 r = r.Replace("%%%", wert);
             }

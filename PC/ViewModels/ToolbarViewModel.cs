@@ -1,12 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -224,7 +220,7 @@ namespace PC
                     {
                         if (YPlusCommand.CanExecute(null))
                             YPlusCommand.Execute(null);
-                    } 
+                    }
                 }
 
             }
