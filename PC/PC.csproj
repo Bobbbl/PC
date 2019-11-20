@@ -101,6 +101,7 @@
     <Compile Include="GRBLCommandDictionary.cs" />
     <Compile Include="GRBLProtokoll.cs" />
     <Compile Include="MachineStates.cs" />
+    <Compile Include="ViewModels\PlotViewModel.cs" />
     <Compile Include="ViewModels\ConsoleViewModel.cs" />
     <Compile Include="ViewModels\PortViewModel.cs" />
     <Compile Include="ViewModels\PresentViewModel.cs" />
