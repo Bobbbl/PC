@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -54,6 +55,9 @@ namespace PC
 
             }
         }
+
+
+        private GlobalKeyboardHook _GlobalKeyboardHook;
 
 
         #region Commands
@@ -152,6 +156,8 @@ namespace PC
 
         #endregion
 
+
+        #region Constructor ToolbarViewModel
         public ToolbarViewModel()
         {
             SetZeroCommand = new RelayCommand(async () => await SetZero());
@@ -160,9 +166,9 @@ namespace PC
             (HomingCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             UnlockCommand = new RelayCommand(async () => await Unlock());
             (UnlockCommand as RelayCommand).CANPointer += () => { return IsConnected; };
-            XMinusCommand = new RelayCommand(async() => await XMinus());
+            XMinusCommand = new RelayCommand(async () => await XMinus());
             (XMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
-            XPlusCommand = new RelayCommand(async() => await XPlus());
+            XPlusCommand = new RelayCommand(async () => await XPlus());
             (XPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
             YPlusCommand = new RelayCommand(async () => await YPlus());
             (YPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
@@ -184,7 +190,46 @@ namespace PC
             (SendCommand as RelayCommand).CANPointer += delegate { return IsConnected; };
 
             StaticPropertyChanged += ToolbarViewModel_StaticPropertyChanged;
+
+
+            // Global Keyboard Hooks
+            _GlobalKeyboardHook = new GlobalKeyboardHook();
+            _GlobalKeyboardHook.KeyboardPressed += _GlobalKeyboardHook_KeyboardPressed;
         }
+
+        private void _GlobalKeyboardHook_KeyboardPressed(object sender, GlobalKeyboardHookEventArgs e)
+        {
+            if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyUp)
+            {
+                var focusedelementtype = Keyboard.FocusedElement.GetType();
+                if (focusedelementtype != typeof(System.Windows.Controls.TextBox) &&
+                    focusedelementtype != typeof(HelixToolkit.Wpf.CameraController))
+                {
+                    if (Keyboard.IsKeyDown(Key.Left))
+                    {
+                        if (XMinusCommand.CanExecute(null))
+                            XMinusCommand.Execute(null);
+                    }
+                    if (Keyboard.IsKeyDown(Key.Right))
+                    {
+                        if (XPlusCommand.CanExecute(null))
+                            XPlusCommand.Execute(null);
+                    }
+                    if (Keyboard.IsKeyDown(Key.Down))
+                    {
+                        if (YMinusCommand.CanExecute(null))
+                            YMinusCommand.Execute(null);
+                    }
+                    if (Keyboard.IsKeyDown(Key.Up))
+                    {
+                        if (YPlusCommand.CanExecute(null))
+                            YPlusCommand.Execute(null);
+                    } 
+                }
+
+            }
+        }
+        #endregion
 
         private void ToolbarViewModel_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

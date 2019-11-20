@@ -91,6 +91,7 @@
     <Compile Include="Converters\FloatToString.cs" />
     <Compile Include="Converters\ObservableCollectionToString.cs" />
     <Compile Include="Converters\PortToPortisConverter.cs" />
+    <Compile Include="Global Keyboard Helper\GlobalKeyboardHook.cs" />
     <Compile Include="PortisEventHandler.cs" />
     <Compile Include="PortisEventsArgs.cs" />
     <Compile Include="SphereManipulator.cs" />

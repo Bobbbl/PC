@@ -20,7 +20,7 @@
         <CheckBox IsChecked="{Binding Verbose}" Grid.Row="0">Verbose</CheckBox>
         <Border BorderBrush="Black" BorderThickness="3" MinHeight="200" Grid.Row="1">
             <ScrollViewer>
-                <TextBlock Text="{Binding ConsoleContent}">
+                <TextBlock Text="{Binding ConsoleContent}" Focusable="True">
                     <TextBlock.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="ApplicationCommands.Cut" Header="Cut"></MenuItem>
