@@ -14,7 +14,7 @@
         <DockPanel>
             <portpresenter:PortPresenter DockPanel.Dock="Top"></portpresenter:PortPresenter>
             <portpresenter:ToolbarPresenterLegacy DockPanel.Dock="Left"></portpresenter:ToolbarPresenterLegacy>
-            <portpresenter:ConsolePresenter DockPanel.Dock="Bottom" MaxHeight="300"></portpresenter:ConsolePresenter>
+            <portpresenter:ConsolePresenter DockPanel.Dock="Bottom" Height="220" MaxHeight="220"></portpresenter:ConsolePresenter>
             <portpresenter:PlotPresenter></portpresenter:PlotPresenter>
         </DockPanel>
     </Grid>
