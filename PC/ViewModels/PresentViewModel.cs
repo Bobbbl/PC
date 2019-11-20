@@ -229,15 +229,20 @@ namespace PC
             switch (e.PropertyName)
             {
                 case nameof(Device.CurrentX):
-                    PresentViewModel.CurrentX = Device.CurrentX;
+                    double x = Device.CurrentX;
+                    PresentViewModel.CurrentX = x;
+                    PlotViewModel.WheelPosition.X = x;
                     break;
 
                 case nameof(Device.CurrentY):
-                    PresentViewModel.CurrentY = Device.CurrentY;
+                    double y = Device.CurrentY;
+                    PresentViewModel.CurrentY = y;
+                    PlotViewModel.WheelPosition.Y = y;
                     break;
 
                 case nameof(Device.CurrentZ):
-                    PresentViewModel.CurrentZ = Device.CurrentZ;
+                    double z = Device.CurrentZ;
+                    PresentViewModel.CurrentZ = z; 
                     break;
 
                 default:
