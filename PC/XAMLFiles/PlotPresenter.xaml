@@ -13,14 +13,20 @@
     <Grid>
         <Border BorderBrush="Black" BorderThickness="3">
             <h:HelixViewport3D>
-                <!--Light-->
-                <h:DefaultLights/>
-                <!--Grid-->
-                <h:GridLinesVisual3D/>
                 <!--Camera-->
                 <h:HelixViewport3D.DefaultCamera>
                     <PerspectiveCamera Position="-20 -40 20" LookDirection="17 34 -17" UpDirection="0 0 1"/>
                 </h:HelixViewport3D.DefaultCamera>
+                <!--Light-->
+                <h:DefaultLights/>
+                <!--Grid-->
+                <h:GridLinesVisual3D/>
+
+                <l:SphereManipulator Diameter="4" Length="4" Position="0,0,0" Direction="0,0,1" Color="Yellow">
+
+                </l:SphereManipulator>
+
+
 
             </h:HelixViewport3D>
         </Border>
