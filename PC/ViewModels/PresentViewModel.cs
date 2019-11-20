@@ -25,9 +25,7 @@ namespace PC
             set
             {
                 _CurrentX = value;
-                // TODO: Change hard coded CurrentX etc to nameof(...)
-                // This will be more stable
-                RaiseStaticPropertyChanged("CurrentX");
+                RaiseStaticPropertyChanged(nameof(CurrentX));
             }
         }
 
@@ -41,7 +39,7 @@ namespace PC
             set
             {
                 _CurrentY = value;
-                RaiseStaticPropertyChanged("CurrentY");
+                RaiseStaticPropertyChanged(nameof(CurrentY));
             }
         }
 
@@ -55,7 +53,7 @@ namespace PC
             set
             {
                 _CurrentZ = value;
-                RaiseStaticPropertyChanged("CurrentZ");
+                RaiseStaticPropertyChanged(nameof(CurrentZ));
             }
         }
 
@@ -76,7 +74,7 @@ namespace PC
             set
             {
                 _CurrentSelectedPortName = value;
-                RaiseStaticPropertyChanged("CurrentSelectedPortName");
+                RaiseStaticPropertyChanged(nameof(CurrentSelectedPortName));
 
             }
         }
@@ -92,7 +90,7 @@ namespace PC
             set
             {
                 _CurrentSelectedBaudRate = value;
-                RaiseStaticPropertyChanged("CurrentSelectedBaudRate");
+                RaiseStaticPropertyChanged(nameof(CurrentSelectedBaudRate));
             }
         }
 
@@ -110,7 +108,7 @@ namespace PC
                 if (_Device != value)
                 {
                     _Device = value;
-                    RaiseStaticPropertyChanged("Device");
+                    RaiseStaticPropertyChanged(nameof(Device));
                 }
 
             }
