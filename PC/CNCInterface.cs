@@ -87,6 +87,7 @@ namespace PC
         public abstract Task<CNCMessage> WaitReceiveMessageAsync(int TimeOut, CNCMessage WaitForMessage, int WaitTimout);
 
         public abstract CNCMessage WaitReceiveMessageContaining(int timeout, string containing, int waittimout, bool logging = true);
+        public abstract CNCMessage WaitReceiveMessageContainingMultible(int timeout, List<string> containing, int waittimout, bool logging = true);
         public abstract Task<CNCMessage> WaitReceiveMessageContainingAsync(int timeout, string containing, int waittimout);
 
 

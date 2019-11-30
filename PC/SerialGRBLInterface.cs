@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
@@ -195,6 +196,65 @@ namespace PC
 
             return rmessage;
         }
+
+        public override CNCMessage WaitReceiveMessageContainingMultible(int timeout, List<string> containing, int waittimout, bool logging = true)
+        {
+            if (containing is null)
+            {
+                throw new ArgumentNullException(nameof(containing));
+            }
+
+            CNCMessage rmessage = new CNCMessage() { Message = "" };
+
+            LastMessageReceived = null;
+
+            if (waittimout == 0)
+            {
+                try
+                {
+                    SerialInterface.ReadTimeout = timeout;
+                    rmessage = ReceiveMessage(timeout, logging: logging);
+                    LastMessageReceived = rmessage;
+                    OnMessageReceived(this, rmessage);
+                }
+                catch (TimeoutException ex)
+                {
+                    rmessage.Message = "TIMEOUT";
+                }
+
+            }
+            else
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
+                while (containing.Find(s => rmessage.Message.Contains(s)) == null ? true : false)
+                {
+                    try
+                    {
+                        SerialInterface.ReadTimeout = timeout;
+                        rmessage = ReceiveMessage(timeout, logging: logging);
+                        LastMessageReceived = rmessage;
+                        OnMessageReceived(this, rmessage);
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        rmessage.Message = "TIMEOUT";
+                    }
+
+                    if (sw.ElapsedMilliseconds >= waittimout)
+                        return rmessage;
+
+
+                }
+            }
+
+
+
+
+            return rmessage;
+        }
+
 
         public override async Task<CNCMessage> WaitReceiveMessageContainingAsync(int timeout, string containing, int waittimout)
         {

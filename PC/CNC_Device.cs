@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
@@ -79,9 +80,43 @@ namespace PC
         /// </summary>
         public float CurrentFeed { get; set; }
 
-        private DispatcherTimer PositionRefreshTimer { get; set; } = new DispatcherTimer();
-        private int _RefreshInterval;
+        /// <summary>
+        /// The current mode the system is in
+        /// </summary>
+        private CommModes _CurrentMode = CommModes.DefaultMode;
+        public CommModes CurrentMode
+        {
+            get
+            {
+                return _CurrentMode;
+            }
+            set
+            {
+                if (_CurrentMode != value)
+                {
+                    _CurrentMode = value;
 
+                    switch (value)
+                    {
+                        case CommModes.DefaultMode:
+                            RefreshInterval = _OldRefreshInterval;
+                            break;
+                        case CommModes.SendMode:
+                            RefreshInterval = 0;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    
+                }
+            }
+        }
+
+        private DispatcherTimer PositionRefreshTimer { get; set; } = new DispatcherTimer();
+
+        private int _OldRefreshInterval;
+        private int _RefreshInterval;
         public int RefreshInterval
         {
             get { return _RefreshInterval; }
@@ -95,7 +130,8 @@ namespace PC
                 else
                 {
                     PositionRefreshTimer.Stop();
-                    PositionRefreshTimer.Interval = new TimeSpan(0, 0, 0, 0, value);
+                    PositionRefreshTimer.Interval = new TimeSpan(0, 0, 0, 0, value); ;
+                    _OldRefreshInterval = value;
                     PositionRefreshTimer.Start();
                 }
             }
@@ -495,14 +531,18 @@ namespace PC
             return tmp;
         }
 
-        public async Task<CNCMessage> SendCustomMessage(CNCMessage message)
+        /// <summary>
+        /// This array holds two messages. "ok" and "error". This are the two messages which are by default returned
+        /// by GRBL. If one of this two is received, the handler will not wait any longer for a other messages.
+        /// </summary>
+        private List<string> _StandardWaitForArray = new List<string>();
+        public async Task<CNCMessage> SendCustomMessage(CNCMessage message, int WaitTimeout = 1000)
         {
             CNCMessage tmp = null;
             await Task.Run(() =>
             {
                 Interface.SendMessage(message);
-                CNCMessage t = new CNCMessage() { Message = "ok" };
-                tmp = Interface.WaitReceiveMessage(100, t, 1000);
+                tmp = Interface.WaitReceiveMessageContainingMultible(100, _StandardWaitForArray, WaitTimeout);
             });
 
             return tmp;
@@ -536,7 +576,17 @@ namespace PC
             Interface = IFace;
             Protokoll = protokoll;
             PositionRefreshTimer.Tick += async (s, e) => await PositionRefreshTimer_Tick(s, e);
+
+            _StandardWaitForArray.Add("ok");
+            _StandardWaitForArray.Add("error");
+
         }
+
+
+        ~CNC_Device()
+        {
+        }
+        #endregion
 
         private async Task PositionRefreshTimer_Tick(object sender, EventArgs e)
         {
@@ -550,10 +600,5 @@ namespace PC
             if (RefreshInterval > 0)
                 PositionRefreshTimer.Start();
         }
-
-        ~CNC_Device()
-        {
-        }
-        #endregion
     }
 }

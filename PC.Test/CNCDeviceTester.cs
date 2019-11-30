@@ -135,6 +135,21 @@ namespace PC.Test
             Assert.DoesNotContain("error", tmp.Message);
         }
 
+        [Fact]
+        public async Task SendCustomMessage()
+        {
+            CNCMessage message = new CNCMessage() { Message = "$X" };
+            CNCMessage message1 = new CNCMessage() { Message = "FALSCH" };
+
+            var tmp = await device.SendCustomMessage(message);
+
+            Assert.Contains("ok", tmp.Message);
+
+            tmp = await device.SendCustomMessage(message1);
+
+            Assert.Contains("error", tmp.Message);
+        }
+
 
         [Fact]
         public async Task GetKillAlarmTest()

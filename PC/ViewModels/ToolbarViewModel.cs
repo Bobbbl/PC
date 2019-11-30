@@ -1,7 +1,10 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -33,6 +36,7 @@ namespace PC
         public string CustomLineContent { get; set; }
 
         public string CNCFileContent { get; set; }
+        public ObservableCollection<string> CNCFileContentArray { get; set; } = new ObservableCollection<string>();
 
         private static bool _IsConnected = false;
         public static bool IsConnected
@@ -140,14 +144,46 @@ namespace PC
             {
                 using (StreamReader sr = File.OpenText(odialog.FileName))
                 {
-                    CNCFileContent = sr.ReadToEnd();
+                    CNCFileContent = string.Empty;
+                    CNCFileContentArray = new ObservableCollection<string>(Regex.Split(await sr.ReadToEndAsync(), "\r\n|\r|\n"));
+
+                    await Task.Run(() =>
+                    {
+
+                        int e = 0;
+                        foreach (string item in CNCFileContentArray)
+                        {
+                            CNCFileContent += item + '\n';
+
+                            if (e > 1000)
+                                break;
+
+                            e++;
+                        }
+
+                    });
+
                 }
             }
         }
 
         public async Task Send()
         {
-            throw new NotImplementedException();
+            PresentViewModel.Device.CurrentMode = CommModes.SendMode;
+            CNCMessage message0 = new CNCMessage() { Message = CNCFileContentArray[0] };
+            CNCMessage answer = new CNCMessage();
+
+            foreach (var item in CNCFileContentArray)
+            {
+                message0.Message = item;
+                answer = await PresentViewModel.Device.SendCustomMessage(message0);
+                if (answer.Message.Contains("error"))
+                {
+                    break;
+                }
+            }
+            PresentViewModel.Device.CurrentMode = CommModes.DefaultMode;
+
         }
 
         #endregion
@@ -157,33 +193,33 @@ namespace PC
         public ToolbarViewModel()
         {
             SetZeroCommand = new RelayCommand(async () => await SetZero());
-            (SetZeroCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (SetZeroCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             HomingCommand = new RelayCommand(async () => await Homing());
-            (HomingCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (HomingCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             UnlockCommand = new RelayCommand(async () => await Unlock());
-            (UnlockCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (UnlockCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             XMinusCommand = new RelayCommand(async () => await XMinus());
-            (XMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (XMinusCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             XPlusCommand = new RelayCommand(async () => await XPlus());
-            (XPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (XPlusCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             YPlusCommand = new RelayCommand(async () => await YPlus());
-            (YPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (YPlusCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             YMinusCommand = new RelayCommand(async () => await YMinus());
-            (YMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (YMinusCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             ZPlusCommand = new RelayCommand(async () => await ZPlus());
-            (ZPlusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (ZPlusCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             ZMinusCommand = new RelayCommand(async () => await ZMinus());
-            (ZMinusCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (ZMinusCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             SpindelCommand = new RelayCommand(async () => await Spindel());
-            (SpindelCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (SpindelCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             ResetCommand = new RelayCommand(async () => await Reset());
-            (ResetCommand as RelayCommand).CANPointer += () => { return false; };
+            (ResetCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             SendLineButtonCommand = new RelayCommand(async () => await SendLine());
-            (SendLineButtonCommand as RelayCommand).CANPointer += () => { return IsConnected; };
+            (SendLineButtonCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             LoadCommand = new RelayCommand(async () => await Load());
 
             SendCommand = new RelayCommand(async () => await Send());
-            (SendCommand as RelayCommand).CANPointer += delegate { return IsConnected; };
+            (SendCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
 
             StaticPropertyChanged += ToolbarViewModel_StaticPropertyChanged;
 
@@ -193,35 +229,54 @@ namespace PC
             _GlobalKeyboardHook.KeyboardPressed += _GlobalKeyboardHook_KeyboardPressed;
         }
 
+        public bool WhenSendButtonEnabled()
+        {
+            if (PresentViewModel.Device == null)
+                return false;
+
+            if (IsConnected && (PresentViewModel.Device.CurrentMode == CommModes.DefaultMode))
+                return true;
+            else
+                return false;
+        }
+
         private void _GlobalKeyboardHook_KeyboardPressed(object sender, GlobalKeyboardHookEventArgs e)
         {
             if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyUp)
             {
-                var focusedelementtype = Keyboard.FocusedElement.GetType();
-                if (focusedelementtype != typeof(System.Windows.Controls.TextBox) &&
-                    focusedelementtype != typeof(HelixToolkit.Wpf.CameraController))
+                try
                 {
-                    if (Keyboard.IsKeyDown(Key.Left))
+                    var focusedelementtype = Keyboard.FocusedElement.GetType();
+                    if (focusedelementtype != typeof(System.Windows.Controls.TextBox) &&
+                   focusedelementtype != typeof(HelixToolkit.Wpf.CameraController))
                     {
-                        if (XMinusCommand.CanExecute(null))
-                            XMinusCommand.Execute(null);
-                    }
-                    if (Keyboard.IsKeyDown(Key.Right))
-                    {
-                        if (XPlusCommand.CanExecute(null))
-                            XPlusCommand.Execute(null);
-                    }
-                    if (Keyboard.IsKeyDown(Key.Down))
-                    {
-                        if (YMinusCommand.CanExecute(null))
-                            YMinusCommand.Execute(null);
-                    }
-                    if (Keyboard.IsKeyDown(Key.Up))
-                    {
-                        if (YPlusCommand.CanExecute(null))
-                            YPlusCommand.Execute(null);
+                        if (Keyboard.IsKeyDown(Key.Left))
+                        {
+                            if (XMinusCommand.CanExecute(null))
+                                XMinusCommand.Execute(null);
+                        }
+                        if (Keyboard.IsKeyDown(Key.Right))
+                        {
+                            if (XPlusCommand.CanExecute(null))
+                                XPlusCommand.Execute(null);
+                        }
+                        if (Keyboard.IsKeyDown(Key.Down))
+                        {
+                            if (YMinusCommand.CanExecute(null))
+                                YMinusCommand.Execute(null);
+                        }
+                        if (Keyboard.IsKeyDown(Key.Up))
+                        {
+                            if (YPlusCommand.CanExecute(null))
+                                YPlusCommand.Execute(null);
+                        }
                     }
                 }
+                catch (NullReferenceException ex)
+                {
+                    return;
+                }
+
 
             }
         }

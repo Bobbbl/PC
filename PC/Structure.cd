@@ -10,14 +10,14 @@
   <Class Name="PC.CNCInterface">
     <Position X="7" Y="1.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAABAAQCAAACYAACAAABAQAKAARABAAAAAIACIAgg=</HashCode>
+      <HashCode>AAAAABAAQCAAACYAACAAABQQAKAARABAAAAAIACIAgg=</HashCode>
       <FileName>CNCInterface.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PC.SerialGRBLInterface">
     <Position X="10.25" Y="5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAIAACAAAAAVIBAECAEARAQAKEARADAAAQAAgAAAAA=</HashCode>
+      <HashCode>AAAIAACAAAAAVIBAECAEARQQAKEARADAAAQAAgAAAAA=</HashCode>
       <FileName>SerialGRBLInterface.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -59,7 +59,7 @@
   <Class Name="PC.CNC_Device">
     <Position X="3.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAABABCIQACYAwAAABhAAABAgAgMQ4CAAAFEtAkIIAI=</HashCode>
+      <HashCode>IAABABCIQACYAwAAABhAAABAoAgMQ4CAAAFEtAkIIAI=</HashCode>
       <FileName>CNC_Device.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
