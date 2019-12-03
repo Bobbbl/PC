@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace PC
 {
@@ -85,7 +86,8 @@ namespace PC
 
             try
             {
-                SerialInterface.ReadTimeout = TimeOut;
+                if (SerialInterface.ReadTimeout != TimeOut)
+                    SerialInterface.ReadTimeout = TimeOut;
                 if (SerialInterface.BytesToRead >= 0)
                     rmessage.Message = SerialInterface.ReadLine();
                 LastMessageReceived = rmessage;
@@ -255,7 +257,6 @@ namespace PC
             return rmessage;
         }
 
-
         public override async Task<CNCMessage> WaitReceiveMessageContainingAsync(int timeout, string containing, int waittimout)
         {
             CNCMessage rmessage = new CNCMessage() { Message = "" };
@@ -306,7 +307,6 @@ namespace PC
             return rmessage;
         }
 
-
         public override CNCMessage WaitReceiveMessage(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0, bool logging = true)
         {
             CNCMessage rmessage = new CNCMessage() { Message = "" };
@@ -356,6 +356,7 @@ namespace PC
 
             return rmessage;
         }
+
         public override async Task<CNCMessage> WaitReceiveMessageAsync(int TimeOut = 100, CNCMessage WaitForMessage = null, int WaitTimeout = 0)
         {
             CNCMessage rmessage = new CNCMessage() { Message = "" };
@@ -408,7 +409,7 @@ namespace PC
 
         public override void SendMessage(CNCMessage message, bool logging = true)
         {
-            if (AutoPoll)
+            if (MessageQueue)
             {
                 MessageBuffer.Add(message);
                 OnMessageSent(this, message);
@@ -430,7 +431,6 @@ namespace PC
                 SendReceiveBuffer.Add(message.Message);
         }
 
-
         public override void CloseConnection()
         {
             try
@@ -446,7 +446,43 @@ namespace PC
 
         public SerialPort SerialInterface { get; set; }
 
-        public SerialGRBLInterface(string PortName, int BaudRate)
+        protected List<string> WaitForArray = new List<string>();
+        protected void PollTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            MessageQueue = false;
+
+            CNCMessage message = new CNCMessage();
+
+            while (MessageBuffer.Count > 0)
+            {
+                message = MessageBuffer[0];
+
+                try
+                {
+                    SerialInterface.WriteLine(message.Message);
+
+                    var ans = WaitReceiveMessageContainingMultible(100, WaitForArray, 1000);
+
+                    MessageBuffer.RemoveAt(0);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    SendReceiveBuffer.Add(ex.Message);
+                    return;
+                }
+            }
+
+            SendReceiveBuffer.Add(message.Message);
+
+            MessageQueue = true;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="PortName"></param>
+        /// <param name="BaudRate"></param>
+        public SerialGRBLInterface(string PortName, int BaudRate, bool MQueue = true) : base(MQueue)
         {
             // Default Settings
             System.IO.Ports.SerialPort sport = new System.IO.Ports.SerialPort();
@@ -472,6 +508,11 @@ namespace PC
             }
 
             SerialInterface = sport;
+
+            WaitForArray.Add("ok");
+            WaitForArray.Add("error");
+
+            PollTimer.Elapsed += PollTimer_Elapsed;
         }
     }
 }
