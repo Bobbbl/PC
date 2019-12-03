@@ -12,5 +12,9 @@ namespace PC.XAMLFiles
             InitializeComponent();
         }
 
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

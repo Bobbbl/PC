@@ -35,6 +35,8 @@ namespace PC
 
         public string CustomLineContent { get; set; }
 
+        public double StreamProgress { get; set; } = 0;
+
         public string CNCFileContent { get; set; }
         public ObservableCollection<string> CNCFileContentArray { get; set; } = new ObservableCollection<string>();
 
@@ -173,6 +175,9 @@ namespace PC
             CNCMessage message0 = new CNCMessage() { Message = CNCFileContentArray[0] };
             CNCMessage answer = new CNCMessage();
 
+            long count = 0;
+            long maxcount = CNCFileContentArray.Count;
+
             foreach (var item in CNCFileContentArray)
             {
                 message0.Message = item;
@@ -187,7 +192,14 @@ namespace PC
                 PresentViewModel.CurrentX = farray[0];
                 PresentViewModel.CurrentY = farray[1];
                 PresentViewModel.CurrentZ = farray[2];
+
+                StreamProgress = (double)count / (double)maxcount;
+
+                count++;
+
             }
+
+            StreamProgress = 1;
             PresentViewModel.Device.CurrentMode = CommModes.DefaultMode;
 
         }
