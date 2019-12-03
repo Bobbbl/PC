@@ -85,7 +85,8 @@ namespace PC
 
             try
             {
-                SerialInterface.ReadTimeout = TimeOut;
+                if (SerialInterface.ReadTimeout != TimeOut)
+                    SerialInterface.ReadTimeout = TimeOut;
                 if (SerialInterface.BytesToRead >= 0)
                     rmessage.Message = SerialInterface.ReadLine();
                 LastMessageReceived = rmessage;
@@ -212,7 +213,8 @@ namespace PC
             {
                 try
                 {
-                    SerialInterface.ReadTimeout = timeout;
+                    if (SerialInterface.ReadTimeout != timeout)
+                        SerialInterface.ReadTimeout = timeout;
                     rmessage = ReceiveMessage(timeout, logging: logging);
                     LastMessageReceived = rmessage;
                     OnMessageReceived(this, rmessage);
@@ -222,6 +224,23 @@ namespace PC
                     rmessage.Message = "TIMEOUT";
                 }
 
+            }
+            else if (waittimout < 0)
+            {
+                while (containing.Find(s => rmessage.Message.Contains(s)) == null ? true : false)
+                {
+                    try
+                    {
+                        SerialInterface.ReadTimeout = timeout;
+                        rmessage = ReceiveMessage(timeout, logging: logging);
+                        LastMessageReceived = rmessage;
+                        OnMessageReceived(this, rmessage);
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        rmessage.Message = "TIMEOUT";
+                    }
+                }
             }
             else
             {

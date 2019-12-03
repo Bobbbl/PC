@@ -176,11 +176,17 @@ namespace PC
             foreach (var item in CNCFileContentArray)
             {
                 message0.Message = item;
-                answer = await PresentViewModel.Device.SendCustomMessage(message0);
+                answer = await PresentViewModel.Device.SendCustomMessage(message0, -1);
                 if (answer.Message.Contains("error"))
                 {
                     break;
                 }
+
+                float[] farray = await PresentViewModel.Device.GetCurrentXYZ();
+
+                PresentViewModel.CurrentX = farray[0];
+                PresentViewModel.CurrentY = farray[1];
+                PresentViewModel.CurrentZ = farray[2];
             }
             PresentViewModel.Device.CurrentMode = CommModes.DefaultMode;
 
