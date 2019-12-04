@@ -250,10 +250,22 @@ namespace PC
                 }
 
                 CNCMessage output;
+                CNCMessage outokerror;
+                List<string> outarray = new List<string>();
+                outarray.Add("ok");
+                outarray.Add("error");
+
+
                 if (ConsoleViewModel.Verbose)
-                    output = Interface.WaitReceiveMessageContaining(10, "WPos", 2000);
+                {
+                    output = Interface.WaitReceiveMessageContaining(100, "WPos", 2000);
+                    outokerror = Interface.WaitReceiveMessageContainingMultible(100, outarray, 2000);
+                }
                 else
-                    output = Interface.WaitReceiveMessageContaining(10, "WPos", 2000, logging: false);
+                {
+                    output = Interface.WaitReceiveMessageContaining(100, "WPos", 2000, logging: false);
+                    outokerror = Interface.WaitReceiveMessageContainingMultible(100, outarray, 2000, logging: false);
+                }
 
 
                 try
