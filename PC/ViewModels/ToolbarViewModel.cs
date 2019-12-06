@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -174,30 +175,91 @@ namespace PC
             PresentViewModel.Device.CurrentMode = CommModes.SendMode;
             CNCMessage message0 = new CNCMessage() { Message = CNCFileContentArray[0] };
             CNCMessage answer = new CNCMessage();
+            CNCMessage posrequmessage = new CNCMessage();
+            CNCMessage posmessage = new CNCMessage();
+            CNCMessage rmessage = new CNCMessage() { Message = string.Empty };
+
+            CNC_Device Device = PresentViewModel.Device;
+            CNCInterface Interface = Device.Interface;
 
             long count = 0;
             long maxcount = CNCFileContentArray.Count;
+            int okcount = 0;
+            float[] r = new float[3];
+            int wcount = 0;
+            int recd = 0;
 
-            foreach (var item in CNCFileContentArray)
+            await Task.Run(() =>
             {
-                message0.Message = item;
-                answer = await PresentViewModel.Device.SendCustomMessage(message0, -1);
-                if (answer.Message.Contains("error"))
+
+                foreach (var item in CNCFileContentArray)
                 {
-                    break;
+                    message0.Message = item;
+
+                    PresentViewModel.Device.Interface.SendMessage(message0, false);
+                    okcount++;
+
+                    posrequmessage = PresentViewModel.Device.Protokoll.GetCurrentXYZMessage();
+                    Interface.SendMessage(posrequmessage, false);
+                    okcount++;
+
+
+                    while (okcount > 0)
+                    {
+                        rmessage = new CNCMessage();
+                        rmessage = Interface.ReceiveMessage(100, false);
+
+                        if (rmessage.Message.Contains("ok") || rmessage.Message.Contains("error"))
+                        {
+                            okcount--;
+                            
+                        }
+                        else if (rmessage.Message.Contains("WPos"))
+                        {
+                            try
+                            {
+                                r[0] = Convert.ToSingle(Regex.Match(rmessage.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]))").Groups[2].Value, CultureInfo.InvariantCulture);
+                                r[1] = Convert.ToSingle(Regex.Match(rmessage.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]))").Groups[3].Value, CultureInfo.InvariantCulture);
+                                r[2] = Convert.ToSingle(Regex.Match(rmessage.Message, @"(WPos:([-0-9]+.[0-9]+),([-0-9]+.[0-9]+),([-0-9]+.[0-9]))").Groups[4].Value, CultureInfo.InvariantCulture);
+
+
+                                PresentViewModel.Device.CurrentX = r[0];
+                                PresentViewModel.Device.CurrentY = r[1];
+                                PresentViewModel.Device.CurrentZ = r[2];
+                            }
+                            catch (Exception ex)
+                            {
+                                r[0] = (float)PresentViewModel.CurrentX;
+                                r[1] = (float)PresentViewModel.CurrentY;
+                                r[2] = (float)PresentViewModel.CurrentZ;
+                            }
+
+                            
+                            recd++;
+
+                        }
+
+                        if (wcount > 2 && recd != 0)
+                        {
+                            Interface.SendMessage(posrequmessage, false);
+                            okcount++;
+                            wcount = 0;
+                            recd = 0;
+                        }
+                        wcount++;
+
+                    }
+
+
+
+
+                    StreamProgress = (double)count / (double)maxcount;
+
+                    count++;
+
                 }
 
-                float[] farray = await PresentViewModel.Device.GetCurrentXYZ();
-
-                PresentViewModel.CurrentX = farray[0];
-                PresentViewModel.CurrentY = farray[1];
-                PresentViewModel.CurrentZ = farray[2];
-
-                StreamProgress = (double)count / (double)maxcount;
-
-                count++;
-
-            }
+            });
 
             StreamProgress = 1;
             PresentViewModel.Device.CurrentMode = CommModes.DefaultMode;

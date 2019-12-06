@@ -73,7 +73,7 @@ namespace PC
             }
 
 
-            SendReceiveBuffer.Add(rmessage.Message);
+            AddToSendReceiveBuffer(rmessage.Message);
             return rmessage;
         }
 
@@ -102,14 +102,14 @@ namespace PC
                 rmessage.Message = ex.Message;
                 CloseConnection();
                 if (logging)
-                    SendReceiveBuffer.Add(rmessage.Message);
+                    AddToSendReceiveBuffer(rmessage.Message);
                 return rmessage;
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 rmessage.Message = ex.Message;
                 if (logging)
-                    SendReceiveBuffer.Add(rmessage.Message);
+                    AddToSendReceiveBuffer(rmessage.Message);
                 return rmessage;
             }
             catch (IndexOutOfRangeException ex)
@@ -130,7 +130,7 @@ namespace PC
                 // (SerialPort is not thread save). 
                 // The good news are; this only means the message was already read from port and nothing
                 // else is to do.
-                Debugger.Break();
+                //Debugger.Break();
                 rmessage.Message = "-";
                 return rmessage;
             }
@@ -144,10 +144,21 @@ namespace PC
 
 
             if (logging)
-                SendReceiveBuffer.Add(rmessage.Message);
+                AddToSendReceiveBuffer(rmessage.Message);
             return rmessage;
         }
 
+        /// <summary>
+        /// Waits for a CNCMessage which contains <param name="containing"></param>
+        /// 
+        /// throws:
+        /// ApplicationException -- error message received
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <param name="containing"></param>
+        /// <param name="waittimout"></param>
+        /// <param name="logging"></param>
+        /// <returns></returns>
         public override CNCMessage WaitReceiveMessageContaining(int timeout, string containing, int waittimout, bool logging = true)
         {
             CNCMessage rmessage = new CNCMessage() { Message = "" };
@@ -162,6 +173,10 @@ namespace PC
                     rmessage = ReceiveMessage(timeout, logging: logging);
                     LastMessageReceived = rmessage;
                     OnMessageReceived(this, rmessage);
+                    if(rmessage.Message.Contains("error"))
+                    {
+                        throw new ApplicationException(rmessage.Message);
+                    }
                 }
                 catch (TimeoutException ex)
                 {
@@ -181,6 +196,10 @@ namespace PC
                         rmessage = ReceiveMessage(timeout, logging: logging);
                         LastMessageReceived = rmessage;
                         OnMessageReceived(this, rmessage);
+                        if (rmessage.Message.Contains("error"))
+                        {
+                            throw new ApplicationException(rmessage.Message);
+                        }
                     }
                     catch (TimeoutException ex)
                     {
@@ -440,13 +459,13 @@ namespace PC
                 }
                 catch (InvalidOperationException ex)
                 {
-                    SendReceiveBuffer.Add(ex.Message);
+                    AddToSendReceiveBuffer(ex.Message);
                     return;
                 }
             }
 
             if (logging)
-                SendReceiveBuffer.Add(message.Message);
+                AddToSendReceiveBuffer(message.Message);
         }
 
 

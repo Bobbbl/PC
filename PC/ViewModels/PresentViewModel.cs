@@ -188,8 +188,7 @@ namespace PC
 
                         foreach (var item in k.NewItems)
                         {
-                            ConsoleViewModel.ConsoleContent += item;
-                            ConsoleViewModel.ConsoleContent += "\n";
+                            ConsoleViewModel.AppendLineToConsole(item as string);
                         }
                     };
 

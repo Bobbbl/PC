@@ -26,6 +26,19 @@ namespace PC
                 _SendReceiveBuffer = value;
             }
         }
+        
+        public void AddToSendReceiveBuffer(string message)
+        {
+            SendReceiveBuffer.Add(message);
+
+            if(SendReceiveBuffer.Count > 1000)
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    SendReceiveBuffer.RemoveAt(0);
+                }
+            }
+        }
 
         public void OnMessageReceived(object sender, CNCMessage message)
         {

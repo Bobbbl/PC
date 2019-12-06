@@ -108,7 +108,7 @@ namespace PC
                             break;
                     }
 
-                    
+
                 }
             }
         }
@@ -550,12 +550,28 @@ namespace PC
         private List<string> _StandardWaitForArray = new List<string>();
         public async Task<CNCMessage> SendCustomMessage(CNCMessage message, int WaitTimeout = 1000)
         {
-            CNCMessage tmp = null;
-            await Task.Run(() =>
+            CNCMessage tmp = new CNCMessage();
+            CNCMessage posrequmessage = new CNCMessage();
+            CNCMessage posmessage = new CNCMessage();
+            string regexstring = string.Empty;
+            float[] r = new float[3];
+
+            try
             {
-                Interface.SendMessage(message);
-                tmp = Interface.WaitReceiveMessageContainingMultible(100, _StandardWaitForArray, WaitTimeout);
+                await Task.Run(() =>
+                    {
+                        Interface.SendMessage(message);
+                        tmp = Interface.WaitReceiveMessageContaining(100, "ok", WaitTimeout);
+
+
+
+
             });
+            }
+            catch (ApplicationException ex)
+            {
+                return new CNCMessage() { Message = ex.Message };
+            }
 
             return tmp;
         }
@@ -599,6 +615,16 @@ namespace PC
         {
         }
         #endregion
+
+        public async Task TogglePositionUpdate()
+        {
+            var farray = await GetCurrentXYZ();
+
+            CurrentX = farray[0];
+            CurrentY = farray[1];
+            CurrentZ = farray[2];
+
+        }
 
         private async Task PositionRefreshTimer_Tick(object sender, EventArgs e)
         {

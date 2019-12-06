@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -67,11 +68,34 @@ namespace PC
             }
         }
 
+        public static void AppendLineToConsole(string line)
+        {
+            _ConsoleContent += line;
+            _ConsoleContent += "\n";
+
+            RaiseStaticPropertyChanged(nameof(ConsoleContent));
+        }
 
         public ConsoleViewModel()
         {
             ClearCommand = new RelayCommand(() => Clear());
+
+            StaticPropertyChanged += ConsoleViewModel_StaticPropertyChanged;
         }
 
+        private void ConsoleViewModel_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ConsoleViewModel.ConsoleContent):
+                    if(ConsoleViewModel.ConsoleContent.Length >= 500)
+                    {
+                        ConsoleViewModel.ConsoleContent = ConsoleViewModel.ConsoleContent.Remove(0, 100);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

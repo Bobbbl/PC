@@ -21,7 +21,7 @@ namespace PC
 
             foreach (string item in inlist)
             {
-                rstring += item;
+                rstring += item + "\n";
             }
 
             return rstring;
