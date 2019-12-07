@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using HelixToolkit.Wpf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,8 +8,10 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace PC
 {
@@ -26,6 +29,7 @@ namespace PC
         }
         #endregion
 
+
         public int StepSizeJog { get; set; }
 
         public int FeedRateJog { get; set; }
@@ -40,6 +44,8 @@ namespace PC
 
         public string CNCFileContent { get; set; }
         public ObservableCollection<string> CNCFileContentArray { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<Point3D> SegmentList { get; set; } = new ObservableCollection<Point3D>();
+
 
         private static bool _IsConnected = false;
         public static bool IsConnected
@@ -142,6 +148,9 @@ namespace PC
 
         public async Task Load()
         {
+
+            #region Read File Content
+
             OpenFileDialog odialog = new OpenFileDialog();
             if (odialog.ShowDialog() == true)
             {
@@ -150,24 +159,120 @@ namespace PC
                     CNCFileContent = string.Empty;
                     CNCFileContentArray = new ObservableCollection<string>(Regex.Split(await sr.ReadToEndAsync(), "\r\n|\r|\n"));
 
-                    await Task.Run(() =>
+
+                    int e = 0;
+                    foreach (string item in CNCFileContentArray)
                     {
+                        CNCFileContent += item + '\n';
 
-                        int e = 0;
-                        foreach (string item in CNCFileContentArray)
-                        {
-                            CNCFileContent += item + '\n';
+                        if (e > 1000)
+                            break;
 
-                            if (e > 1000)
-                                break;
+                        e++;
+                    }
 
-                            e++;
-                        }
-
-                    });
 
                 }
             }
+
+            #endregion
+
+            PlotViewModel.PointList.Clear();
+
+            await Task.Run<Point3DCollection>(() =>
+            {
+
+                #region Get Points
+                Point3DCollection coll = new Point3DCollection();
+
+                Point3D currentcoor = new Point3D();
+                currentcoor.X = 0;
+                currentcoor.Y = 0;
+                currentcoor.Z = 0;
+
+                foreach (string item in CNCFileContentArray)
+                {
+
+                    // Find possible X
+                    string xstr = Regex.Match(item, @"[G0|G1] X([0-9]*)").Groups[1].Value;
+                    string ystr = Regex.Match(item, @"[G0|G1] Y([0-9]*)").Groups[1].Value;
+                    string zstr = Regex.Match(item, @"[G0|G1] Z([0-9]*)").Groups[1].Value;
+
+                    double x, y, z;
+
+                    if (!string.IsNullOrEmpty(xstr) || !string.IsNullOrEmpty(ystr) || !string.IsNullOrEmpty(zstr))
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(xstr))
+                            {
+                                x = double.Parse(xstr);
+                                currentcoor.X = x;
+                            }
+                            else
+                            {
+                                x = currentcoor.X;
+                            }
+                        }
+                        catch (FormatException ex)
+                        {
+                            x = currentcoor.X;
+                        }
+                        try
+                        {
+                            if(!string.IsNullOrEmpty(ystr))
+                            {
+                                y = double.Parse(ystr);
+                                currentcoor.Y = y;
+                            }
+                            else
+                            {
+                                y = currentcoor.Y;
+                            }
+                        }
+                        catch (FormatException ex)
+                        {
+                            y = currentcoor.Y;
+                        }
+                        try
+                        {
+                            if(!string.IsNullOrEmpty(zstr))
+                            {
+                                z = double.Parse(zstr);
+                                currentcoor.Z = z;
+                            }
+                            else
+                            {
+                                z = currentcoor.Z;
+                            }
+
+                        }
+                        catch (FormatException ex)
+                        {
+                            z = currentcoor.Z;
+                        }
+
+                        Point3D p = new Point3D();
+                        p.X = currentcoor.X;
+                        p.Y = currentcoor.Y;
+                        p.Z = currentcoor.Z;
+
+
+                        Application.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            PlotViewModel.PointList.Add(p);
+                        });
+                    }
+
+                }
+
+                return coll;
+
+                #endregion
+            });
+
+
+
         }
 
         public async Task Send()
@@ -212,7 +317,7 @@ namespace PC
                         if (rmessage.Message.Contains("ok") || rmessage.Message.Contains("error"))
                         {
                             okcount--;
-                            
+
                         }
                         else if (rmessage.Message.Contains("WPos"))
                         {
@@ -234,7 +339,7 @@ namespace PC
                                 r[2] = (float)PresentViewModel.CurrentZ;
                             }
 
-                            
+
                             recd++;
 
                         }
@@ -307,7 +412,10 @@ namespace PC
             // Global Keyboard Hooks
             _GlobalKeyboardHook = new GlobalKeyboardHook();
             _GlobalKeyboardHook.KeyboardPressed += _GlobalKeyboardHook_KeyboardPressed;
+
+
         }
+        #endregion
 
         public bool WhenSendButtonEnabled()
         {
@@ -360,7 +468,6 @@ namespace PC
 
             }
         }
-        #endregion
 
         private void ToolbarViewModel_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

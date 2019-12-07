@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Media.Media3D;
 
 namespace PC
@@ -20,6 +22,46 @@ namespace PC
         }
 
         #endregion
+
+        public static Point3DCollection _PointList = new Point3DCollection();
+        public static Point3DCollection PointList
+        {
+            get
+            {
+                return _PointList;
+            }
+            set
+            {
+                _PointList = value;
+
+            }
+        }
+
+
+
+        public static HelixToolkit.Wpf.HelixViewport3D CurrentViewport;
+
+
+        public static HelixToolkit.Wpf.HelixViewport3D GetCurrentViewport(DependencyObject obj)
+        {
+            return (HelixToolkit.Wpf.HelixViewport3D)obj.GetValue(CurrentViewportProperty);
+        }
+
+        public static void SetCurrentViewport(DependencyObject obj, HelixToolkit.Wpf.HelixViewport3D value)
+        {
+            obj.SetValue(CurrentViewportProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for CurrentViewport.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CurrentViewportProperty =
+            DependencyProperty.RegisterAttached("CurrentViewport", typeof(object), typeof(PlotViewModel), new PropertyMetadata(default(object), CurrentViewportChanged));
+
+
+
+        private static void CurrentViewportChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            CurrentViewport = e.NewValue as HelixToolkit.Wpf.HelixViewport3D;
+        }
 
         public static Point3D _WheelPosition = new Point3D(0, 0, 0);
         public static Point3D WheelPosition
