@@ -32,9 +32,10 @@
                 <!--Grid-->
                 <h:GridLinesVisual3D/>
                 <!--Wheel-->
-                <l:SphereManipulator Diameter="4" Length="4" Position="{Binding WheelPosition}" Direction="0,0,1" Color="Yellow"></l:SphereManipulator>
+                <l:SphereManipulator Diameter="2" Length="2" Position="{Binding WheelPosition}" Direction="0,0,1" Color="Yellow"></l:SphereManipulator>
 
                 <h:PointsVisual3D Points="{Binding PointList}" Size="2" IsRendering="True"></h:PointsVisual3D>
+                <h:LinesVisual3D Points="{Binding LineList}"></h:LinesVisual3D>
 
 
             </h:HelixViewport3D>

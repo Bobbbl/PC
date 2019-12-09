@@ -23,6 +23,8 @@ namespace PC
 
         #endregion
 
+        public static Point3DCollection LineList { get; set; } = new Point3DCollection();
+
         public static Point3DCollection _PointList = new Point3DCollection();
         public static Point3DCollection PointList
         {

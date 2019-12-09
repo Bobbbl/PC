@@ -170,8 +170,6 @@ namespace PC
 
                         e++;
                     }
-
-
                 }
             }
 
@@ -179,26 +177,48 @@ namespace PC
 
             PlotViewModel.PointList.Clear();
 
-            await Task.Run<Point3DCollection>(() =>
+            await Task.Run(() =>
             {
 
                 #region Get Points
+
                 Point3DCollection coll = new Point3DCollection();
 
-                Point3D currentcoor = new Point3D();
-                currentcoor.X = 0;
-                currentcoor.Y = 0;
-                currentcoor.Z = 0;
+                Point3D currentcoor = new Point3D(0, 0, 0);
+
+                Point3D lastcoor = new Point3D(0, 0, 0);
+
+
+                string xstr = string.Empty, ystr = string.Empty, zstr = string.Empty;
+                double x, y, z;
+                Point3D p;
+                int currmovmod = 0; // holds the current movement mode. 0 = global positioning | 1 relative positioning
+                string currmovmodstr = "g90";
 
                 foreach (string item in CNCFileContentArray)
                 {
 
-                    // Find possible X
-                    string xstr = Regex.Match(item, @"[G0|G1] X([0-9]*)").Groups[1].Value;
-                    string ystr = Regex.Match(item, @"[G0|G1] Y([0-9]*)").Groups[1].Value;
-                    string zstr = Regex.Match(item, @"[G0|G1] Z([0-9]*)").Groups[1].Value;
+                    // check for global/relativ instruction
+                    string ret = Regex.Match(item, @"[G90|G91] ").Groups[1].Value.ToLower();
+                    if (ret.Contains("g90"))
+                    {
+                        currmovmodstr = "g90";
+                    }
+                    else if (ret.Contains("g91"))
+                        currmovmodstr = "g91";
 
-                    double x, y, z;
+
+
+                    // Find possible X
+                    xstr = Regex.Match(item, @"X([0-9]*)").Groups[1].Value;
+                    ystr = Regex.Match(item, @"Y([0-9]*)").Groups[1].Value;
+                    zstr = Regex.Match(item, @"Z([0-9]*)").Groups[1].Value;
+
+                    // Save last coordinate
+                    lastcoor.X = currentcoor.X;
+                    lastcoor.Y = currentcoor.Y;
+                    lastcoor.Z = currentcoor.Z;
+
 
                     if (!string.IsNullOrEmpty(xstr) || !string.IsNullOrEmpty(ystr) || !string.IsNullOrEmpty(zstr))
                     {
@@ -207,7 +227,10 @@ namespace PC
                             if (!string.IsNullOrEmpty(xstr))
                             {
                                 x = double.Parse(xstr);
-                                currentcoor.X = x;
+                                if (currmovmodstr == "g90")
+                                    currentcoor.X = x;
+                                else
+                                    currentcoor.Y += x;
                             }
                             else
                             {
@@ -220,10 +243,13 @@ namespace PC
                         }
                         try
                         {
-                            if(!string.IsNullOrEmpty(ystr))
+                            if (!string.IsNullOrEmpty(ystr))
                             {
                                 y = double.Parse(ystr);
-                                currentcoor.Y = y;
+                                if (currmovmodstr == "g90")
+                                    currentcoor.Y = y;
+                                else
+                                    currentcoor.Y += y;
                             }
                             else
                             {
@@ -236,10 +262,13 @@ namespace PC
                         }
                         try
                         {
-                            if(!string.IsNullOrEmpty(zstr))
+                            if (!string.IsNullOrEmpty(zstr))
                             {
                                 z = double.Parse(zstr);
-                                currentcoor.Z = z;
+                                if (currmovmodstr == "g90")
+                                    currentcoor.Z = z;
+                                else
+                                    currentcoor.Z += z;
                             }
                             else
                             {
@@ -252,7 +281,9 @@ namespace PC
                             z = currentcoor.Z;
                         }
 
-                        Point3D p = new Point3D();
+
+
+                        p = new Point3D();
                         p.X = currentcoor.X;
                         p.Y = currentcoor.Y;
                         p.Z = currentcoor.Z;
@@ -264,11 +295,30 @@ namespace PC
                         });
                     }
 
+                    // if lastpoint and currentpoint is different, then make a connection
+                    if(currentcoor.X != lastcoor.X || currentcoor.Y != lastcoor.Y || currentcoor.Z != lastcoor.Z)
+                    {
+
+                        // First Point
+                        Point3D firstpoint = new Point3D(lastcoor.X, lastcoor.Y, lastcoor.Z);
+
+                        // Second Point
+                        Point3D secondpoint = new Point3D(currentcoor.X, currentcoor.Y, currentcoor.Z);
+
+                        // Add Line
+                        Application.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            PlotViewModel.LineList.Add(firstpoint);
+                            PlotViewModel.LineList.Add(secondpoint);
+                        });
+                        
+
+                    }
+
                 }
 
-                return coll;
-
                 #endregion
+
             });
 
 
@@ -278,6 +328,7 @@ namespace PC
         public async Task Send()
         {
             PresentViewModel.Device.CurrentMode = CommModes.SendMode;
+
             CNCMessage message0 = new CNCMessage() { Message = CNCFileContentArray[0] };
             CNCMessage answer = new CNCMessage();
             CNCMessage posrequmessage = new CNCMessage();
