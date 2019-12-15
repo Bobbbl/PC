@@ -176,13 +176,14 @@ namespace PC
             #endregion
 
             PlotViewModel.PointList.Clear();
+            PlotViewModel.LineList.Clear();
 
             await Task.Run(() =>
             {
 
                 #region Get Points
 
-                Point3DCollection coll = new Point3DCollection();
+                List<Point3D> coll = new List<Point3D>();
 
                 Point3D currentcoor = new Point3D(0, 0, 0);
 
@@ -191,15 +192,17 @@ namespace PC
 
                 string xstr = string.Empty, ystr = string.Empty, zstr = string.Empty;
                 double x, y, z;
-                Point3D p;
-                int currmovmod = 0; // holds the current movement mode. 0 = global positioning | 1 relative positioning
+
                 string currmovmodstr = "g90";
 
                 foreach (string item in CNCFileContentArray)
                 {
 
+                    // Remove Comments
+                    var ite = Regex.Replace(item, @"\(.*?\)", "");
+
                     // check for global/relativ instruction
-                    string ret = Regex.Match(item, @"[G90|G91] ").Groups[1].Value.ToLower();
+                    string ret = Regex.Match(ite, @"[G90|G91] ").Groups[1].Value.ToLower();
                     if (ret.Contains("g90"))
                     {
                         currmovmodstr = "g90";
@@ -210,9 +213,9 @@ namespace PC
 
 
                     // Find possible X
-                    xstr = Regex.Match(item, @"X([0-9]*)").Groups[1].Value;
-                    ystr = Regex.Match(item, @"Y([0-9]*)").Groups[1].Value;
-                    zstr = Regex.Match(item, @"Z([0-9]*)").Groups[1].Value;
+                    xstr = Regex.Match(ite, @"X(-?[0-9]*.[0-9]*)").Groups[1].Value;
+                    ystr = Regex.Match(ite, @"Y(-?[0-9]*.[0-9]*)").Groups[1].Value;
+                    zstr = Regex.Match(ite, @"Z(-?[0-9]*.[0-9]*)").Groups[1].Value;
 
                     // Save last coordinate
                     lastcoor.X = currentcoor.X;
@@ -283,39 +286,83 @@ namespace PC
 
 
 
-                        p = new Point3D();
+                        var p = new Point3D();
                         p.X = currentcoor.X;
                         p.Y = currentcoor.Y;
                         p.Z = currentcoor.Z;
 
-
-                        Application.Current.Dispatcher.Invoke((Action)delegate
+                        /*
+                        * Usage
+                        * G2 Xnnn Ynnn Innn Jnnn Ennn Fnnn (Clockwise Arc)
+                        * G3 Xnnn Ynnn Innn Jnnn Ennn Fnnn (Counter-Clockwise Arc)
+                        * Parameters
+                        * Xnnn The position to move to on the X axis
+                        * Ynnn The position to move to on the Y axis
+                        * Innn The point in X space from the current X position to maintain a constant distance from
+                        * Jnnn The point in Y space from the current Y position to maintain a constant distance from
+                        * Ennn The amount to extrude between the starting point and ending point
+                        * Fnnn The feedrate per minute of the move between the starting point and ending point (if supplied)
+                        */
+                        //Check if a line or a arc
+                        var g = Regex.Match(ite, @"([G][2]|[G][3]) ").Groups;
+                        string arcstr = Regex.Match(ite, @"([G][2]|[G][3]) ").Groups[0].Value.ToLower();
+                        Point3D end;
+                        Point3D center;
+                        Point3D start;
+                        List<Point3D> plist = new List<Point3D>();
+                        if (!string.IsNullOrEmpty(arcstr))
                         {
-                            PlotViewModel.PointList.Add(p);
-                        });
+                            string istr = Regex.Match(ite, @"I(-?[0-9]*.[0-9]*)").Groups[1].Value;
+                            var I = double.Parse(istr);
+
+                            string jstr = Regex.Match(ite, @"J(-?[0-9]*.[0-9]*)").Groups[1].Value;
+                            var J = double.Parse(jstr);
+
+                            start = new Point3D(lastcoor.X, lastcoor.Y, lastcoor.Z);
+                            end = new Point3D(currentcoor.X, currentcoor.Y, currentcoor.Z);
+                            center = new Point3D(lastcoor.X + I, lastcoor.Y + J, lastcoor.Z);
+
+                            plist = Arc(start, end, center, 10, arcstr.ToLower().Contains("g2"));
+
+                        }
+
+                        foreach (var il in plist)
+                        {
+                            coll.Add(il);
+                        }
+                        coll.Add(new Point3D(currentcoor.X, currentcoor.Y, currentcoor.Z));
                     }
 
-                    // if lastpoint and currentpoint is different, then make a connection
-                    if(currentcoor.X != lastcoor.X || currentcoor.Y != lastcoor.Y || currentcoor.Z != lastcoor.Z)
-                    {
 
-                        // First Point
-                        Point3D firstpoint = new Point3D(lastcoor.X, lastcoor.Y, lastcoor.Z);
-
-                        // Second Point
-                        Point3D secondpoint = new Point3D(currentcoor.X, currentcoor.Y, currentcoor.Z);
-
-                        // Add Line
-                        Application.Current.Dispatcher.Invoke((Action)delegate
-                        {
-                            PlotViewModel.LineList.Add(firstpoint);
-                            PlotViewModel.LineList.Add(secondpoint);
-                        });
-                        
-
-                    }
 
                 }
+
+                List<Point3D> llist = new List<Point3D>();
+
+                Point3D firstpoint, secondpoint;
+
+                for (int i = 0; i < coll.Count - 1; i++)
+                {
+                    firstpoint = coll[i];
+                    secondpoint = coll[i + 1];
+
+                    // Add Line
+
+                    llist.Add(firstpoint);
+                    llist.Add(secondpoint);
+                }
+
+                PlotViewModel.LineList = llist;
+                PlotViewModel.PointList = coll;
+
+                //Application.Current.Dispatcher.Invoke((Action)delegate
+                //{
+                //    foreach (Point3D pl in llist)
+                //    {
+                //        PlotViewModel.LineList.Add(pl);
+
+                //    }
+                //});
 
                 #endregion
 
@@ -323,6 +370,80 @@ namespace PC
 
 
 
+        }
+
+        public double ConvertDegreesToRadians(double degrees)
+        {
+            double radians = (Math.PI / 180) * degrees;
+            return (radians);
+        }
+
+        public Vector RotateVector2d(double x, double y, double angle)
+        {
+            double[] result = new double[2];
+            result[0] = x * Math.Cos(angle) - y * Math.Sin(angle);
+            result[1] = x * Math.Sin(angle) + y * Math.Cos(angle);
+            return new Vector(result[0], result[1]);
+        }
+
+        public List<Point3D> Arc(Point3D Start, Point3D End, Point3D Center, int NumPoints, bool clockwise)
+        {
+            var list = new List<Point3D>(NumPoints);
+
+            // TODO: Check R same for both
+
+            /* Create Vectors */
+            // All vectors are vectors in Z Plane
+
+            // lokal vectors
+            Vector ortsvectorcenter = new Vector(Center.X, Center.Y);
+            Vector ortsvectorstart = new Vector(Start.X, Start.Y);
+            Vector ortsvectorend = new Vector(End.X, End.Y);
+
+            // Vectors for use
+            Vector start = ortsvectorstart - ortsvectorcenter;
+            Vector end = ortsvectorend - ortsvectorcenter;
+
+            /* Calculate Angle between the start and the end vector beginning at the rotation
+             * center point*/
+
+            double alpha = 0;
+            alpha = Math.Abs(ConvertDegreesToRadians(Vector.AngleBetween(start, end)));
+
+            if (clockwise)
+                alpha *= -1;
+            //alpha = Math.PI * 2 - alpha;
+
+            /*Rotate vector step by step. For this we calculate an vector(array) with angles which should be used to rotate the vector to*/
+            var anglesteps = alpha / (NumPoints); // -1 'cause start is already included by for - loop
+
+
+            if (alpha < 0)
+            {
+                for (double w = 0; w >= alpha; w += anglesteps)
+                {
+                    Vector coor = RotateVector2d(start.X, start.Y, w);
+                    //list.Add(new Point3D(fx(Start.X, Start.Y, Center.X, w), fy(Start.X, Start.Y, Center.Y, w), fz(Start.Z)));
+                    var ortsvectorrotated = coor + ortsvectorcenter;
+                    list.Add(new Point3D(ortsvectorrotated.X, ortsvectorrotated.Y, Start.Z));
+                }
+            }
+            else
+            {
+                for (double w = 0; w <= alpha; w += anglesteps)
+                {
+                    Vector coor = RotateVector2d(start.X, start.Y, w);
+                    //list.Add(new Point3D(fx(Start.X, Start.Y, Center.X, w), fy(Start.X, Start.Y, Center.Y, w), fz(Start.Z)));
+                    var ortsvectorrotated = coor + ortsvectorcenter;
+                    list.Add(new Point3D(ortsvectorrotated.X, ortsvectorrotated.Y, Start.Z));
+                }
+            }
+
+
+
+
+
+            return list;
         }
 
         public async Task Send()

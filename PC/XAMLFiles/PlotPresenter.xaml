@@ -12,6 +12,7 @@
              >
     <UserControl.Resources>
         <l:FloatToString x:Key="FloatToString"/>
+        <l:ListToPoint3DCollection x:Key="ListToPoint3DCollection"></l:ListToPoint3DCollection>
     </UserControl.Resources>
     <UserControl.DataContext>
         <l:PlotViewModel/>
@@ -32,11 +33,12 @@
                 <!--Grid-->
                 <h:GridLinesVisual3D/>
                 <!--Wheel-->
-                <l:SphereManipulator Diameter="2" Length="2" Position="{Binding WheelPosition}" Direction="0,0,1" Color="Yellow"></l:SphereManipulator>
+                <!--<l:SphereManipulator Diameter="2" Length="2" Position="{Binding WheelPosition}" Direction="0,0,1" Color="Yellow"></l:SphereManipulator>-->
 
-                <h:PointsVisual3D Points="{Binding PointList}" Size="2" IsRendering="True"></h:PointsVisual3D>
-                <h:LinesVisual3D Points="{Binding LineList}"></h:LinesVisual3D>
-
+                <h:PointsVisual3D Points="{Binding PointList, Converter={StaticResource ListToPoint3DCollection}}" Size="2" IsRendering="True"></h:PointsVisual3D>
+                <h:LinesVisual3D Points="{Binding LineList, Converter={StaticResource ListToPoint3DCollection}}"></h:LinesVisual3D>
+                <!--<h:TubeVisual3D Path="{Binding PointList}" Diameter="1" IsPathClosed="False" Fill="Red"/>-->
+                <!--<h:TubeVisual3D Path="{Binding TubeList}" Diameter="1" IsPathClosed="False" Fill="Red"></h:TubeVisual3D>-->
 
             </h:HelixViewport3D>
         </Border>

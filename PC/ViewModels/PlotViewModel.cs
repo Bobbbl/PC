@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -23,10 +24,24 @@ namespace PC
 
         #endregion
 
-        public static Point3DCollection LineList { get; set; } = new Point3DCollection();
+        private static List<Point3D> _LineList = new List<Point3D>();
 
-        public static Point3DCollection _PointList = new Point3DCollection();
-        public static Point3DCollection PointList
+        public static List<Point3D> LineList
+        {
+            get
+            {
+                return _LineList;
+            }
+            set
+            {
+                _LineList = value;
+                RaiseStaticPropertyChanged(nameof(LineList));
+            }
+        }
+
+        private static List<Point3D> _PointList = new List<Point3D>();
+
+        public static List<Point3D> PointList
         {
             get
             {
@@ -35,10 +50,15 @@ namespace PC
             set
             {
                 _PointList = value;
-
+                RaiseStaticPropertyChanged(nameof(PointList));
             }
         }
 
+
+
+        public static Point3DCollection ArcList { get; set; } = new Point3DCollection();
+
+        public static Point3DCollection TubeList { get; set; } = new Point3DCollection();
 
 
         public static HelixToolkit.Wpf.HelixViewport3D CurrentViewport;
@@ -98,6 +118,17 @@ namespace PC
             _WheelPosition.Z = z;
             RaiseStaticPropertyChanged(nameof(WheelPosition));
         }
+
+        #region Constructor
+
+        public PlotViewModel()
+        {
+            TubeList.Add(new Point3D(0, 0, 0));
+            TubeList.Add(new Point3D(2.5548, 22.4311, 0));
+            TubeList.Add(new Point3D(0.5567, 26.0488, 0));
+        }
+
+        #endregion
 
     }
 }
