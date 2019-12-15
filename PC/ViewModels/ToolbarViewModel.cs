@@ -322,7 +322,7 @@ namespace PC
                             end = new Point3D(currentcoor.X, currentcoor.Y, currentcoor.Z);
                             center = new Point3D(lastcoor.X + I, lastcoor.Y + J, lastcoor.Z);
 
-                            plist = Arc(start, end, center, 10, arcstr.ToLower().Contains("g2"));
+                            plist = Arc(start, end, center, 10, arcstr.ToLower().Contains("g2"), SelectedPlane.XY);
 
                         }
 
@@ -386,19 +386,49 @@ namespace PC
             return new Vector(result[0], result[1]);
         }
 
-        public List<Point3D> Arc(Point3D Start, Point3D End, Point3D Center, int NumPoints, bool clockwise)
+        public List<Point3D> Arc(Point3D Start, Point3D End, Point3D Center, int NumPoints, bool clockwise, SelectedPlane Plane = SelectedPlane.XY)
         {
             var list = new List<Point3D>(NumPoints);
 
             // TODO: Check R same for both
 
             /* Create Vectors */
-            // All vectors are vectors in Z Plane
+            Vector ortsvectorcenter = new Vector();
+            Vector ortsvectorstart = new Vector();
+            Vector ortsvectorend = new Vector();
 
+            /*Select Plane*/
+
+            // XY
             // lokal vectors
-            Vector ortsvectorcenter = new Vector(Center.X, Center.Y);
-            Vector ortsvectorstart = new Vector(Start.X, Start.Y);
-            Vector ortsvectorend = new Vector(End.X, End.Y);
+
+            switch (Plane)
+            {
+                case SelectedPlane.XY:
+                    ortsvectorcenter = new Vector(Center.X, Center.Y);
+                    ortsvectorstart = new Vector(Start.X, Start.Y);
+                    ortsvectorend = new Vector(End.X, End.Y);
+                    break;
+                case SelectedPlane.ZX:
+                    // ZX
+                    ortsvectorcenter = new Vector(Center.X, Center.Z);
+                    ortsvectorstart = new Vector(Start.X, Start.Z);
+                    ortsvectorend = new Vector(End.X, End.Z);
+                    break;
+                case SelectedPlane.YZ:
+                    // YZ
+                    ortsvectorcenter = new Vector(Center.Y, Center.Z);
+                    ortsvectorstart = new Vector(Start.Y, Start.Z);
+                    ortsvectorend = new Vector(End.Y, End.Z);
+                    break;
+                default:
+                    ortsvectorcenter = new Vector(Center.X, Center.Y);
+                    ortsvectorstart = new Vector(Start.X, Start.Y);
+                    ortsvectorend = new Vector(End.X, End.Y);
+                    break;
+            }
+
+
 
             // Vectors for use
             Vector start = ortsvectorstart - ortsvectorcenter;
@@ -412,20 +442,31 @@ namespace PC
 
             if (clockwise)
                 alpha *= -1;
-            //alpha = Math.PI * 2 - alpha;
 
             /*Rotate vector step by step. For this we calculate an vector(array) with angles which should be used to rotate the vector to*/
             var anglesteps = alpha / (NumPoints); // -1 'cause start is already included by for - loop
-
+            Vector ortsvectorrotated = new Vector();
 
             if (alpha < 0)
             {
                 for (double w = 0; w >= alpha; w += anglesteps)
                 {
                     Vector coor = RotateVector2d(start.X, start.Y, w);
-                    //list.Add(new Point3D(fx(Start.X, Start.Y, Center.X, w), fy(Start.X, Start.Y, Center.Y, w), fz(Start.Z)));
-                    var ortsvectorrotated = coor + ortsvectorcenter;
-                    list.Add(new Point3D(ortsvectorrotated.X, ortsvectorrotated.Y, Start.Z));
+                    ortsvectorrotated = coor + ortsvectorcenter;
+                    switch (Plane)
+                    {
+                        case SelectedPlane.XY:
+                            list.Add(new Point3D(ortsvectorrotated.X, ortsvectorrotated.Y, Start.Z));
+                            break;
+                        case SelectedPlane.ZX:
+                            list.Add(new Point3D(ortsvectorrotated.X, Start.Y, ortsvectorrotated.Y));
+                            break;
+                        case SelectedPlane.YZ:
+                            list.Add(new Point3D(Start.X, ortsvectorrotated.X, ortsvectorrotated.Y));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             else
@@ -433,11 +474,25 @@ namespace PC
                 for (double w = 0; w <= alpha; w += anglesteps)
                 {
                     Vector coor = RotateVector2d(start.X, start.Y, w);
-                    //list.Add(new Point3D(fx(Start.X, Start.Y, Center.X, w), fy(Start.X, Start.Y, Center.Y, w), fz(Start.Z)));
-                    var ortsvectorrotated = coor + ortsvectorcenter;
-                    list.Add(new Point3D(ortsvectorrotated.X, ortsvectorrotated.Y, Start.Z));
+                    ortsvectorrotated = coor + ortsvectorcenter;
+                    switch (Plane)
+                    {
+                        case SelectedPlane.XY:
+                            list.Add(new Point3D(ortsvectorrotated.X, ortsvectorrotated.Y, Start.Z));
+                            break;
+                        case SelectedPlane.ZX:
+                            list.Add(new Point3D(ortsvectorrotated.X, Start.Y, ortsvectorrotated.Y));
+                            break;
+                        case SelectedPlane.YZ:
+                            list.Add(new Point3D(Start.X, ortsvectorrotated.X, ortsvectorrotated.Y));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
+
+
 
 
 

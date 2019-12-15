@@ -56,6 +56,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -93,6 +95,7 @@
     <Compile Include="Converters\FloatToString.cs" />
     <Compile Include="Converters\ObservableCollectionToString.cs" />
     <Compile Include="Converters\PortToPortisConverter.cs" />
+    <Compile Include="CurrentPlane.cs" />
     <Compile Include="Global Keyboard Helper\GlobalKeyboardHook.cs" />
     <Compile Include="PortisEventHandler.cs" />
     <Compile Include="PortisEventsArgs.cs" />
