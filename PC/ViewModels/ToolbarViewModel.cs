@@ -194,6 +194,7 @@ namespace PC
                 double x, y, z;
 
                 string currmovmodstr = "g90";
+                SelectedPlane currplane = SelectedPlane.XY;
 
                 foreach (string item in CNCFileContentArray)
                 {
@@ -202,15 +203,28 @@ namespace PC
                     var ite = Regex.Replace(item, @"\(.*?\)", "");
 
                     // check for global/relativ instruction
-                    string ret = Regex.Match(ite, @"[G90|G91] ").Groups[1].Value.ToLower();
-                    if (ret.Contains("g90"))
+                    string ret = Regex.Match(ite, @"(G90)|(G91)").Groups[0].Value.ToLower();
+                    if (ret.ToLower().Contains("g90"))
                     {
                         currmovmodstr = "g90";
                     }
-                    else if (ret.Contains("g91"))
+                    else if (ret.ToLower().Contains("g91"))
                         currmovmodstr = "g91";
 
-
+                    ret = Regex.Match(ite, @"(G17)|(G18)|(G19)").Groups[0].Value.ToLower();
+                    //var gr = Regex.Match(ite, @"(G17)|(G18)|(G19)").Groups;
+                    if (ret.ToLower().Contains("g17"))
+                    {
+                        currplane = SelectedPlane.XY;
+                    }
+                    else if (ret.ToLower().Contains("g18"))
+                    {
+                        currplane = SelectedPlane.ZX;
+                    }
+                    else if (ret.ToLower().Contains("g19"))
+                    {
+                        currplane = SelectedPlane.YZ;
+                    }
 
                     // Find possible X
                     xstr = Regex.Match(ite, @"X(-?[0-9]*.[0-9]*)").Groups[1].Value;
@@ -313,16 +327,35 @@ namespace PC
                         if (!string.IsNullOrEmpty(arcstr))
                         {
                             string istr = Regex.Match(ite, @"I(-?[0-9]*.[0-9]*)").Groups[1].Value;
-                            var I = double.Parse(istr);
-
                             string jstr = Regex.Match(ite, @"J(-?[0-9]*.[0-9]*)").Groups[1].Value;
-                            var J = double.Parse(jstr);
+                            string rstr = Regex.Match(ite, @"R(-?[0-9]*.[0-9]*)").Groups[1].Value;
 
-                            start = new Point3D(lastcoor.X, lastcoor.Y, lastcoor.Z);
-                            end = new Point3D(currentcoor.X, currentcoor.Y, currentcoor.Z);
-                            center = new Point3D(lastcoor.X + I, lastcoor.Y + J, lastcoor.Z);
+                            double I = 0, J = 0, R = 0;
 
-                            plist = Arc(start, end, center, 10, arcstr.ToLower().Contains("g2"), SelectedPlane.XY);
+                            if (!string.IsNullOrEmpty(istr) || !string.IsNullOrEmpty(jstr))
+                            {
+                                I = double.Parse(istr);
+                                J = double.Parse(jstr);
+                            }
+                            else if (!string.IsNullOrEmpty(rstr))
+                            {
+                                R = double.Parse(rstr);
+                            }
+
+                            if (!string.IsNullOrEmpty(istr) || !string.IsNullOrEmpty(jstr))
+                            {
+                                start = new Point3D(lastcoor.X, lastcoor.Y, lastcoor.Z);
+                                end = new Point3D(currentcoor.X, currentcoor.Y, currentcoor.Z);
+                                center = new Point3D(lastcoor.X + I, lastcoor.Y + J, lastcoor.Z);
+
+                                plist = Arc(start, end, center, 10, arcstr.ToLower().Contains("g2"), currplane);
+                            }
+                            else if (!string.IsNullOrEmpty(rstr))
+                            {
+                                start = new Point3D(lastcoor.X, lastcoor.Y, lastcoor.Z);
+                                end = new Point3D(currentcoor.X, currentcoor.Y, currentcoor.Z);
+                                plist = ArcR(start, end, 10, arcstr.ToLower().Contains("g2"), currplane);
+                            }
 
                         }
 
@@ -355,14 +388,6 @@ namespace PC
                 PlotViewModel.LineList = llist;
                 PlotViewModel.PointList = coll;
 
-                //Application.Current.Dispatcher.Invoke((Action)delegate
-                //{
-                //    foreach (Point3D pl in llist)
-                //    {
-                //        PlotViewModel.LineList.Add(pl);
-
-                //    }
-                //});
 
                 #endregion
 
@@ -384,6 +409,141 @@ namespace PC
             result[0] = x * Math.Cos(angle) - y * Math.Sin(angle);
             result[1] = x * Math.Sin(angle) + y * Math.Cos(angle);
             return new Vector(result[0], result[1]);
+        }
+
+        public double SignedAngle1(Vector a, Vector b)
+        {
+            return Math.Atan2(b.Y, b.X) - Math.Atan2(a.Y, a.X);
+        }
+
+        public double SignedAngle2(Vector a, Vector b)
+        {
+            return Math.Atan2(a.X * b.Y - a.Y * b.X, a.X * b.X + a.Y * b.Y);
+        }
+
+        public List<Point3D> ArcR(Point3D Start, Point3D End, int NumPoints, bool Clockwise, SelectedPlane Plane = SelectedPlane.XY)
+        {
+            var list = new List<Point3D>(NumPoints);
+
+
+            /* Create Vectors */
+            Vector ortsvectorcenter = new Vector();
+            Vector ortsvectorstart = new Vector();
+            Vector ortsvectorend = new Vector();
+
+            switch (Plane)
+            {
+                case SelectedPlane.XY:
+                    ortsvectorstart = new Vector(Start.X, Start.Y);
+                    ortsvectorend = new Vector(End.X, End.Y);
+                    break;
+                case SelectedPlane.ZX:
+                    // ZX
+                    ortsvectorstart = new Vector(Start.X, Start.Z);
+                    ortsvectorend = new Vector(End.X, End.Z);
+                    break;
+                case SelectedPlane.YZ:
+                    // YZ
+                    ortsvectorstart = new Vector(Start.Y, Start.Z);
+                    ortsvectorend = new Vector(End.Y, End.Z);
+                    break;
+                default:
+                    ortsvectorstart = new Vector(Start.X, Start.Y);
+                    ortsvectorend = new Vector(End.X, End.Y);
+                    break;
+            }
+
+            var vectorstartend = ortsvectorend - ortsvectorstart;
+            ortsvectorcenter = ortsvectorstart + vectorstartend * 0.5;
+
+            // Vectors for use
+            Vector start = ortsvectorstart - ortsvectorcenter;
+            Vector end = ortsvectorend - ortsvectorcenter;
+
+            /* Calculate Angle between the start and the end vector beginning at the rotation
+             * center point*/
+
+            double alpha = 0;
+            alpha = SignedAngle2(start, end);
+
+
+
+            // If alpha <0 then it is in clockwise direction. 
+            // If alpha > 0 then it is in counterclockwise direction
+            if (Clockwise)
+            {
+                if (alpha > 0)
+                {
+                    alpha = Math.PI * 2 - alpha;
+                    alpha *= -1;
+                }
+            }
+            else
+            {
+                if (alpha < 0)
+                    alpha = Math.PI * 2 + alpha;
+            }
+
+            if (alpha == 0)
+                return list;
+
+            /*Rotate vector step by step. For this we calculate an vector(array) with angles which should be used to rotate the vector to*/
+            var anglesteps = alpha / (NumPoints); // -1 'cause start is already included by for - loop
+            Vector ortsvectorrotated = new Vector();
+
+            if (alpha < 0)
+            {
+                for (double w = 0; w >= alpha; w += anglesteps)
+                {
+                    Vector coor = RotateVector2d(start.X, start.Y, w);
+                    ortsvectorrotated = coor + ortsvectorcenter;
+                    switch (Plane)
+                    {
+                        case SelectedPlane.XY:
+                            list.Add(new Point3D(ortsvectorrotated.X, ortsvectorrotated.Y, Start.Z));
+                            break;
+                        case SelectedPlane.ZX:
+                            list.Add(new Point3D(ortsvectorrotated.X, Start.Y, ortsvectorrotated.Y));
+                            break;
+                        case SelectedPlane.YZ:
+                            list.Add(new Point3D(Start.X, ortsvectorrotated.X, ortsvectorrotated.Y));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                for (double w = 0; w <= alpha; w += anglesteps)
+                {
+                    Vector coor = RotateVector2d(start.X, start.Y, w);
+                    ortsvectorrotated = coor + ortsvectorcenter;
+                    switch (Plane)
+                    {
+                        case SelectedPlane.XY:
+                            list.Add(new Point3D(ortsvectorrotated.X, ortsvectorrotated.Y, Start.Z));
+                            break;
+                        case SelectedPlane.ZX:
+                            list.Add(new Point3D(ortsvectorrotated.X, Start.Y, ortsvectorrotated.Y));
+                            break;
+                        case SelectedPlane.YZ:
+                            list.Add(new Point3D(Start.X, ortsvectorrotated.X, ortsvectorrotated.Y));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+
+
+
+
+
+
+            return list;
+
         }
 
         public List<Point3D> Arc(Point3D Start, Point3D End, Point3D Center, int NumPoints, bool clockwise, SelectedPlane Plane = SelectedPlane.XY)
@@ -438,10 +598,35 @@ namespace PC
              * center point*/
 
             double alpha = 0;
-            alpha = Math.Abs(ConvertDegreesToRadians(Vector.AngleBetween(start, end)));
+            alpha = SignedAngle2(start, end);
 
+
+
+
+            // If alpha <0 then it is in clockwise direction. 
+            // If alpha > 0 then it is in counterclockwise direction
             if (clockwise)
-                alpha *= -1;
+            {
+                if (alpha > 0)
+                {
+                    alpha = Math.PI * 2 - alpha;
+                    alpha *= -1;
+                }
+                else if (alpha == 0)
+                    alpha = Math.PI * -2;
+            }
+            else
+            {
+                if (alpha < 0)
+                    alpha = Math.PI * 2 + alpha;
+                else if(alpha == 0)
+                    alpha = Math.PI * 2;
+
+            }
+
+            if (alpha == 0)
+                return list;
+
 
             /*Rotate vector step by step. For this we calculate an vector(array) with angles which should be used to rotate the vector to*/
             var anglesteps = alpha / (NumPoints); // -1 'cause start is already included by for - loop
