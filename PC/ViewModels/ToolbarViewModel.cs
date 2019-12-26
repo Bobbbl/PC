@@ -30,11 +30,11 @@ namespace PC
         #endregion
 
 
-        public int StepSizeJog { get; set; }
+        public int StepSizeJog { get; set; } = 1;
 
-        public int FeedRateJog { get; set; }
+        public int FeedRateJog { get; set; } = 100;
 
-        public int SpindelSpeed { get; set; }
+        public int SpindelSpeed { get; set; } = 1000;
 
         public bool SpindelIsOn { get; set; }
 
