@@ -271,6 +271,8 @@
                             <Button Background="LightCoral"
                                     Command="{Binding SendCommand}" Content="Send">
                             </Button>
+                            <Button Background="#FFA60303"
+                                    Command="{Binding CancelCommand}" Content="Cancel"/>
                         </WrapPanel>
 
                         <!--File Content-->

@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -84,6 +85,7 @@ namespace PC
         public ICommand SendLineButtonCommand { get; set; }
         public ICommand LoadCommand { get; set; }
         public ICommand SendCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
 
         public async Task SetZero()
         {
@@ -619,7 +621,7 @@ namespace PC
             {
                 if (alpha < 0)
                     alpha = Math.PI * 2 + alpha;
-                else if(alpha == 0)
+                else if (alpha == 0)
                     alpha = Math.PI * 2;
 
             }
@@ -678,11 +680,6 @@ namespace PC
             }
 
 
-
-
-
-
-
             return list;
         }
 
@@ -706,11 +703,21 @@ namespace PC
             int wcount = 0;
             int recd = 0;
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
 
                 foreach (var item in CNCFileContentArray)
                 {
+
+                    // Cancel Routine
+                    if (CancelSend)
+                    {
+                        CancelSend = false;
+                        StreamProgress = 1;
+                        PresentViewModel.Device.CurrentMode = CommModes.DefaultMode;
+                        return;
+                    }
+
                     message0.Message = item;
 
                     PresentViewModel.Device.Interface.SendMessage(message0, false);
@@ -723,6 +730,18 @@ namespace PC
 
                     while (okcount > 0)
                     {
+
+                        if (CancelSend)
+                        {
+                            CancelSend = false;
+                            StreamProgress = 1;
+                            PresentViewModel.Device.CurrentMode = CommModes.DefaultMode;
+                            await PresentViewModel.Device.SendSoftReset();
+                            Thread.Sleep(1000);
+                            await PresentViewModel.Device.KillAlarm();
+                            return;
+                        }
+
                         rmessage = new CNCMessage();
                         rmessage = Interface.ReceiveMessage(100, false);
 
@@ -783,6 +802,14 @@ namespace PC
 
         }
 
+        private bool CancelSend = false;
+        public async Task Cancel()
+        {
+            CancelSend = true;
+            PresentViewModel.Device.CurrentMode = CommModes.DefaultMode;
+
+        }
+
         #endregion
 
 
@@ -817,6 +844,9 @@ namespace PC
 
             SendCommand = new RelayCommand(async () => await Send());
             (SendCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
+            CancelCommand = new RelayCommand(async () => await Cancel());
+            //(CancelCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
+
 
             StaticPropertyChanged += ToolbarViewModel_StaticPropertyChanged;
 
