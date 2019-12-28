@@ -1,4 +1,5 @@
 ﻿using HelixToolkit.Wpf;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
@@ -11,6 +12,38 @@ namespace PC
         private Point pointClicked;
         private Point3D? DirectionPoint;
 
+
+        public int Width
+        {
+            get { return (int)GetValue(WidthProperty); }
+            set { SetValue(WidthProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Width.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty WidthProperty =
+            DependencyProperty.Register("Width", typeof(int), typeof(SphereManipulator), new PropertyMetadata(default(int), WidthPropertyChanged));
+
+        private static void WidthPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as SphereManipulator).UpdateGeometry();
+        }
+
+        
+        public int Height
+        {
+            get { return (int)GetValue(HeightProperty); }
+            set { SetValue(HeightProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Height.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HeightProperty =
+            DependencyProperty.Register("Height", typeof(int), typeof(SphereManipulator), new PropertyMetadata(default(int), HeightPropertyChanged));
+
+        private static void HeightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as SphereManipulator).UpdateGeometry();
+        }
+
         protected override void UpdateGeometry()
         {
             var mb = new MeshBuilder(false, false);
@@ -19,7 +52,7 @@ namespace PC
             d.Normalize();
             var p1 = p0 + (d * this.Length);
             //mb.AddArrow(p0, p1, this.Diameter);
-            mb.AddEllipsoid(p1, 1, 4, 4);
+            mb.AddEllipsoid(p1, this.Width, this.Height, 4);
 
             this.Model.Geometry = mb.ToMesh();
         }

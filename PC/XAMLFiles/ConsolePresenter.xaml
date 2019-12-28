@@ -1,35 +1,55 @@
-﻿<UserControl x:Class="PC.XAMLFiles.ConsolePresenter"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PC"
+             xmlns:local1="clr-namespace:PC.XAMLFiles" x:Class="PC.XAMLFiles.ConsolePresenter"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="500">
     <UserControl.Resources>
         <local:ObservableCollectionToString x:Key="ObservableCollectionToString"/>
+        <local:PlotViewModel x:Key="PlotViewModelResource"></local:PlotViewModel>
     </UserControl.Resources>
     <UserControl.DataContext>
-        <local:ConsoleViewModel></local:ConsoleViewModel>
+        <local:ConsoleViewModel/>
     </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <CheckBox IsChecked="{Binding Verbose}" Grid.Row="0">Verbose</CheckBox>
+        <CheckBox IsChecked="{Binding Verbose}" Grid.Row="0" Content="Verbose"/>
         <Border BorderBrush="Black" BorderThickness="3" MinHeight="200" Grid.Row="1">
-            <ScrollViewer>
-                <TextBlock Text="{Binding ConsoleContent}" Focusable="True">
-                    <TextBlock.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Command="ApplicationCommands.Cut" Header="Cut"></MenuItem>
-                            <MenuItem Command="ApplicationCommands.Copy" Header="Copy"></MenuItem>
-                            <MenuItem Command="{Binding ClearCommand}" Header="Clear"></MenuItem>
-                        </ContextMenu>
-                    </TextBlock.ContextMenu>
-                </TextBlock>
-            </ScrollViewer>
+            <TabControl>
+                <TabItem Header="Console">
+                    <ScrollViewer>
+                        <TextBlock Text="{Binding ConsoleContent}" Focusable="True">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="ApplicationCommands.Cut" Header="Cut"/>
+                                    <MenuItem Command="ApplicationCommands.Copy" Header="Copy"/>
+                                    <MenuItem Command="{Binding ClearCommand}" Header="Clear"/>
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
+                    </ScrollViewer>
+
+                </TabItem>
+                <TabItem Header="Wheel">
+                    <WrapPanel Orientation="Vertical">
+                        <WrapPanel>
+                            <Label Content="Wheel Width"/>
+                            <TextBox Margin="3" BorderBrush="Transparent" Text="{Binding WheelWidth, Source={StaticResource PlotViewModelResource}, UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Wheel Height"/>
+                            <TextBox Margin="3" BorderBrush="Transparent" Text="{Binding WheelHeight, Source={StaticResource PlotViewModelResource}, UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                    </WrapPanel>
+                </TabItem>
+            </TabControl>
+
         </Border>
     </Grid>
 </UserControl>

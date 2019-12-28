@@ -33,7 +33,7 @@
                 <!--Grid-->
                 <h:GridLinesVisual3D/>
                 <!--Wheel-->
-                <l:SphereManipulator Diameter="2" Length="2" Position="{Binding WheelPosition}" Direction="0,0,1" Color="Yellow"></l:SphereManipulator>
+                <l:SphereManipulator Height="{Binding WheelHeight}" Width="{Binding WheelWidth}" Length="2" Position="{Binding WheelPosition}" Direction="0,0,1" Color="Yellow"></l:SphereManipulator>
 
                 <!--<h:PointsVisual3D Points="{Binding PointList, Converter={StaticResource ListToPoint3DCollection}}" Size="2" IsRendering="True"></h:PointsVisual3D>-->
                 <h:LinesVisual3D Points="{Binding LineList, Converter={StaticResource ListToPoint3DCollection}}"></h:LinesVisual3D>

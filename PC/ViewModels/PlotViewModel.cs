@@ -85,6 +85,43 @@ namespace PC
             CurrentViewport = e.NewValue as HelixToolkit.Wpf.HelixViewport3D;
         }
 
+        private static int _WheelHeight = 2;
+        public static int WheelHeight
+        {
+            get
+            {
+                return _WheelHeight;
+            }
+            set
+            {
+
+                if (value != _WheelHeight)
+                {
+                    _WheelHeight = value;
+                    RaiseStaticPropertyChanged(nameof(WheelHeight));
+                }
+            }
+        }
+
+
+        private static int _WheelWidth = 2;
+        public static int WheelWidth
+        {
+            get
+            {
+                return _WheelWidth;
+            }
+            set
+            {
+                if (value != _WheelWidth)
+                {
+                    _WheelWidth = value;
+                    RaiseStaticPropertyChanged(nameof(WheelWidth));
+                }
+
+            }
+        }
+
         public static Point3D _WheelPosition = new Point3D(0, 0, 0);
         public static Point3D WheelPosition
         {
