@@ -67,6 +67,7 @@
     <Compile Include="GRBLCommandDictionaryTest.cs" />
     <Compile Include="GRBLProtokollTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PythonTester.cs" />
     <Compile Include="SerialGRBLInterfaceTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +81,10 @@
       <Project>{716842cf-8ea3-47fb-a7a4-5f90f4d91cf7}</Project>
       <Name>PC</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestArguments.py" />
+    <Content Include="TestGeneralPythonScript.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
