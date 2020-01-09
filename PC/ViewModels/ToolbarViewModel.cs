@@ -720,6 +720,24 @@ namespace PC
 
                     message0.Message = item;
 
+                    if(item.Contains("G4"))
+                    {
+                        MatchCollection match = Regex.Match(item, @"\b(G4)\s*(P[0-9]*)");
+                        if(match.Count > 0)
+                        {
+                            try
+                            {
+                                string numberstring = Regex.Match()
+                            }
+                            catch (Exception)
+                            {
+
+                                throw;
+                            }
+                        }
+
+                    }
+
                     PresentViewModel.Device.Interface.SendMessage(message0, false);
                     okcount++;
 
