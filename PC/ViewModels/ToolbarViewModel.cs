@@ -722,12 +722,15 @@ namespace PC
 
                     if(item.Contains("G4"))
                     {
-                        MatchCollection match = Regex.Match(item, @"\b(G4)\s*(P[0-9]*)");
+                        MatchCollection match = Regex.Matches(item, @"\b(G4)\s*(P[0-9]*)");
                         if(match.Count > 0)
                         {
                             try
                             {
-                                string numberstring = Regex.Match()
+                                string debugstring = Regex.Matches(Regex.Matches(Regex.Matches(item, @"\b(G4)\s*(P[0-9]*)")[0].Value, @"(P)([0-9]*)")[0].Value, @"[0-9]*\B([0-9])")[0].Value;
+                                int waittime = Convert.ToInt32(debugstring);
+                                Thread.Sleep(waittime);
+
                             }
                             catch (Exception)
                             {
