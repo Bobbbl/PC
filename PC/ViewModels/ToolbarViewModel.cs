@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -729,8 +730,8 @@ namespace PC
                             {
                                 string debugstring = Regex.Matches(Regex.Matches(Regex.Matches(item, @"\b(G4)\s*(P[0-9]*)")[0].Value, @"(P)([0-9]*)")[0].Value, @"[0-9]*\B([0-9])")[0].Value;
                                 int waittime = Convert.ToInt32(debugstring);
-                                Thread.Sleep(waittime);
-
+                                Thread.Sleep(waittime*1000);
+                                continue;
                             }
                             catch (Exception)
                             {
@@ -820,6 +821,7 @@ namespace PC
 
             StreamProgress = 1;
             PresentViewModel.Device.CurrentMode = CommModes.DefaultMode;
+            CancelSend = false;
 
         }
 
@@ -863,9 +865,23 @@ namespace PC
             (SendLineButtonCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
             LoadCommand = new RelayCommand(async () => await Load());
 
-            SendCommand = new RelayCommand(async () => await Send());
+            try
+            {
+                SendCommand = new RelayCommand(async () => await Send());
+            }
+            catch (Exception)
+            {
+                Debugger.Break();
+            }
             (SendCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
-            CancelCommand = new RelayCommand(async () => await Cancel());
+            try
+            {
+                CancelCommand = new RelayCommand(async () => await Cancel());
+            }
+            catch (Exception)
+            {
+                Debugger.Break();
+            }
             //(CancelCommand as RelayCommand).CANPointer += WhenSendButtonEnabled;
 
 

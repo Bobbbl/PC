@@ -26,12 +26,17 @@ namespace PC
                 _SendReceiveBuffer = value;
             }
         }
-        
+
         public void AddToSendReceiveBuffer(string message)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+
             SendReceiveBuffer.Add(message);
 
-            if(SendReceiveBuffer.Count > 1000)
+            if (SendReceiveBuffer.Count > 1000)
             {
                 for (int i = 0; i < 100; i++)
                 {
