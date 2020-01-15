@@ -258,13 +258,13 @@ namespace PC
 
                 if (ConsoleViewModel.Verbose)
                 {
-                    output = Interface.WaitReceiveMessageContaining(100, "WPos", 2000);
-                    outokerror = Interface.WaitReceiveMessageContainingMultible(100, outarray, 2000);
+                    output = Interface.WaitReceiveMessageContaining(100, "WPos", 100);
+                    outokerror = Interface.WaitReceiveMessageContainingMultible(100, outarray, 100);
                 }
                 else
                 {
-                    output = Interface.WaitReceiveMessageContaining(100, "WPos", 2000, logging: false);
-                    outokerror = Interface.WaitReceiveMessageContainingMultible(100, outarray, 2000, logging: false);
+                    output = Interface.WaitReceiveMessageContaining(100, "WPos", 100, logging: false);
+                    outokerror = Interface.WaitReceiveMessageContainingMultible(100, outarray, 100, logging: false);
                 }
 
 
