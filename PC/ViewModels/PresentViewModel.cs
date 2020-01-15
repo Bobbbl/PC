@@ -51,8 +51,6 @@ namespace PC
             }
         }
 
-        public DispatcherTimer PollTimer { get; set; }
-
         public bool ErrorReceived { get; set; }
 
 
